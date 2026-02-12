@@ -1,0 +1,75 @@
+.organizer-dashboard {
+  padding: 2rem;
+  background: #0f172a;
+  color: #fff;
+  min-height: 100vh;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.event-section {
+  margin-top: 2rem;
+}
+
+.event-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.event-item {
+  background: #1e293b;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
+}
+
+.event-item:hover {
+  transform: translateY(-3px);
+}
+
+.event-info h4 {
+  font-size: 1.25rem;
+  color: #38bdf8;
+}
+
+.event-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.btn {
+  background: #334155;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: #2563eb;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: #94a3b8;
+}
+
+.btn-view {
+  background: #22c55e;
+}
+
+.btn-save {
+  background: #16a34a;
+}
+
+.btn-cancel {
+  background: #ef4444;
+}

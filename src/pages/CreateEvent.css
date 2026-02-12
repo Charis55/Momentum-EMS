@@ -1,0 +1,123 @@
+/* ==== CREATE EVENT PAGE STYLING ==== */
+
+/* Layout */
+.create-hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 60px;
+  padding: 80px;
+  min-height: 100vh;
+}
+
+/* Left Brand Card */
+.create-left {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.create-logo-card {
+  background: rgba(255,255,255,0.12);
+  padding: 40px;
+  border-radius: 26px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 18px 60px rgba(0,0,0,0.35);
+  text-align: center;
+  animation: floaty 6s ease-in-out infinite;
+}
+
+.form-hero-logo {
+  width: 210px;
+  margin-bottom: 18px;
+  filter: drop-shadow(0px 6px 16px rgba(255,200,0,0.25));
+}
+
+.create-title {
+  font-size: 2rem;
+  font-weight: 900;
+  color: white;
+}
+
+.create-sub {
+  color: rgba(255,255,255,0.85);
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+/* Right Form Card */
+.create-form-card {
+  background: rgba(9,9,28,0.95);
+  backdrop-filter: blur(16px);
+  border-radius: 20px;
+  padding: 40px;
+  width: 480px;
+  box-shadow: 0 18px 60px rgba(0,0,0,0.3);
+  color: white;
+}
+
+.form-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-bottom: 26px;
+  background: linear-gradient(90deg,#ff7a00,#ffcc33);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Inputs */
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #fff;
+}
+
+.form-input, .form-textarea {
+  width: 100%;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 12px;
+  border-radius: 12px;
+  color: #fff !important;
+  font-size: 1rem;
+}
+
+.form-input:focus, .form-textarea:focus {
+  outline: 2px solid rgba(255,180,50,0.9);
+}
+
+.form-textarea {
+  resize: none;
+}
+
+/* Submit Button */
+.form-submit-btn {
+  width: 100%;
+  margin-top: 14px;
+  padding: 14px;
+  font-size: 1.1rem;
+}
+
+/* Animation */
+@keyframes floaty {
+  0%{ transform: translateY(0) }
+  50%{ transform: translateY(-12px) }
+  100%{ transform: translateY(0) }
+}
+
+/* Responsive */
+@media (max-width:900px) {
+  .create-hero {
+    flex-direction: column;
+    padding: 40px;
+  }
+
+  .create-form-card {
+    width: 100%;
+  }
+}

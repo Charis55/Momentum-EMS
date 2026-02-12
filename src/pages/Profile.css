@@ -1,0 +1,195 @@
+/* ======================================================
+    ✅ PROFILE LAYOUT & CARD
+====================================================== */
+.profile-container {
+  display: flex;
+  justify-content: center;
+  padding: 80px 5%; 
+}
+
+.profile-card {
+  width: 480px; 
+  background: rgba(9, 9, 28, 0.75); 
+  padding: 40px;
+  border-radius: 24px;
+  text-align: center;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.profile-title {
+  font-size: 2.2rem;
+  font-weight: 900;
+  margin-bottom: 30px;
+  background: linear-gradient(90deg, #ff7a00, #ffcc33);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ======================================================
+    ✅ REDESIGNED PHOTO SECTION (Visibility Fix)
+====================================================== */
+.profile-photo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.profile-photo-section p {
+  color: #ffffff !important; /* Force white for visibility */
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-top: 12px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.avatar-wrapper {
+  position: relative;
+  width: 130px;
+  height: 130px;
+  margin: 0 auto;
+}
+
+.profile-avatar-circle {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 3px solid var(--gold);
+  object-fit: cover;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+
+.avatar-edit-badge {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(135deg, var(--orange), var(--gold));
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: 3px solid #09091c;
+  color: white !important; /* Ensure the plus sign is white */
+  font-size: 1.2rem;
+  font-weight: bold;
+  transition: transform 0.2s ease;
+}
+
+.avatar-edit-badge:hover {
+  transform: scale(1.1);
+}
+
+/* ======================================================
+    ✅ INPUTS & READABILITY (Visibility Fix)
+====================================================== */
+.input-group {
+  text-align: left;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.input-group label {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+.profile-input {
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 16px 20px; 
+  border-radius: 12px;
+  color: #ffffff !important; /* Force white text in textbox */
+  font-size: 1rem;
+  margin-top: 8px;
+  display: block;
+  transition: all 0.3s ease;
+}
+
+.profile-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.profile-input:focus {
+  outline: none;
+  border-color: var(--gold);
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 15px rgba(255, 204, 51, 0.15);
+}
+
+.profile-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 30px 0;
+}
+
+/* ======================================================
+    ✅ DANGER ZONE & BUTTONS
+====================================================== */
+.danger-zone {
+  margin-top: 35px;
+  padding: 20px;
+  border: 1px solid rgba(209, 0, 0, 0.3);
+  border-radius: 16px;
+  background: rgba(209, 0, 0, 0.05);
+  text-align: left;
+}
+
+.danger-zone h4 {
+  color: #ff4d4d;
+  margin: 0;
+  font-size: 1rem;
+}
+
+.danger-zone p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  margin: 5px 0 15px;
+}
+
+.danger-btn {
+  width: 100%;
+  padding: 14px;
+  background: #d10000;
+  border-radius: 12px;
+  color: white;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.btn-secondary-outline {
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: white;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+/* ======================================================
+    ✅ REDESIGNED DELETE MODAL
+====================================================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}

@@ -1,0 +1,58 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ============================
+    // EVENTS COLLECTION
+    // ============================
+    match /events/{eventId} {
+
+      // Public can view events
+      allow read: if true;
+
+      // Only signed-in users can create events
+      allow create: if request.auth != null
+        && request.resource.data.organizerId == request.auth.uid;
+
+      // Event owner can update/delete
+      allow update, delete: if request.auth != null
+        && request.auth.uid == resource.data.organizerId;
+    }
+
+    // ============================
+    // REGISTRATIONS (Public signup)
+    // ============================
+    match /registrations/{regId} {
+      // Anyone can create (public registration)
+      allow create: if true;
+
+      // Only logged-in organizers can read
+      allow read: if request.auth != null;
+    }
+
+    // ============================
+    // ATTENDEES SUBCOLLECTION
+    // events/{eventId}/attendees/{uid}
+    // ============================
+    match /events/{eventId}/attendees/{uid} {
+
+      // Attendee must be logged in and can only create their own record
+      allow create: if request.auth != null
+        && request.auth.uid == uid;
+
+      // Only attendee themself OR organizer may delete
+      allow delete: if request.auth != null
+        && (
+          request.auth.uid == uid ||
+          request.auth.uid == resource.data.organizerId
+        );
+
+      // Attendee sees their own enrollment; organizer sees all
+      allow read: if request.auth != null
+        && (
+          request.auth.uid == uid ||
+          request.auth.uid == resource.data.organizerId
+        );
+    }
+  }
+}
