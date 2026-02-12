@@ -17,43 +17,65 @@ import {
 
 import { db } from "./config";
 
-// ✅ Create a new event
+// ✅ Create a new event (Updated with Privacy & Speaker)
 export async function createEvent(eventPayload, user) {
   if (!user?.uid) throw new Error("No authenticated organizer found.");
 
-  console.log("🚀 [createEvent] Incoming eventPayload:", eventPayload);
-  console.log("👤 [createEvent] User:", user.uid, user.email);
+  console.log("🚀 [createEvent] Incoming payload:", eventPayload);
 
-  const normalizedPayload = {
+  const payload = {
     name: eventPayload.name || "",
-    timingISO: eventPayload.timingISO || "", 
-    timeZone: eventPayload.timeZone || Intl.DateTimeFormat().resolvedOptions().timeZone,
+    speaker: eventPayload.speaker || "", // NEW FEATURE
+    date: eventPayload.date || "", 
+    timezone: eventPayload.timezone || "Africa/Lagos",
     link: eventPayload.link || "",
     description: eventPayload.description || "",
     objectives: eventPayload.objectives || "",
-    topicRelevance: eventPayload.topicRelevance || "",
-    speaker: eventPayload.speaker || "",
-  };
-
-  const payload = {
-    ...normalizedPayload,
+    relevance: eventPayload.relevance || "",
+    isPrivate: eventPayload.isPrivate || false, // NEW FEATURE
     organizerId: user.uid,
     organizerEmail: user.email || null,
     createdBy: user.uid,
     createdAt: serverTimestamp(),
   };
 
-  console.log("✅ [createEvent] Final Payload Object:", payload);
-  console.log("📦 [createEvent] Final Payload JSON:", JSON.stringify(payload, null, 2));
-  console.log("🔑 [createEvent] organizerId:", payload.organizerId);
-
   const ref = await addDoc(collection(db, "events"), payload);
   console.log("🎯 [createEvent] Event created with ID:", ref.id);
-
   return ref.id;
 }
 
-// ✅ Organizer events feed
+// ✅ Update an existing event (FEATURE: Edit Ability)
+export async function updateEvent(eventId, eventPayload) {
+  console.log("updateEvent] Updating ID:", eventId);
+  const eventRef = doc(db, "events", eventId);
+  
+  const updateData = {
+    name: eventPayload.name,
+    speaker: eventPayload.speaker, // NEW FEATURE
+    date: eventPayload.date,
+    timezone: eventPayload.timezone,
+    link: eventPayload.link,
+    description: eventPayload.description,
+    objectives: eventPayload.objectives,
+    relevance: eventPayload.relevance,
+    isPrivate: eventPayload.isPrivate, // NEW FEATURE
+    updatedAt: serverTimestamp(),
+  };
+
+  await updateDoc(eventRef, updateData);
+  console.log("✅ [updateEvent] Update successful");
+}
+
+// ✅ Fetch a single event (Required to pre-fill the Edit Form)
+export async function getEventById(eventId) {
+  const snap = await getDoc(doc(db, "events", eventId));
+  if (snap.exists()) {
+    return { id: snap.id, ...snap.data() };
+  }
+  return null;
+}
+
+// ✅ Organizer events feed (Shows ALL their own events regardless of privacy)
 export function subscribeOrganizerEvents(organizerId, cb) {
   const q = query(
     collection(db, "events"),
@@ -66,18 +88,23 @@ export function subscribeOrganizerEvents(organizerId, cb) {
   );
 }
 
-// ✅ Public events (attendee dashboard)
+// ✅ Public events (FEATURE: Only shows non-private events for Discovery)
 export function subscribeUpcomingEvents(cb) {
-  const q = query(collection(db, "events"), orderBy("createdAt", "desc"));
+  // Filters out events where isPrivate is true
+  const q = query(
+    collection(db, "events"), 
+    where("isPrivate", "==", false), 
+    orderBy("createdAt", "desc")
+  );
 
   return onSnapshot(q, (snap) => {
     const data = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-    console.log("📡 Dashboard Live Events:", data);
+    console.log("📡 Public Dashboard Feed:", data);
     cb(data);
   });
 }
 
-// ✅ Attendee helpers
+// ✅ Attendee helpers (Unchanged)
 export async function enrollUser(eventId, user) {
   const ref = doc(db, "events", eventId, "attendees", user.uid);
   await setDoc(ref, {
@@ -101,7 +128,7 @@ export async function getAttendeesCount(eventId) {
   const snap = await getDocs(collection(db, "events", eventId, "attendees"));
   return snap.size;
 }
-// ✅ Fetch events from Firestore
+
 export async function getEvents() {
   const snapshot = await getDocs(collection(db, "events"));
   return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
