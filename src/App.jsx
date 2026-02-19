@@ -11,6 +11,9 @@ import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import PrivateRoute from "./components/PrivateRoute";
 
+// ✅ ADDED THIS IMPORT to fix the SyntaxError
+import OrganizerDashboard from "./pages/OrganizerDashboard"; 
+
 export default function App() {
   return (
     <>
@@ -33,6 +36,17 @@ export default function App() {
             </PrivateRoute>
           }
         />
+
+        {/* ✅ ADDED THIS ROUTE to fix "No routes matched location /organizer-dashboard" */}
+        <Route
+          path="/organizer-dashboard"
+          element={
+            <PrivateRoute>
+              <OrganizerDashboard />
+            </PrivateRoute>
+          }
+        />
+
         <Route
           path="/dashboard"
           element={

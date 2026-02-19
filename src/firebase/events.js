@@ -1,4 +1,3 @@
-// src/firebase/events.js
 import {
   collection,
   addDoc,
@@ -13,60 +12,52 @@ import {
   onSnapshot,
   orderBy,
   serverTimestamp,
+  increment,
 } from "firebase/firestore";
-
 import { db } from "./config";
 
-// ✅ Create a new event (Updated with Privacy & Speaker)
+// ✅ CREATE EVENT: Standardized for Organizer Dashboard visibility
 export async function createEvent(eventPayload, user) {
   if (!user?.uid) throw new Error("No authenticated organizer found.");
 
-  console.log("🚀 [createEvent] Incoming payload:", eventPayload);
-
   const payload = {
     name: eventPayload.name || "",
-    speaker: eventPayload.speaker || "", // NEW FEATURE
+    speaker: eventPayload.speaker || "", 
     date: eventPayload.date || "", 
     timezone: eventPayload.timezone || "Africa/Lagos",
     link: eventPayload.link || "",
     description: eventPayload.description || "",
     objectives: eventPayload.objectives || "",
     relevance: eventPayload.relevance || "",
-    isPrivate: eventPayload.isPrivate || false, // NEW FEATURE
-    organizerId: user.uid,
+    isPrivate: Boolean(eventPayload.isPrivate), 
+    organizerId: user.uid, // Required for Dashboard filter
     organizerEmail: user.email || null,
     createdBy: user.uid,
-    createdAt: serverTimestamp(),
+    createdAt: serverTimestamp(), // Required for orderBy
+    maxCapacity: Number(eventPayload.maxCapacity) || 100,
+    enrolledCount: 0, 
   };
 
   const ref = await addDoc(collection(db, "events"), payload);
-  console.log("🎯 [createEvent] Event created with ID:", ref.id);
   return ref.id;
 }
 
-// ✅ Update an existing event (FEATURE: Edit Ability)
+// ✅ UPDATE EVENT
 export async function updateEvent(eventId, eventPayload) {
-  console.log("updateEvent] Updating ID:", eventId);
   const eventRef = doc(db, "events", eventId);
-  
   const updateData = {
-    name: eventPayload.name,
-    speaker: eventPayload.speaker, // NEW FEATURE
-    date: eventPayload.date,
-    timezone: eventPayload.timezone,
-    link: eventPayload.link,
-    description: eventPayload.description,
-    objectives: eventPayload.objectives,
-    relevance: eventPayload.relevance,
-    isPrivate: eventPayload.isPrivate, // NEW FEATURE
+    ...eventPayload,
     updatedAt: serverTimestamp(),
   };
-
   await updateDoc(eventRef, updateData);
-  console.log("✅ [updateEvent] Update successful");
 }
 
-// ✅ Fetch a single event (Required to pre-fill the Edit Form)
+// ✅ DELETE EVENT
+export async function deleteEventById(eventId) {
+  await deleteDoc(doc(db, "events", eventId));
+}
+
+// ✅ GET EVENT BY ID
 export async function getEventById(eventId) {
   const snap = await getDoc(doc(db, "events", eventId));
   if (snap.exists()) {
@@ -75,7 +66,7 @@ export async function getEventById(eventId) {
   return null;
 }
 
-// ✅ Organizer events feed (Shows ALL their own events regardless of privacy)
+// ✅ SUBSCRIBE ORGANIZER EVENTS: Standardized for Hub
 export function subscribeOrganizerEvents(organizerId, cb) {
   const q = query(
     collection(db, "events"),
@@ -83,53 +74,99 @@ export function subscribeOrganizerEvents(organizerId, cb) {
     orderBy("createdAt", "desc")
   );
 
-  return onSnapshot(q, (snap) =>
-    cb(snap.docs.map((d) => ({ id: d.id, ...d.data() })))
-  );
+  return onSnapshot(q, (snap) => {
+    const data = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    cb(data);
+  }, (err) => {
+    console.error("Organizer Subscription Error:", err);
+  });
 }
 
-// ✅ Public events (FEATURE: Only shows non-private events for Discovery)
+// ✅ SUBSCRIBE UPCOMING EVENTS
 export function subscribeUpcomingEvents(cb) {
-  // Filters out events where isPrivate is true
   const q = query(
     collection(db, "events"), 
-    where("isPrivate", "==", false), 
+    where("isPrivate", "==", false),
     orderBy("createdAt", "desc")
   );
 
   return onSnapshot(q, (snap) => {
-    const data = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-    console.log("📡 Public Dashboard Feed:", data);
-    cb(data);
+    cb(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
   });
 }
 
-// ✅ Attendee helpers (Unchanged)
-export async function enrollUser(eventId, user) {
-  const ref = doc(db, "events", eventId, "attendees", user.uid);
-  await setDoc(ref, {
+// ✅ SUBSCRIBE TO ATTENDEES: Real-time feedback
+export function subscribeToAttendees(eventId, cb) {
+  const q = query(collection(db, "events", eventId, "attendees"), orderBy("enrolledAt", "desc"));
+  return onSnapshot(q, (snap) => {
+    cb(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+  });
+}
+
+// ✅ ENROLLMENT WORKFLOW: Increments count
+export async function enrollInEvent(eventId, user) {
+  if (!user) throw new Error("Login required to enroll.");
+
+  const eventRef = doc(db, "events", eventId);
+  const eventSnap = await getDoc(eventRef);
+  const eventData = eventSnap.data();
+
+  if (eventData.organizerId === user.uid) {
+    return { success: false, message: "Organizers cannot enroll in their own events." };
+  }
+
+  const enrollRef = doc(db, "events", eventId, "attendees", user.uid);
+  const enrollSnap = await getDoc(enrollRef);
+  if (enrollSnap.exists()) {
+    return { success: false, message: "Already enrolled" };
+  }
+
+  const currentCount = eventData.enrolledCount || 0;
+  if (eventData.maxCapacity && currentCount >= eventData.maxCapacity) {
+    return { success: false, message: "Event full" };
+  }
+
+  await setDoc(enrollRef, {
     uid: user.uid,
     email: user.email,
-    displayName: user.displayName || "",
+    displayName: user.displayName || "Anonymous",
     enrolledAt: serverTimestamp(),
   });
+
+  await updateDoc(eventRef, {
+    enrolledCount: increment(1)
+  });
+
+  const userEventRef = doc(db, "users", user.uid, "my_enrollments", eventId);
+  await setDoc(userEventRef, {
+    eventId: eventId,
+    eventName: eventData.name,
+    enrolledAt: serverTimestamp()
+  });
+
+  return { success: true, message: "Successfully enrolled" };
 }
 
-export async function unenrollUser(eventId, uid) {
-  await deleteDoc(doc(db, "events", eventId, "attendees", uid));
+// ✅ UNENROLLMENT WORKFLOW: Correctly decrements count
+export async function unenrollFromEvent(eventId, uid) {
+  if (!uid) throw new Error("User ID required.");
+
+  const eventRef = doc(db, "events", eventId);
+  const enrollRef = doc(db, "events", eventId, "attendees", uid);
+  const userEventRef = doc(db, "users", uid, "my_enrollments", eventId);
+
+  // Remove records and update count
+  await deleteDoc(enrollRef);
+  await updateDoc(eventRef, {
+    enrolledCount: increment(-1)
+  });
+  await deleteDoc(userEventRef);
+
+  return { success: true, message: "Successfully unenrolled" };
 }
 
 export async function isUserEnrolled(eventId, uid) {
+  if (!uid) return false;
   const snap = await getDoc(doc(db, "events", eventId, "attendees", uid));
   return snap.exists();
-}
-
-export async function getAttendeesCount(eventId) {
-  const snap = await getDocs(collection(db, "events", eventId, "attendees"));
-  return snap.size;
-}
-
-export async function getEvents() {
-  const snapshot = await getDocs(collection(db, "events"));
-  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 }

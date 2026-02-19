@@ -21,6 +21,7 @@ export default function CreateEvent() {
     objectives: "",
     relevance: "",
     isPrivate: false,
+    maxCapacity: 100, // Default capacity
   });
 
   useEffect(() => {
@@ -28,7 +29,10 @@ export default function CreateEvent() {
       const fetchEvent = async () => {
         try {
           const eventData = await getEventById(id);
-          if (eventData) setForm(eventData);
+          if (eventData) {
+            // Populate form with existing data, keeping date in string format for input
+            setForm(eventData);
+          }
         } catch (err) {
           console.error("Error fetching event:", err);
         }
@@ -48,6 +52,7 @@ export default function CreateEvent() {
   const submit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    
     const user = auth.currentUser;
     if (!user) {
       alert("You must be logged in.");
@@ -57,13 +62,16 @@ export default function CreateEvent() {
 
     try {
       if (id) {
+        // UPDATE EXISTING EVENT
         await updateEvent(id, form);
         alert("✅ Event Updated!");
       } else {
+        // CREATE NEW EVENT
+        // Passing 'user' ensures 'organizerId' is saved for Dashboard visibility
         await createEvent(form, user);
         alert(`✅ Event Published!`);
       }
-      nav("/dashboard");
+      nav("/dashboard"); // Redirect to Dashboard to see the new/updated card
     } catch (err) {
       alert("❌ Error: " + err.message);
     } finally {
@@ -97,7 +105,6 @@ export default function CreateEvent() {
               <input type="text" name="speaker" value={form.speaker} onChange={handleChange} className="form-input" placeholder="Name of presenter" required />
             </div>
 
-            {/* The 320px width limit in CSS now prevents the overlap seen in your last update */}
             <div className="form-grid">
               <div className="form-group">
                 <label>Date & Time</label>

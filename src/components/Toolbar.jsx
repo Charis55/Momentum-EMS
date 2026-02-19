@@ -15,6 +15,10 @@ export default function Toolbar() {
         {/* ✅ Re-routed to /events to show the "Explore All" page */}
         <Link to="/events">Events</Link> 
         <Link to="/create">Create</Link>
+        
+        {/* ✅ New Link for the Organizer Dashboard feedback logic we implemented */}
+        <Link to="/organizer-dashboard" className="nav-highlight">Organizer</Link>
+        
         <Link to="/profile">Profile</Link>
       </nav>
     </header>

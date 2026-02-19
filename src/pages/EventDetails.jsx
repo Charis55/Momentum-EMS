@@ -1,107 +1,216 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { subscribeUpcomingEvents } from "../firebase/events";
+// Imports including the unenroll function and count increment logic
+import { 
+  getEventById, 
+  enrollInEvent, 
+  unenrollFromEvent, 
+  isUserEnrolled 
+} from "../firebase/events"; 
+import { auth } from "../firebase/config";
 import Toolbar from "../components/Toolbar";
 import "./CreateEvent.css"; 
 
 export default function EventDetails() {
   const { id } = useParams();
-  const navigate = useNavigate();
+  const nav = useNavigate();
   const [event, setEvent] = useState(null);
-  const [copied, setCopied] = useState(false); // ✅ Share feedback state
+  const [loading, setLoading] = useState(true);
+  const [enrollStatus, setEnrollStatus] = useState(""); 
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [alreadyEnrolled, setAlreadyEnrolled] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = subscribeUpcomingEvents((events) => {
-      const found = events.find((e) => e.id === id);
-      setEvent(found);
-    });
-    return () => unsubscribe();
+    const fetchEventData = async () => {
+      try {
+        const data = await getEventById(id);
+        if (data) {
+          setEvent(data);
+          if (auth.currentUser) {
+            const enrolled = await isUserEnrolled(id, auth.currentUser.uid);
+            setAlreadyEnrolled(enrolled);
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching event details:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchEventData();
   }, [id]);
 
-  // ✅ Share functionality
-  const handleShare = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  /**
+   * ✅ TOGGLE ENROLLMENT HANDLER
+   * Handles both Enrolling and Unenrolling to prevent permission errors
+   */
+  const handleToggleEnrollment = async () => {
+    const user = auth.currentUser;
+    if (!user) {
+      alert("Please login to manage enrollment.");
+      return;
+    }
+    
+    setIsProcessing(true);
+    setEnrollStatus(""); 
+    
+    try {
+      if (alreadyEnrolled) {
+        // Logic for Unenrolling
+        const result = await unenrollFromEvent(id, user.uid);
+        if (result.success) {
+          setAlreadyEnrolled(false);
+          setEnrollStatus(result.message);
+          
+          // Instant local update for the enrollment count
+          setEvent(prev => ({ 
+            ...prev, 
+            enrolledCount: Math.max(0, (prev.enrolledCount || 1) - 1) 
+          }));
+        }
+      } else {
+        // Logic for Enrolling
+        const result = await enrollInEvent(id, user);
+        if (result.success) {
+          setAlreadyEnrolled(true);
+          setEnrollStatus(result.message);
+          
+          // Instant local update for the enrollment count
+          setEvent(prev => ({ 
+            ...prev, 
+            enrolledCount: (prev.enrolledCount || 0) + 1 
+          }));
+        } else {
+          setEnrollStatus(result.message);
+        }
+      }
+    } catch (err) {
+      // Catch and display permission or network errors
+      console.error("Enrollment Action Failed:", err);
+      setEnrollStatus("Error: " + err.message);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
-  if (!event) {
-    return (
-      <div className="auth-bg">
-        <Toolbar />
-        <p style={{ color: 'white', textAlign: 'center', paddingTop: '100px' }}>
-          Loading event details...
-        </p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="auth-bg" style={{ minHeight: '100vh' }}>
+  if (loading) return (
+    <div className="auth-bg full-page">
       <Toolbar />
-      <div className="container" style={{ paddingTop: '100px', paddingBottom: '50px' }}>
-        <div className="create-form-card animate-fade" style={{ maxWidth: '800px', margin: '0 auto' }}>
-          
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-            <button 
-              onClick={() => navigate(-1)} 
-              style={{ background: 'none', border: 'none', color: '#ffcc33', cursor: 'pointer', fontWeight: 'bold', fontSize: '1rem' }}
-            >
-              ← Back to Events
-            </button>
-
-            {/* ✅ SHARE BUTTON */}
-            <button 
-              onClick={handleShare}
-              style={{ background: 'rgba(255, 255, 255, 0.1)', border: '1px solid rgba(255, 255, 255, 0.2)', color: 'white', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontSize: '0.85rem', transition: '0.3s' }}
-            >
-              {copied ? "✅ Link Copied!" : "🔗 Share Event"}
-            </button>
-          </div>
-
-          <h2 className="form-title" style={{ fontSize: '2.5rem', marginBottom: '10px' }}>
-            {event.name}
-          </h2>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '25px', marginTop: '30px' }}>
-            
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '20px' }}>
-              <div>
-                <label style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.8rem', textTransform: 'uppercase', fontWeight: '800' }}>Date & Time</label>
-                <p style={{ color: 'white', fontSize: '1.1rem', margin: '5px 0' }}>
-                  {new Date(event.date || event.timingISO).toLocaleString()}
-                </p>
-              </div>
-              <div>
-                <label style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.8rem', textTransform: 'uppercase', fontWeight: '800' }}>Speaker</label>
-                <p style={{ color: 'white', fontSize: '1.1rem', margin: '5px 0' }}>
-                  {event.speaker || "To be announced"}
-                </p>
-              </div>
-            </div>
-
-            <div className="info-section">
-              <label style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.8rem', textTransform: 'uppercase', fontWeight: '800' }}>Description</label>
-              <p style={{ color: 'white', lineHeight: '1.6', marginTop: '8px' }}>{event.description}</p>
-            </div>
-
-            {event.objectives && (
-              <div className="info-section">
-                <label style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.8rem', textTransform: 'uppercase', fontWeight: '800' }}>Objectives</label>
-                <p style={{ color: 'white', lineHeight: '1.6', marginTop: '8px' }}>{event.objectives}</p>
-              </div>
-            )}
-
-            {event.link && (
-              <div style={{ marginTop: '20px', textAlign: 'center' }}>
-                <a href={event.link} target="_blank" rel="noreferrer" className="auth-btn" style={{ display: 'inline-block', textDecoration: 'none', padding: '15px 40px' }}>
-                  Join Webinar Now →
-                </a>
-              </div>
-            )}
-          </div>
-        </div>
+      <div className="main-viewport-expanded">
+        <h2 className="bright-text">Loading event details...</h2>
       </div>
     </div>
+  );
+
+  // Check if current user is the one who created the event
+  const isOrganizer = auth.currentUser?.uid === event?.organizerId;
+
+  return (
+    <>
+      <Toolbar />
+      <div className="auth-bg full-page">
+        <main className="main-viewport-expanded">
+          <div className="details-card-ultra animate-fade">
+            
+            {/* Top Navigation Row */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
+              <button onClick={() => nav(-1)} className="back-link" style={{color: '#ffcc33', fontWeight: '800', background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px'}}>
+                ← BACK TO EXPLORE
+              </button>
+              
+              <button className="share-btn-redesign" onClick={() => {
+                navigator.clipboard.writeText(window.location.href);
+                alert("Event link copied to clipboard!");
+              }}>
+                <span style={{fontSize: '1.2rem'}}>🔗</span> SHARE EVENT
+              </button>
+            </div>
+
+            <div className="details-main-grid">
+              {/* Left Column: Event Content */}
+              <div className="primary-info">
+                <h1 className="form-title-glow">
+                  {event?.name}
+                </h1>
+                
+                <div className="info-section" style={{ marginTop: '50px' }}>
+                  <label className="meta-label">About this webinar</label>
+                  <p className="bright-text" style={{ fontSize: '1.15rem', lineHeight: '1.8', opacity: 0.9 }}>
+                    {event?.description || "No description provided."}
+                  </p>
+                </div>
+
+                <div className="info-section" style={{ marginTop: '40px' }}>
+                  <label className="meta-label">Learning Objectives</label>
+                  <p className="bright-text" style={{ fontSize: '1.15rem', lineHeight: '1.8', opacity: 0.9 }}>
+                    {event?.objectives || "No specific objectives listed."}
+                  </p>
+                </div>
+              </div>
+
+              {/* Right Column: Enrollment & Meta Info */}
+              <div className="secondary-info">
+                <div style={{ background: 'rgba(255,255,255,0.02)', padding: '40px', borderRadius: '28px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                  
+                  {/* ✅ ONLY CREATOR CAN VIEW COUNT */}
+                  {isOrganizer && (
+                    <div className="enrollment-counter-box" style={{ marginBottom: '30px' }}>
+                      <span className="counter-number">{event?.enrolledCount || 0}</span>
+                      <span className="counter-label">Enrolled</span>
+                    </div>
+                  )}
+
+                  <div style={{ marginBottom: '30px' }}>
+                    <label className="meta-label">Speaker</label>
+                    <p className="bright-text" style={{ fontSize: '1.5rem', fontWeight: '600' }}>{event?.speaker || "TBA"}</p>
+                  </div>
+
+                  <div style={{ marginBottom: '40px' }}>
+                    <label className="meta-label">Date & Time</label>
+                    <p className="bright-text" style={{ fontSize: '1.2rem' }}>
+                      {event?.date ? new Date(event.date).toLocaleString(undefined, { 
+                        weekday: 'long', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' 
+                      }) : "TBA"}
+                    </p>
+                    <p style={{ color: '#ffcc33', fontSize: '0.8rem', marginTop: '5px', fontWeight: '600' }}>{event?.timezone}</p>
+                  </div>
+
+                  {/* Toggle Button */}
+                  <button 
+                    onClick={handleToggleEnrollment} 
+                    disabled={isProcessing}
+                    className="btn-primary form-submit-btn"
+                    style={{ 
+                      height: '75px', 
+                      fontSize: '1.2rem', 
+                      boxShadow: alreadyEnrolled ? 'none' : '0 10px 30px rgba(255, 122, 0, 0.3)',
+                      background: alreadyEnrolled ? 'rgba(255, 255, 255, 0.05)' : 'linear-gradient(90deg, #ff7a00, #ffcc33)',
+                      color: alreadyEnrolled ? '#ff4444' : '#000',
+                      border: alreadyEnrolled ? '1px solid rgba(255, 68, 68, 0.4)' : 'none',
+                      transition: 'all 0.3s ease'
+                    }}
+                  >
+                    {isProcessing ? "Processing..." : alreadyEnrolled ? "Unenroll from Event" : "Confirm Enrollment →"}
+                  </button>
+
+                  {/* Enrollment Status Message */}
+                  {enrollStatus && (
+                    <p style={{ 
+                      color: enrollStatus.toLowerCase().includes("error") ? "#ff4444" : "#4caf50", 
+                      marginTop: '20px', 
+                      textAlign: 'center', 
+                      fontWeight: '700',
+                      fontSize: '0.9rem'
+                    }}>
+                      {enrollStatus}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </>
   );
 }

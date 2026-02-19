@@ -1,75 +1,225 @@
+/* 1. Main Page Layout & Thematic Background */
 .organizer-dashboard {
-  padding: 2rem;
-  background: #0f172a;
-  color: #fff;
+  padding: 2.5rem;
+  /* Matching the exact high-energy gradient from your screenshots */
+  background: linear-gradient(135deg, #d31027 0%, #ea384d 15%, #ff512f 40%, #f09819 100%);
+  color: #ffffff;
   min-height: 100vh;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
-.dashboard-header {
+/* 2. Header Section - Extra Bold Readability */
+.dashboard-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 50px;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.bright-text {
+  color: #ffffff;
+  font-size: 3.2rem; /* Increased size for impact */
+  font-weight: 900;   /* Maximum thickness for gradient contrast */
+  margin: 0;
+  letter-spacing: -1.5px;
+  text-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.dim-text {
+  color: rgba(255, 255, 255, 0.95); /* Nearly solid white for readability */
+  font-size: 1.25rem;
+  font-weight: 700; /* Bolder sub-text */
+  margin-top: 8px;
+  letter-spacing: 0.2px;
+}
+
+/* 3. Event Grid System */
+.event-section {
+  margin-top: 2rem;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.events-grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 30px;
+}
+
+/* 4. Glassmorphism Card Design - Enhanced Contrast */
+.organizer-event-card {
+  /* Semi-transparent glass with slightly higher opacity for text backing */
+  background: rgba(255, 255, 255, 0.12); 
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  /* Thicker border for better definition against the gradient */
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  border-radius: 28px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 260px;
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.25);
+}
+
+.organizer-event-card:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.45);
+  transform: translateY(-10px);
+  box-shadow: 0 20px 50px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* 5. Internal Card Components - Bolder Text */
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.event-main-info h4 {
+  color: #ffffff;
+  font-size: 1.7rem; 
+  margin: 10px 0;
+  font-weight: 850; /* Extra Bold */
+  line-height: 1.25;
+  text-transform: capitalize;
+}
+
+.event-date-pill {
+  display: inline-block;
+  /* Darker backing for the white date text */
+  background: rgba(0, 0, 0, 0.25);
+  color: #ffffff;
+  padding: 6px 16px;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 800; /* Bolder pill text */
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.event-excerpt {
+  color: rgba(255, 255, 255, 0.9); /* More opaque for readability */
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+/* 6. Attendee Statistics Badge - Glowing Gold */
+.stat-badge {
+  background: rgba(0, 0, 0, 0.15); /* Darker contrast for the numbers */
+  border-radius: 20px;
+  padding: 15px 20px;
+  text-align: center;
+  min-width: 100px;
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-count {
+  display: block;
+  font-size: 2.3rem; /* Slightly larger */
+  font-weight: 950;   /* Maximum weight */
+  color: #ffcc33;     /* Signature gold yellow */
+  text-shadow: 0 0 15px rgba(255, 204, 51, 0.45);
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.85);
+  text-transform: uppercase;
+  font-weight: 800; /* Extra bold label */
+  letter-spacing: 1.5px;
+  margin-top: 4px;
+}
+
+/* 7. Action Buttons & Icons */
+.card-actions {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-top: 2px solid rgba(255, 255, 255, 0.15);
+  padding-top: 20px;
 }
 
-.event-section {
-  margin-top: 2rem;
+.action-link {
+  background: none;
+  border: none;
+  color: #38bdf8; /* Sharp blue accent */
+  font-weight: 900; /* Heavy weight */
+  cursor: pointer;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  transition: all 0.2s;
 }
 
-.event-grid {
-  display: grid;
-  gap: 1rem;
-  margin-top: 1rem;
+.action-link:hover {
+  color: #7dd3fc;
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
 }
 
-.event-item {
-  background: #1e293b;
-  padding: 1rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s;
-}
-
-.event-item:hover {
-  transform: translateY(-3px);
-}
-
-.event-info h4 {
-  font-size: 1.25rem;
-  color: #38bdf8;
-}
-
-.event-actions {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 0.75rem;
-}
-
-.btn {
-  background: #334155;
-  color: white;
-  padding: 6px 14px;
-  border-radius: 6px;
+.btn-icon-only {
+  background: none;
   border: none;
   cursor: pointer;
+  font-size: 1.4rem;
+  margin-left: 18px;
+  opacity: 0.85; /* Higher base visibility */
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  padding: 0;
+  color: #ffffff;
 }
 
+.btn-icon-only:hover {
+  opacity: 1;
+  transform: scale(1.3);
+}
+
+/* 8. Global Primary Button */
 .btn-primary {
   background: #2563eb;
+  color: #ffffff;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-weight: 850; /* Bolder button text */
+  font-size: 1.05rem;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
 }
 
-.btn-ghost {
-  background: transparent;
-  color: #94a3b8;
+.btn-primary:hover {
+  background: #1d4ed8;
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
 }
 
-.btn-view {
-  background: #22c55e;
+/* 9. Empty State - High Contrast */
+.empty-state-card {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 120px 40px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 35px;
+  border: 3px dashed rgba(255, 255, 255, 0.25);
+  margin-top: 40px;
 }
 
-.btn-save {
-  background: #16a34a;
-}
-
-.btn-cancel {
-  background: #ef4444;
+.empty-icon {
+  font-size: 6rem;
+  margin-bottom: 30px;
+  display: block;
+  opacity: 0.6;
 }
