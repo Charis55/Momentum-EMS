@@ -1,18 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { auth, db, storage } from "../firebase/config";
-import { doc, getDoc, setDoc } from "firebase/firestore"; // ✅ Changed updateDoc to setDoc
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { updateProfile, deleteUser, verifyBeforeUpdateEmail, sendPasswordResetEmail } from "firebase/auth";
+import { auth, db } from "../firebase/config"; // Removed storage
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { 
+  updateProfile, 
+  deleteUser, 
+  verifyBeforeUpdateEmail, 
+  sendPasswordResetEmail,
+  signOut 
+} from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 import Toolbar from "../components/Toolbar";
 import "./Profile.css";
 
 export default function Profile() {
   const user = auth.currentUser;
+  const navigate = useNavigate();
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState(user?.email || "");
-  const [photoURL, setPhotoURL] = useState(user?.photoURL || "");
-  const [newPhoto, setNewPhoto] = useState(null);
   const [saving, setSaving] = useState(false);
   const [statusMsg, setStatusMsg] = useState({ type: "", text: "" });
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -23,36 +28,33 @@ export default function Profile() {
       const snap = await getDoc(doc(db, "users", user.uid));
       if (snap.exists()) {
         setUsername(snap.data().username || "");
-        setPhotoURL(snap.data().photoURL || user.photoURL);
       }
     }
     loadProfile();
   }, [user]);
 
+  async function handleLogout() {
+    try {
+      await signOut(auth);
+      navigate("/login");
+    } catch (err) {
+      console.error("Logout Error:", err);
+      setStatusMsg({ type: "error", text: "❌ Error logging out." });
+    }
+  }
+
   async function handleSave() {
     setSaving(true);
     setStatusMsg({ type: "", text: "" });
     try {
-      let uploadedPhotoURL = photoURL;
-      if (newPhoto) {
-        const fileRef = ref(storage, `profilePictures/${user.uid}`);
-        await uploadBytes(fileRef, newPhoto);
-        uploadedPhotoURL = await getDownloadURL(fileRef);
-      }
+      // Updated to only handle Display Name
+      await updateProfile(user, { displayName: username });
 
-      // 1. Update the Auth Profile
-      await updateProfile(user, { displayName: username, photoURL: uploadedPhotoURL });
-
-      // 2. Update or Create the Firestore document
-      // ✅ Using setDoc with { merge: true } prevents the "No document to update" error
       await setDoc(doc(db, "users", user.uid), { 
         username, 
-        photoURL: uploadedPhotoURL,
-        email: user.email // Keep email synced for reference
+        email: user.email 
       }, { merge: true });
 
-      setPhotoURL(uploadedPhotoURL);
-      setNewPhoto(null);
       setStatusMsg({ type: "success", text: "✅ Profile updated successfully!" });
     } catch (err) {
       console.error(err);
@@ -94,28 +96,14 @@ export default function Profile() {
       <Toolbar />
       <div className="auth-bg auth-center" style={{ paddingTop: '80px' }}>
         <div className="profile-card animate-fade">
-          <h2 className="auth-title" style={{ fontSize: '2.2rem' }}>Account Settings</h2>
+          
+          <h2 className="auth-title" style={{ fontSize: '2.2rem', marginBottom: '30px' }}>Account Settings</h2>
 
           {statusMsg.text && (
             <p className={statusMsg.type === "error" ? "auth-error" : "gradient-text"} style={{ textAlign: 'center', marginBottom: '20px' }}>
               {statusMsg.text}
             </p>
           )}
-
-          <div className="profile-photo-section">
-            <div className="avatar-wrapper">
-              <img
-                src={newPhoto ? URL.createObjectURL(newPhoto) : photoURL || "/assets/avatar.png"}
-                alt="Profile"
-                className="profile-avatar-circle"
-              />
-              <label className="avatar-edit-badge">
-                +
-                <input type="file" accept="image/*" onChange={(e) => setNewPhoto(e.target.files[0])} hidden />
-              </label>
-            </div>
-            <p>Click the + icon to change photo</p>
-          </div>
 
           <div className="auth-form">
             <div className="input-group">
@@ -155,10 +143,26 @@ export default function Profile() {
             </div>
 
             <div className="danger-zone">
-              <h4>Danger Zone</h4>
-              <p>Permanently delete your account and all data.</p>
-              <button className="danger-btn" onClick={() => setShowDeleteModal(true)}>
+              <h4 style={{ color: '#ff4444' }}>Danger Zone</h4>
+              <p>Session management and account deletion.</p>
+              
+              <button className="danger-btn" onClick={() => setShowDeleteModal(true)} style={{ marginBottom: '12px' }}>
                 Delete Account
+              </button>
+
+              <button 
+                onClick={handleLogout}
+                className="btn-secondary-outline" 
+                style={{ 
+                  width: '100%', 
+                  padding: '14px', 
+                  fontSize: '1rem', 
+                  borderColor: 'rgba(255,255,255,0.2)', 
+                  color: '#fff',
+                  marginTop: '5px'
+                }}
+              >
+                Logout from Momentum
               </button>
             </div>
           </div>

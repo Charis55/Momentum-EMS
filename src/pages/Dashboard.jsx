@@ -47,53 +47,64 @@ export default function Dashboard() {
         </div>
       </section>
 
-      {/* UPCOMING EVENTS */}
-      <section className="container" style={{ marginTop: "130px", paddingTop: "80px" }}>
+      {/* UPCOMING WEBINARS SECTION */}
+      <section className="container" style={{ marginTop: "130px", paddingTop: "80px", paddingBottom: "100px" }}>
         
-        <div className="section-header">
+        <div className="section-header" style={{ textAlign: "center", marginBottom: "60px" }}>
           <h2 className="section-title-glow">
             <span className="gradient-text">Upcoming Webinars</span>
           </h2>
           <p className="section-sub-fancy">
             Join inspiring sessions led by world-class innovators.
           </p>
-          <div className="underline-accent"></div>
+          <div className="underline-accent" style={{ margin: "20px auto" }}></div>
         </div>
 
-        <div className="event-grid">
-          {loading && <p style={{ color: "#fff" }}>Loading events...</p>}
+        {/* SYMMETRICAL 2-COLUMN GRID */}
+        <div className="event-grid" style={{ 
+          display: "grid", 
+          gridTemplateColumns: "repeat(2, 1fr)", 
+          gap: "35px", 
+          maxWidth: "1200px", 
+          margin: "0 auto" 
+        }}>
+          {loading && <p style={{ color: "#fff", gridColumn: "span 2", textAlign: "center" }}>Loading events...</p>}
 
           {!loading && events.length === 0 && (
-            <p style={{ opacity: 0.8, color: "#fff" }}>No upcoming events yet.</p>
+            <p style={{ opacity: 0.8, color: "#fff", gridColumn: "span 2", textAlign: "center" }}>No upcoming events yet.</p>
           )}
 
-          {/* Limit to only the 4 most recent events on the dashboard preview */}
+          {/* Slicing to 4 events to maintain the 2x2 row structure */}
           {events.slice(0, 4).map((e) => (
-            <div key={e.id} className="event-card-curve scroll-fade">
-              <div className="event-card-body">
+            <div key={e.id} className="event-card-curve scroll-fade" style={{ width: "100%", margin: "0" }}>
+              <div className="event-card-body" style={{ height: "100%", display: "flex", flexDirection: "column" }}>
+                {/* Logo and Branding */}
                 <img
                   src={logo}
                   className="event-thumb-img"
                   alt="Momentum Logo"
-                  style={{ objectFit: "contain", background: "#fff" }}
+                  style={{ objectFit: "contain", background: "#fff", padding: "10px", borderRadius: "12px", marginBottom: "20px" }}
                 />
 
-                <h3>{e.name}</h3>
+                {/* Event Info Retained from Previous State */}
+                <h3 style={{ fontSize: "1.4rem", fontWeight: "800", color: "#333", marginBottom: "12px" }}>{e.name}</h3>
 
-                <div className="event-meta-row">
-                  <span className="event-icon">🎤</span>
+                <div className="event-meta-row" style={{ color: "#555", fontWeight: "600", marginBottom: "8px" }}>
+                  <span className="event-icon" style={{ marginRight: "8px" }}>🎤</span>
                   {e.speaker || "Speaker TBA"}
                 </div>
 
-                <div className="event-meta-row">
-                  <span className="event-icon">🕒</span>
+                <div className="event-meta-row" style={{ color: "#555", fontWeight: "600", marginBottom: "15px" }}>
+                  <span className="event-icon" style={{ marginRight: "8px" }}>🕒</span>
                   {e.date || e.timingISO ? new Date(e.date || e.timingISO).toLocaleString() : "Date coming soon"}
                 </div>
 
-                <p>{e.description?.substring(0, 100) || "No event description available yet."}...</p>
+                <p style={{ color: "#666", fontSize: "0.95rem", lineHeight: "1.5", flexGrow: 1 }}>
+                  {e.description?.substring(0, 100) || "No event description available yet."}...
+                </p>
 
-                {/* ✅ FIXED: Button now routes to the dynamic event detail page */}
-                <Link to={`/event/${e.id}`} className="event-btn">
+                {/* Action Link */}
+                <Link to={`/event/${e.id}`} className="event-btn" style={{ marginTop: "20px" }}>
                   View Details →
                 </Link>
               </div>

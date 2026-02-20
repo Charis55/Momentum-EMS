@@ -6,13 +6,14 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import CreateEvent from "./pages/CreateEvent";
 import EventPage from "./pages/EventPage"; 
-import EventDetails from "./pages/EventDetails"; // ✅ IMPORTED THIS
+import EventDetails from "./pages/EventDetails"; 
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import PrivateRoute from "./components/PrivateRoute";
-
-// ✅ ADDED THIS IMPORT to fix the SyntaxError
 import OrganizerDashboard from "./pages/OrganizerDashboard"; 
+
+// ✅ ADDED THIS IMPORT
+import EditEvent from "./pages/EditEvent"; 
 
 export default function App() {
   return (
@@ -37,12 +38,22 @@ export default function App() {
           }
         />
 
-        {/* ✅ ADDED THIS ROUTE to fix "No routes matched location /organizer-dashboard" */}
         <Route
           path="/organizer-dashboard"
           element={
             <PrivateRoute>
               <OrganizerDashboard />
+            </PrivateRoute>
+          }
+        />
+
+        {/* ✅ ADDED THIS ROUTE to fix the console error */}
+        {/* This matches the nav(`/edit-event/${ev.id}`) in your Dashboard */}
+        <Route
+          path="/edit-event/:eventId"
+          element={
+            <PrivateRoute>
+              <EditEvent />
             </PrivateRoute>
           }
         />

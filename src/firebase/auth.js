@@ -10,14 +10,14 @@ import {
 import { auth } from "./config";
 
 export async function registerUser(email, password) {
+  // Return the full credential object so the component can access .user
   const cred = await createUserWithEmailAndPassword(auth, email, password);
-  await sendEmailVerification(cred.user);
-  return cred.user;
+  return cred; 
 }
 
 export async function loginUser(email, password) {
   const cred = await signInWithEmailAndPassword(auth, email, password);
-  return cred.user;
+  return cred;
 }
 
 export async function logoutUser() {
