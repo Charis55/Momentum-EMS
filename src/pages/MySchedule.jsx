@@ -121,42 +121,38 @@ export default function MySchedule() {
                   key={item.enrollmentId}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="momentum-card"
+                  className="event-card-curve"
                 >
-                  <div className="card-image-area">
-                    <img src={logo} alt="Momentum" className="card-logo" />
-                  </div>
+                  <div className="event-card-body">
+                    <img src={logo} alt="Momentum" className="event-thumb-img" style={{ objectFit: 'contain', padding: '10px' }} />
 
-                  <div className="card-content">
-                    <h2 className="event-name">
+                    <h3>
                       {item.eventName || item.eventTitle || "Untitled Webinar"}
-                    </h2>
+                    </h3>
 
-                    <div className="info-row">
-                      <span className="icon">🎤</span>
-                      <p className="info-text">{item.speaker || item.organizerName || "Guest Speaker"}</p>
+                    <div className="event-meta-row">
+                      <span className="event-icon">🎤</span>
+                      {item.speaker || item.organizerName || "Guest Speaker"}
                     </div>
 
-                    <div className="info-row">
-                      <span className="icon">🕒</span>
-                      <p className="info-text">
-                        {item.date || item.eventDate
-                          ? new Date(item.date || item.eventDate).toLocaleString('en-GB', {
-                            day: '2-digit', month: '2-digit', year: 'numeric',
-                            hour: '2-digit', minute: '2-digit', second: '2-digit'
-                          })
-                          : "Date TBA"}
-                      </p>
+                    <div className="event-meta-row">
+                      <span className="event-icon">🕒</span>
+                      {item.date || item.eventDate
+                        ? new Date(item.date || item.eventDate).toLocaleString('en-GB', {
+                          day: '2-digit', month: '2-digit', year: 'numeric',
+                          hour: '2-digit', minute: '2-digit'
+                        })
+                        : "Date TBA"}
                     </div>
 
-                    <p className="event-description">
+                    <p>
                       {item.description
                         ? (item.description.substring(0, 80) + "...")
                         : "Explore this upcoming session on the live event page."}
                     </p>
 
                     <button
-                      className="details-btn"
+                      className="event-btn"
                       onClick={() => nav(`/event/${item.eventId || item.id}`)}
                     >
                       View Details →
@@ -259,51 +255,7 @@ export default function MySchedule() {
           gap: 30px;
         }
 
-        .momentum-card {
-          background: #fffdf9;
-          border-radius: 25px;
-          padding: 14px;
-          box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-          transition: transform 0.3s ease;
-        }
-        .momentum-card:hover { transform: translateY(-8px); }
 
-        .card-image-area {
-          background: #fff;
-          height: 160px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: 25px;
-          border: 1px solid #f0f0f0;
-          margin-bottom: 20px;
-        }
-        .card-logo { width: 120px; }
-
-        .card-content { padding: 0 5px 5px; }
-        .event-name { font-size: 1.25rem; font-weight: 900; color: #1a1a1a; margin-bottom: 12px; line-height: 1.2; }
-        
-        .info-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
-        .info-text { color: #444; font-weight: 700; font-size: 0.9rem; margin: 0; }
-
-        .event-description {
-          color: #777;
-          font-size: 0.85rem;
-          margin: 12px 0 20px;
-          line-height: 1.5;
-        }
-
-        .details-btn {
-          width: 100%;
-          padding: 12px;
-          border-radius: 12px;
-          border: none;
-          background: linear-gradient(90deg, #ff7e00, #ffcc33);
-          color: #fff;
-          font-weight: 800;
-          font-size: 0.95rem;
-          cursor: pointer;
-        }
 
         .loader-box, .empty-state {
           grid-column: 1 / -1;

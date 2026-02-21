@@ -129,14 +129,8 @@ export default function EventPage() {
           )}
 
           {filteredAndSortedEvents.map((e) => (
-            <div key={e.id} className="event-card-curve" style={{
-              display: "flex",
-              flexDirection: "column",
-              background: "#fff",
-              borderRadius: "25px",
-              overflow: "hidden"
-            }}>
-              <div className="event-card-body" style={{ flexGrow: 1, display: "flex", flexDirection: "column", padding: "10px 5px" }}>
+            <div key={e.id} className="event-card-curve">
+              <div className="event-card-body">
                 <img src={logo} alt="logo" style={{ width: "40px", marginBottom: "15px" }} />
 
                 {e.category && (
@@ -155,34 +149,23 @@ export default function EventPage() {
                   </span>
                 )}
 
-                <h3 style={{ fontSize: "1.2rem", fontWeight: "800", marginBottom: "8px", color: "#1a1a1a" }}>{e.name}</h3>
+                <h3 style={{ marginBottom: "8px" }}>{e.name}</h3>
 
                 {e.speaker && (
-                  <p className="event-meta-row" style={{ color: "#555", fontWeight: "600", marginBottom: "5px", display: "flex", alignItems: "center", gap: "6px", fontSize: "0.9rem" }}>
+                  <p className="event-meta-row" style={{ marginBottom: "5px", display: "flex", alignItems: "center", gap: "6px" }}>
                     <span>🎤</span> {e.speaker}
                   </p>
                 )}
 
-                <p className="event-meta-row" style={{ color: "#555", fontWeight: "600", marginBottom: "12px", display: "flex", alignItems: "center", gap: "6px", fontSize: "0.9rem" }}>
+                <p className="event-meta-row" style={{ marginBottom: "12px", display: "flex", alignItems: "center", gap: "6px" }}>
                   <span>🕒</span> {e.date ? new Date(e.date).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : "TBA"}
                 </p>
 
-                <p style={{ color: "#666", flexGrow: 1, marginBottom: "20px", lineHeight: "1.5", fontSize: "0.9rem" }}>
+                <p style={{ flexGrow: 1, marginBottom: "20px" }}>
                   {e.description?.substring(0, 120) || "No description available."}...
                 </p>
 
-                <Link to={`/event/${e.id}`} className="event-btn" style={{
-                  marginTop: "auto",
-                  textAlign: "center",
-                  display: "block",
-                  background: "linear-gradient(90deg, #ff7e00, #ffcc33)",
-                  color: "#fff",
-                  textDecoration: "none",
-                  padding: "12px",
-                  borderRadius: "12px",
-                  fontWeight: "bold",
-                  fontSize: "0.9rem"
-                }}>
+                <Link to={`/event/${e.id}`} className="event-btn">
                   View Full Details
                 </Link>
               </div>

@@ -90,23 +90,23 @@ export default function Dashboard() {
                   style={{ objectFit: "contain", padding: "10px", borderRadius: "12px", marginBottom: "20px" }}
                 />
 
-                <h3 style={{ fontSize: "1.4rem", fontWeight: "800", color: "#333", marginBottom: "12px" }}>{e.name}</h3>
+                <h3 style={{ marginBottom: "12px" }}>{e.name}</h3>
 
-                <div className="event-meta-row" style={{ color: "#555", fontWeight: "600", marginBottom: "8px" }}>
+                <div className="event-meta-row" style={{ marginBottom: "8px" }}>
                   <span className="event-icon" style={{ marginRight: "8px" }}>🎤</span>
                   {e.speaker || "Speaker TBA"}
                 </div>
 
-                <div className="event-meta-row" style={{ color: "#555", fontWeight: "600", marginBottom: "15px" }}>
+                <div className="event-meta-row" style={{ marginBottom: "15px" }}>
                   <span className="event-icon" style={{ marginRight: "8px" }}>🕒</span>
                   {e.date || e.timingISO ? new Date(e.date || e.timingISO).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : "Date coming soon"}
                 </div>
 
-                <p style={{ color: "#666", fontSize: "0.95rem", lineHeight: "1.5", flexGrow: 1 }}>
+                <p style={{ flexGrow: 1 }}>
                   {e.description?.substring(0, 120) || "No event description available yet."}...
                 </p>
 
-                <Link to={`/event/${e.id}`} className="event-btn" style={{ marginTop: "20px" }}>
+                <Link to={`/event/${e.id}`} className="event-btn">
                   View Details →
                 </Link>
               </div>
