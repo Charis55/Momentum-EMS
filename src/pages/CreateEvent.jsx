@@ -16,12 +16,13 @@ export default function CreateEvent() {
     speaker: "",
     date: "",
     timezone: "Africa/Lagos",
+    category: "Webinar", // NEW DEFAULT
     link: "",
     description: "",
     objectives: "",
     relevance: "",
     isPrivate: false,
-    maxCapacity: 100, // Default capacity
+    maxCapacity: 100,
   });
 
   useEffect(() => {
@@ -30,7 +31,6 @@ export default function CreateEvent() {
         try {
           const eventData = await getEventById(id);
           if (eventData) {
-            // Populate form with existing data, keeping date in string format for input
             setForm(eventData);
           }
         } catch (err) {
@@ -62,16 +62,13 @@ export default function CreateEvent() {
 
     try {
       if (id) {
-        // UPDATE EXISTING EVENT
         await updateEvent(id, form);
         alert("✅ Event Updated!");
       } else {
-        // CREATE NEW EVENT
-        // Passing 'user' ensures 'organizerId' is saved for Dashboard visibility
         await createEvent(form, user);
         alert(`✅ Event Published!`);
       }
-      nav("/dashboard"); // Redirect to Dashboard to see the new/updated card
+      nav("/dashboard");
     } catch (err) {
       alert("❌ Error: " + err.message);
     } finally {
@@ -100,32 +97,30 @@ export default function CreateEvent() {
               <input type="text" name="name" value={form.name} onChange={handleChange} className="form-input" required />
             </div>
 
-            <div className="form-group">
-              <label>Speaker Name</label>
-              <input type="text" name="speaker" value={form.speaker} onChange={handleChange} className="form-input" placeholder="Name of presenter" required />
+            <div className="form-grid">
+              <div className="form-group">
+                <label>Speaker Name</label>
+                <input type="text" name="speaker" value={form.speaker} onChange={handleChange} className="form-input" placeholder="Presenter name" required />
+              </div>
+              <div className="form-group">
+                <label>Category</label>
+                <select name="category" value={form.category} onChange={handleChange} className="form-input">
+                  <option value="Webinar">Webinar</option>
+                  <option value="Workshop">Workshop</option>
+                  <option value="Conference">Conference</option>
+                  <option value="Tech Talk">Tech Talk</option>
+                </select>
+              </div>
             </div>
 
             <div className="form-grid">
               <div className="form-group">
                 <label>Date & Time</label>
-                <input 
-                  type="datetime-local" 
-                  name="date" 
-                  value={form.date} 
-                  onChange={handleChange} 
-                  className="form-input" 
-                  required 
-                />
+                <input type="datetime-local" name="date" value={form.date} onChange={handleChange} className="form-input" required />
               </div>
               <div className="form-group">
                 <label>Time Zone</label>
-                <input 
-                  type="text" 
-                  name="timezone" 
-                  value={form.timezone} 
-                  onChange={handleChange} 
-                  className="form-input" 
-                />
+                <input type="text" name="timezone" value={form.timezone} onChange={handleChange} className="form-input" />
               </div>
             </div>
 
@@ -155,7 +150,7 @@ export default function CreateEvent() {
             </div>
 
             <div className="form-group">
-              <label>Topic Relevance & Specificity</label>
+              <label>Topic Relevance</label>
               <textarea name="relevance" value={form.relevance} onChange={handleChange} className="form-textarea" required></textarea>
             </div>
 

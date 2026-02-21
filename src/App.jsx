@@ -11,9 +11,11 @@ import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import PrivateRoute from "./components/PrivateRoute";
 import OrganizerDashboard from "./pages/OrganizerDashboard"; 
-
-// ✅ ADDED THIS IMPORT
 import EditEvent from "./pages/EditEvent"; 
+
+// ✅ IMPORT YOUR SCHEDULE COMPONENT
+// Create this file if you haven't already
+import MySchedule from "./pages/MySchedule"; 
 
 export default function App() {
   return (
@@ -23,17 +25,16 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
-        {/* ✅ Leads to the LIST of all events */}
+        {/* ✅ Public Event Routes */}
         <Route path="/events" element={<EventPage />} />
-
-        {/* ✅ Leads to the SINGLE event detail view */}
         <Route path="/event/:id" element={<EventDetails />} />
 
+        {/* ✅ Protected Dashboard & Profile Routes */}
         <Route
-          path="/create"
+          path="/dashboard"
           element={
             <PrivateRoute>
-              <CreateEvent />
+              <Dashboard />
             </PrivateRoute>
           }
         />
@@ -47,8 +48,26 @@ export default function App() {
           }
         />
 
-        {/* ✅ ADDED THIS ROUTE to fix the console error */}
-        {/* This matches the nav(`/edit-event/${ev.id}`) in your Dashboard */}
+        {/* ✅ FIX: ADDED MY-SCHEDULE ROUTE */}
+        <Route
+          path="/my-schedule"
+          element={
+            <PrivateRoute>
+              <MySchedule />
+            </PrivateRoute>
+          }
+        />
+
+        {/* ✅ Event Management Routes */}
+        <Route
+          path="/create"
+          element={
+            <PrivateRoute>
+              <CreateEvent />
+            </PrivateRoute>
+          }
+        />
+
         <Route
           path="/edit-event/:eventId"
           element={
@@ -59,14 +78,6 @@ export default function App() {
         />
 
         <Route
-          path="/dashboard"
-          element={
-            <PrivateRoute>
-              <Dashboard />
-            </PrivateRoute>
-          }
-        />
-        <Route
           path="/profile"
           element={
             <PrivateRoute>
@@ -74,6 +85,7 @@ export default function App() {
             </PrivateRoute>
           }
         />
+
         <Route
           path="/settings"
           element={
