@@ -3,32 +3,34 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #cc0000, #ff7a00, #ffcc33);
+  background: radial-gradient(circle at 15% 15%, #8b4513 0%, #3d1f0a 35%, #0f0e0e 75%, #0a0a0a 100%);
   padding: 40px;
 }
 
 .auth-box {
-  background: rgba(8, 10, 30, 0.9);
-  backdrop-filter: blur(18px);
+  background: rgba(18, 18, 18, 0.85);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
   padding: 48px 42px;
   border-radius: 22px;
   width: 380px;
   text-align: center;
-  border: 1px solid rgba(255,255,255,0.15);
-  box-shadow: 0 18px 60px rgba(0,0,0,0.45);
+  border: 1px solid rgba(255, 204, 51, 0.15);
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .auth-logo {
   width: 105px;
   margin-bottom: 10px;
-  filter: drop-shadow(0px 6px 14px rgba(0,0,0,0.35));
+  filter: drop-shadow(0px 6px 14px rgba(0, 0, 0, 0.35));
 }
 
 .auth-title {
   font-size: 1.8rem;
   font-weight: 800;
   margin-bottom: 24px;
-  color: #ffcc33 !important; /* Changed to Yellow */
+  color: #ffcc33 !important;
+  /* Changed to Yellow */
 }
 
 .auth-form {
@@ -40,16 +42,18 @@
 .auth-input {
   width: 100%;
   padding: 14px;
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.22);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 10px;
-  color: #ffffff !important; /* Changed to White */
+  color: #ffffff !important;
+  /* Changed to White */
   font-size: 1rem;
   box-sizing: border-box;
 }
 
 .auth-input::placeholder {
-  color: rgba(255, 255, 255, 0.6) !important; /* Brighter placeholder */
+  color: rgba(255, 255, 255, 0.6) !important;
+  /* Brighter placeholder */
 }
 
 .auth-input:focus {
@@ -78,7 +82,8 @@
 
 .auth-switch {
   margin-top: 14px;
-  color: #ffffff !important; /* Changed to White */
+  color: #ffffff !important;
+  /* Changed to White */
 }
 
 .auth-switch a {
@@ -87,7 +92,8 @@
 }
 
 .auth-error {
-  color: #ff4d4d !important; /* Brighter Red */
+  color: #ff4d4d !important;
+  /* Brighter Red */
   margin-top: 12px;
   font-size: .9rem;
   font-weight: 600;
