@@ -8,16 +8,16 @@ const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null); // Default to null instead of undefined to avoid check errors
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (currentUser) => {
-      console.log("[Auth] onAuthStateChanged:", currentUser?.uid || "none");
-      setUser(currentUser); // Firebase returns null if logged out, or the user object
-      setLoading(false);
+      console.log("[Auth] State Update:", currentUser ? "Logged In" : "Logged Out");
+      setUser(currentUser);
+      setLoading(false); // Once this hits false, PrivateRoute takes over
     });
-    return unsub;
+    return () => unsub();
   }, []);
 
   const login = (email, password) => signInWithEmailAndPassword(auth, email, password);
@@ -25,10 +25,11 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider value={{ user, login, logout, loading }}>
-      {/* We only render children once loading is false to ensure 
-         components don't try to access 'user' before Firebase is ready. 
+      {/* FIX: We MUST render children immediately. 
+          If we wait for !loading here, the Router context might fail 
+          to sync the URL with the Component state on the first frame.
       */}
-      {!loading && children}
+      {children}
     </AuthContext.Provider>
   );
 }

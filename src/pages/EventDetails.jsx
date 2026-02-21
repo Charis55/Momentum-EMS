@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { 
-  getEventById, 
-  enrollInEvent, 
-  unenrollFromEvent, 
-  isUserEnrolled 
-} from "../firebase/events"; 
+import {
+  getEventById,
+  enrollInEvent,
+  unenrollFromEvent,
+  isUserEnrolled
+} from "../firebase/events";
 import { auth } from "../firebase/config";
 import Toolbar from "../components/Toolbar";
 import ConfirmationModal from "../components/ConfirmationModal"; //
@@ -19,13 +19,13 @@ export default function EventDetails() {
   const [alreadyEnrolled, setAlreadyEnrolled] = useState(false);
 
   // Modal State Management
-  const [modal, setModal] = useState({ 
-    show: false, 
-    title: "", 
-    message: "", 
-    confirmText: "Confirm", 
-    type: "danger", 
-    onConfirm: null 
+  const [modal, setModal] = useState({
+    show: false,
+    title: "",
+    message: "",
+    confirmText: "Confirm",
+    type: "danger",
+    onConfirm: null
   });
 
   useEffect(() => {
@@ -95,7 +95,7 @@ export default function EventDetails() {
       });
       return;
     }
-    
+
     if (alreadyEnrolled) {
       setModal({
         show: true,
@@ -130,7 +130,7 @@ export default function EventDetails() {
       <Toolbar />
       <div className="event-details-wrapper">
         <main className="container details-container">
-          
+
           <div className="details-header-nav">
             <button onClick={() => nav(-1)} className="back-explore-btn">← BACK TO EXPLORE</button>
             <div className="social-share-group">
@@ -180,8 +180,8 @@ export default function EventDetails() {
                     </h2>
                     <p className="timezone-subtext">{event?.timezone}</p>
                   </div>
-                  <button 
-                    onClick={handleToggleEnrollment} 
+                  <button
+                    onClick={handleToggleEnrollment}
                     disabled={isProcessing}
                     className={alreadyEnrolled ? "register-btn-ui enrolled" : "register-btn-ui"}
                   >
@@ -195,7 +195,7 @@ export default function EventDetails() {
       </div>
 
       {/* CUSTOM CONFIRMATION MODAL */}
-      <ConfirmationModal 
+      <ConfirmationModal
         isOpen={modal.show}
         title={modal.title}
         message={modal.message}
@@ -234,6 +234,16 @@ export default function EventDetails() {
         .register-btn-ui { width: 100%; padding: 22px; border-radius: 16px; margin-top: 30px; font-size: 1.2rem; font-weight: 900; cursor: pointer; letter-spacing: 1px; }
         .register-btn-ui:not(.enrolled) { background: #ffcc33; color: #000; border: none; }
         .register-btn-ui.enrolled { background: rgba(255, 68, 68, 0.05); border: 1px solid #ff4444; color: #ff4444; }
+
+        @media (max-width: 900px) {
+          .details-container { padding: 0 20px; }
+          .event-main-card { padding: 40px 30px; }
+          .event-content-layout { grid-template-columns: 1fr; gap: 40px; }
+          .event-main-title { font-size: 3rem; }
+          .schedule-date-ui { font-size: 2rem; }
+          .details-header-nav { flex-direction: column; gap: 20px; align-items: flex-start; }
+          .event-details-wrapper { padding-top: 80px; }
+        }
       `}</style>
     </>
   );

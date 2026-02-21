@@ -6,6 +6,109 @@ import Toolbar from "../components/Toolbar";
 import { motion } from "framer-motion";
 import "./OrganizerDashboard.css";
 
+const WEBINAR_CATEGORIES = [
+  "Artificial Intelligence & Machine Learning",
+  "Arts & Culture",
+  "Business & Entrepreneurship",
+  "Data Science & Analytics",
+  "Design & Creativity",
+  "Diversity & Inclusion",
+  "Education & E-Learning",
+  "Engineering & Architecture",
+  "Finance & Investing",
+  "Fitness & Wellness",
+  "Gaming & Esports",
+  "Healthcare & Medicine",
+  "Human Resources (HR)",
+  "Leadership & Management",
+  "Legal & Compliance",
+  "Marketing & SEO",
+  "Nonprofit & Charity",
+  "Personal Development",
+  "Productivity & Time Management",
+  "Real Estate",
+  "Sales & Customer Success",
+  "Science & Research",
+  "Technology & Software",
+  "Travel & Hospitality",
+  "Writing & Publishing"
+];
+
+// Custom Searchable Dropdown for EditEvent (Styled to match EditEvent inputs)
+const SearchableDropdownEdit = ({ options, value, name, onSelect, customStyle }) => {
+  const [searchTerm, setSearchTerm] = useState(value || "");
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    setSearchTerm(value);
+  }, [value]);
+
+  const filteredOptions = options.filter((opt) =>
+    opt.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  return (
+    <div style={{ position: "relative", width: "100%" }}>
+      <input
+        type="text"
+        style={customStyle}
+        placeholder="Search or select category..."
+        value={searchTerm}
+        onChange={(e) => {
+          setSearchTerm(e.target.value);
+          setIsOpen(true);
+        }}
+        onFocus={() => setIsOpen(true)}
+        onBlur={() => setTimeout(() => setIsOpen(false), 200)}
+      />
+      {isOpen && (
+        <ul style={{
+          position: "absolute",
+          top: "100%",
+          left: 0,
+          right: 0,
+          zIndex: 50,
+          background: "#ffffff",
+          maxHeight: "220px",
+          overflowY: "auto",
+          margin: "5px 0 0 0",
+          padding: "0",
+          listStyle: "none",
+          borderRadius: "12px",
+          boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
+          border: "none"
+        }}>
+          {filteredOptions.length > 0 ? (
+            filteredOptions.map((opt) => (
+              <li
+                key={opt}
+                style={{
+                  padding: "15px 18px",
+                  cursor: "pointer",
+                  color: "#000",
+                  borderBottom: "1px solid #f0f0f0",
+                  fontSize: "1rem",
+                  fontWeight: "600",
+                  transition: "background 0.2s"
+                }}
+                onMouseDown={() => onSelect(name, opt)}
+                onMouseEnter={(e) => e.currentTarget.style.background = "#ffeedb"}
+                onMouseLeave={(e) => e.currentTarget.style.background = "#ffffff"}
+              >
+                {opt}
+              </li>
+            ))
+          ) : (
+            <li style={{ padding: "15px 18px", color: "#888", fontWeight: "600" }}>
+              No categories found
+            </li>
+          )}
+        </ul>
+      )}
+    </div>
+  );
+};
+
 export default function EditEvent() {
   const { eventId } = useParams();
   const navigate = useNavigate();
@@ -14,9 +117,10 @@ export default function EditEvent() {
   const [formData, setFormData] = useState({
     name: "",
     speaker: "",
+    category: "Technology & Software", // ADDED CATEGORY FIELD
     date: "",
     timeZone: "Africa/Lagos", 
-    isPrivate: true, // Switched to isPrivate as default
+    isPrivate: true, 
     externalLink: "",
     description: "",
     learningObjectives: ""
@@ -30,9 +134,6 @@ export default function EditEvent() {
         if (docSnap.exists()) {
           const data = docSnap.data();
           
-          // MIGRATION LOGIC:
-          // If isPrivate exists, use it.
-          // If only isPublic exists, invert it to set isPrivate.
           let initialPrivateStatus = true;
           if (data.isPrivate !== undefined) {
             initialPrivateStatus = data.isPrivate;
@@ -62,8 +163,6 @@ export default function EditEvent() {
     try {
       const docRef = doc(db, "events", eventId);
       
-      // Update logic using ONLY isPrivate
-      // deleteField() removes the legacy 'isPublic' key entirely
       const cleanData = {
         ...formData,
         isPublic: deleteField(), 
@@ -76,6 +175,10 @@ export default function EditEvent() {
       console.error("Firestore Update Error:", error);
       alert("Failed to update: Check Firestore permissions.");
     }
+  };
+
+  const handleCategorySelect = (name, value) => {
+    setFormData({ ...formData, [name]: value });
   };
 
   if (loading) return <div className="loader">Loading...</div>;
@@ -133,7 +236,7 @@ export default function EditEvent() {
             boxShadow: '0 25px 50px rgba(0,0,0,0.4)'
           }}
         >
-          {/* ✅ HIGH CONTRAST STATUS BANNER */}
+          {/* HIGH CONTRAST STATUS BANNER */}
           <div style={{
             marginBottom: '30px',
             padding: '20px',
@@ -141,7 +244,6 @@ export default function EditEvent() {
             textAlign: 'center',
             fontWeight: '900',
             fontSize: '1.1rem',
-            // High contrast: Red/Black for Private, Green for Public
             background: formData.isPrivate ? '#000000' : '#22c55e', 
             color: '#ffffff',
             boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
@@ -162,15 +264,29 @@ export default function EditEvent() {
             />
           </div>
 
-          {/* Speaker Name */}
-          <div style={{ marginBottom: '25px' }}>
-            <label style={labelStyle}>Speaker Name</label>
-            <input 
-              type="text" 
-              style={inputStyle}
-              value={formData.speaker}
-              onChange={(e) => setFormData({...formData, speaker: e.target.value})}
-            />
+          <div style={{ display: 'flex', gap: '20px', marginBottom: '25px' }}>
+            {/* Speaker Name */}
+            <div style={{ flex: 1 }}>
+              <label style={labelStyle}>Speaker Name</label>
+              <input 
+                type="text" 
+                style={inputStyle}
+                value={formData.speaker}
+                onChange={(e) => setFormData({...formData, speaker: e.target.value})}
+              />
+            </div>
+
+            {/* IMPLEMENTED SEARCHABLE DROPDOWN */}
+            <div style={{ flex: 1 }}>
+              <label style={labelStyle}>Category</label>
+              <SearchableDropdownEdit
+                options={WEBINAR_CATEGORIES}
+                value={formData.category}
+                name="category"
+                onSelect={handleCategorySelect}
+                customStyle={inputStyle}
+              />
+            </div>
           </div>
 
           {/* Date/Time and Time Zone */}
@@ -198,7 +314,7 @@ export default function EditEvent() {
             </div>
           </div>
 
-          {/* ✅ PRIVATE TOGGLE SECTION */}
+          {/* PRIVATE TOGGLE SECTION */}
           <div style={{ 
             marginBottom: '25px', 
             display: 'flex', 
@@ -217,7 +333,6 @@ export default function EditEvent() {
             <input 
               type="checkbox" 
               checked={formData.isPrivate}
-              // Update state based on checkbox
               onChange={(e) => setFormData({...formData, isPrivate: e.target.checked})}
               style={{ 
                 width: '35px', 

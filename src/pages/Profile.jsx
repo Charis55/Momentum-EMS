@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { auth, db } from "../firebase/config"; // Removed storage
+import { auth, db } from "../firebase/config";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { 
   updateProfile, 
@@ -10,7 +10,6 @@ import {
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import Toolbar from "../components/Toolbar";
-import "./Profile.css";
 
 export default function Profile() {
   const user = auth.currentUser;
@@ -38,7 +37,6 @@ export default function Profile() {
       await signOut(auth);
       navigate("/login");
     } catch (err) {
-      console.error("Logout Error:", err);
       setStatusMsg({ type: "error", text: "❌ Error logging out." });
     }
   }
@@ -47,17 +45,10 @@ export default function Profile() {
     setSaving(true);
     setStatusMsg({ type: "", text: "" });
     try {
-      // Updated to only handle Display Name
       await updateProfile(user, { displayName: username });
-
-      await setDoc(doc(db, "users", user.uid), { 
-        username, 
-        email: user.email 
-      }, { merge: true });
-
+      await setDoc(doc(db, "users", user.uid), { username, email: user.email }, { merge: true });
       setStatusMsg({ type: "success", text: "✅ Profile updated successfully!" });
     } catch (err) {
-      console.error(err);
       setStatusMsg({ type: "error", text: "❌ Error: " + err.message });
     }
     setSaving(false);
@@ -69,14 +60,14 @@ export default function Profile() {
       await verifyBeforeUpdateEmail(user, email);
       setStatusMsg({ type: "success", text: "📧 Verification link sent to new email!" });
     } catch (err) {
-      setStatusMsg({ type: "error", text: "❌ Error: Re-authenticate to change email." });
+      setStatusMsg({ type: "error", text: "❌ Re-authenticate to change email." });
     }
   }
 
   async function handlePasswordReset() {
     try {
       await sendPasswordResetEmail(auth, user.email);
-      setStatusMsg({ type: "success", text: "🔑 Password reset link sent to your inbox!" });
+      setStatusMsg({ type: "success", text: "🔑 Password reset link sent!" });
     } catch (err) {
       setStatusMsg({ type: "error", text: "❌ Error: " + err.message });
     }
@@ -87,102 +78,89 @@ export default function Profile() {
       await deleteUser(user);
       window.location.href = "/login";
     } catch (err) {
-      alert("❌ Re-authenticate by logging in again to delete account.");
+      alert("❌ Re-authenticate to delete account.");
     }
   }
 
   return (
-    <>
+    <div style={{
+      minHeight: "100vh",
+      background: "radial-gradient(circle at 15% 15%, #8b4513 0%, #3d1f0a 35%, #0f0e0e 75%, #0a0a0a 100%)",
+      paddingTop: "100px",
+      fontFamily: "'Inter', sans-serif"
+    }}>
       <Toolbar />
-      <div className="auth-bg auth-center" style={{ paddingTop: '80px' }}>
-        <div className="profile-card animate-fade">
-          
-          <h2 className="auth-title" style={{ fontSize: '2.2rem', marginBottom: '30px' }}>Account Settings</h2>
+      <div style={{ maxWidth: "500px", margin: "0 auto", padding: "0 20px" }}>
+        <div style={{ 
+          background: "rgba(255, 255, 255, 0.05)", 
+          backdropFilter: "blur(15px)", 
+          borderRadius: "30px", 
+          padding: "40px",
+          border: "1px solid rgba(255,255,255,0.1)",
+          color: "white"
+        }}>
+          <h2 style={{ fontSize: "2.2rem", fontWeight: "900", marginBottom: "30px", textAlign: "center" }}>Account Settings</h2>
 
           {statusMsg.text && (
-            <p className={statusMsg.type === "error" ? "auth-error" : "gradient-text"} style={{ textAlign: 'center', marginBottom: '20px' }}>
-              {statusMsg.text}
-            </p>
+            <p style={{ 
+              textAlign: "center", 
+              color: statusMsg.type === "error" ? "#ff4444" : "#ffcc33",
+              fontWeight: "600",
+              marginBottom: "20px" 
+            }}>{statusMsg.text}</p>
           )}
 
-          <div className="auth-form">
-            <div className="input-group">
-              <label>Display Name</label>
+          <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+            <div>
+              <label style={{ display: "block", marginBottom: "8px", opacity: 0.8, fontSize: "0.9rem" }}>Display Name</label>
               <input 
-                className="profile-input"
+                style={inputStyle}
                 value={username} 
                 onChange={(e) => setUsername(e.target.value)} 
-                placeholder="Username" 
               />
             </div>
 
-            <button className="auth-btn" onClick={handleSave} disabled={saving}>
+            <button style={primaryBtn} onClick={handleSave} disabled={saving}>
               {saving ? "Processing..." : "Save Basic Info"}
             </button>
 
-            <div className="profile-divider" />
+            <hr style={{ border: "0", borderTop: "1px solid rgba(255,255,255,0.1)", margin: "10px 0" }} />
 
-            <div className="input-group">
-              <label>Account Email</label>
-              <input 
-                className="profile-input"
-                type="email" 
-                value={email} 
-                onChange={(e) => setEmail(e.target.value)} 
-              />
-              <button className="btn-secondary-outline" onClick={handleEmailUpdate}>
-                Update & Verify Email
-              </button>
+            <div>
+              <label style={{ display: "block", marginBottom: "8px", opacity: 0.8, fontSize: "0.9rem" }}>Account Email</label>
+              <input style={inputStyle} type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+              <button style={outlineBtn} onClick={handleEmailUpdate}>Update & Verify Email</button>
             </div>
 
-            <div className="input-group">
-              <label>Security</label>
-              <button className="btn-secondary-outline" onClick={handlePasswordReset}>
-                Send Password Reset Email
-              </button>
-            </div>
+            <button style={outlineBtn} onClick={handlePasswordReset}>Send Password Reset Email</button>
 
-            <div className="danger-zone">
-              <h4 style={{ color: '#ff4444' }}>Danger Zone</h4>
-              <p>Session management and account deletion.</p>
-              
-              <button className="danger-btn" onClick={() => setShowDeleteModal(true)} style={{ marginBottom: '12px' }}>
-                Delete Account
-              </button>
-
-              <button 
-                onClick={handleLogout}
-                className="btn-secondary-outline" 
-                style={{ 
-                  width: '100%', 
-                  padding: '14px', 
-                  fontSize: '1rem', 
-                  borderColor: 'rgba(255,255,255,0.2)', 
-                  color: '#fff',
-                  marginTop: '5px'
-                }}
-              >
-                Logout from Momentum
-              </button>
+            <div style={{ marginTop: "20px", padding: "20px", borderRadius: "20px", background: "rgba(255, 68, 68, 0.1)" }}>
+              <h4 style={{ color: "#ff4444", margin: "0 0 10px 0" }}>Danger Zone</h4>
+              <button style={{ ...primaryBtn, background: "#ff4444", marginBottom: "10px" }} onClick={() => setShowDeleteModal(true)}>Delete Account</button>
+              <button style={outlineBtn} onClick={handleLogout}>Logout from Momentum</button>
             </div>
           </div>
         </div>
+      </div>
 
-        {showDeleteModal && (
-          <div className="modal-overlay">
-            <div className="auth-card-dark" style={{ width: '380px', textAlign: 'center' }}>
-              <h3 style={{ color: 'white', marginBottom: '10px' }}>Are you sure?</h3>
-              <p style={{ color: 'rgba(255,255,255,0.7)', marginBottom: '25px' }}>
-                This action is irreversible. You may need to log in again to confirm.
-              </p>
-              <div style={{ display: 'flex', gap: '10px' }}>
-                <button className="danger-btn" onClick={confirmDelete}>Confirm Delete</button>
-                <button className="auth-btn" style={{ background: '#444' }} onClick={() => setShowDeleteModal(false)}>Cancel</button>
-              </div>
+      {showDeleteModal && (
+        <div style={modalOverlay}>
+          <div style={modalContent}>
+            <h3>Are you sure?</h3>
+            <p>This action is irreversible.</p>
+            <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
+              <button style={{ ...primaryBtn, background: "#ff4444" }} onClick={confirmDelete}>Confirm</button>
+              <button style={{ ...primaryBtn, background: "#444" }} onClick={() => setShowDeleteModal(false)}>Cancel</button>
             </div>
           </div>
-        )}
-      </div>
-    </>
+        </div>
+      )}
+    </div>
   );
 }
+
+const inputStyle = { width: "100%", padding: "12px", borderRadius: "10px", border: "none", background: "rgba(255,255,255,0.9)", color: "#333", fontWeight: "600", marginBottom: "10px" };
+const primaryBtn = { width: "100%", padding: "14px", borderRadius: "12px", border: "none", background: "linear-gradient(90deg, #ff7e00, #ffcc33)", color: "white", fontWeight: "800", cursor: "pointer" };
+const outlineBtn = { width: "100%", padding: "12px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.3)", background: "transparent", color: "white", fontWeight: "600", cursor: "pointer", marginTop: "5px" };
+const modalOverlay = { position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.8)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 };
+const modalContent = { background: "#1a1a1a", padding: "40px", borderRadius: "30px", textAlign: "center", color: "white", border: "1px solid rgba(255,255,255,0.1)" };

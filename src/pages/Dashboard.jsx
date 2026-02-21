@@ -9,12 +9,10 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Listens for all events in real-time
     const unsubscribe = subscribeUpcomingEvents((data) => {
       setEvents(data || []);
       setLoading(false);
     });
-
     return () => unsubscribe();
   }, []);
 
@@ -24,13 +22,21 @@ export default function Dashboard() {
 
       {/* PREMIUM HERO */}
       <section className="hero-premium container">
-        <div>
+        <div className="hero-content-wrapper">
           <h1 className="hero-title">
             Welcome to <span className="gradient-text">Momentum EMS</span>
           </h1>
-          <p className="hero-sub">
-            Plan, host & attend impactful webinars — built for accessibility & excellence.
-          </p>
+
+          {/* REFINED MISSION STATEMENT WITH FINESSE */}
+          <div className="finesse-description-container">
+            <p className="hero-description">
+              <span className="hero-accent">Experience a seamless bridge between coordination and connection.</span>
+              Momentum EMS is your dedicated workspace for hosting high-accessibility
+              webinars and managing real-time video conferences. From professional
+              knowledge sharing to interactive team syncs, we provide the tools to
+              ensure every voice is heard and every event leaves an impact.
+            </p>
+          </div>
 
           <div className="hero-btns">
             <Link to="/create" className="btn-primary">
@@ -48,8 +54,8 @@ export default function Dashboard() {
       </section>
 
       {/* UPCOMING WEBINARS SECTION */}
-      <section className="container" style={{ marginTop: "130px", paddingTop: "80px", paddingBottom: "100px" }}>
-        
+      <section className="container" style={{ marginTop: "80px", paddingTop: "80px", paddingBottom: "100px" }}>
+
         <div className="section-header" style={{ textAlign: "center", marginBottom: "60px" }}>
           <h2 className="section-title-glow">
             <span className="gradient-text">Upcoming Webinars</span>
@@ -60,33 +66,30 @@ export default function Dashboard() {
           <div className="underline-accent" style={{ margin: "20px auto" }}></div>
         </div>
 
-        {/* SYMMETRICAL 2-COLUMN GRID */}
-        <div className="event-grid" style={{ 
-          display: "grid", 
-          gridTemplateColumns: "repeat(2, 1fr)", 
-          gap: "35px", 
-          maxWidth: "1200px", 
-          margin: "0 auto" 
+        {/* SYMMETRICAL EVENT GRID (Uses responsive .event-grid-dashboard from styles.css) */}
+        <div className="event-grid-dashboard" style={{
+          maxWidth: "1200px",
+          margin: "0 auto"
         }}>
-          {loading && <p style={{ color: "#fff", gridColumn: "span 2", textAlign: "center" }}>Loading events...</p>}
+          {loading && <p style={{ color: "#fff", gridColumn: "1 / -1", textAlign: "center" }}>Loading events...</p>}
 
           {!loading && events.length === 0 && (
-            <p style={{ opacity: 0.8, color: "#fff", gridColumn: "span 2", textAlign: "center" }}>No upcoming events yet.</p>
+            <div style={{ gridColumn: "1 / -1", textAlign: "center", padding: "40px" }}>
+              <p style={{ opacity: 0.8, color: "#fff", marginBottom: "20px" }}>No upcoming events yet.</p>
+              <Link to="/create" className="btn-primary" style={{ fontSize: "0.9rem" }}>Be the first to host</Link>
+            </div>
           )}
 
-          {/* Slicing to 4 events to maintain the 2x2 row structure */}
           {events.slice(0, 4).map((e) => (
             <div key={e.id} className="event-card-curve scroll-fade" style={{ width: "100%", margin: "0" }}>
               <div className="event-card-body" style={{ height: "100%", display: "flex", flexDirection: "column" }}>
-                {/* Logo and Branding */}
                 <img
                   src={logo}
                   className="event-thumb-img"
                   alt="Momentum Logo"
-                  style={{ objectFit: "contain", background: "#fff", padding: "10px", borderRadius: "12px", marginBottom: "20px" }}
+                  style={{ objectFit: "contain", padding: "10px", borderRadius: "12px", marginBottom: "20px" }}
                 />
 
-                {/* Event Info Retained from Previous State */}
                 <h3 style={{ fontSize: "1.4rem", fontWeight: "800", color: "#333", marginBottom: "12px" }}>{e.name}</h3>
 
                 <div className="event-meta-row" style={{ color: "#555", fontWeight: "600", marginBottom: "8px" }}>
@@ -96,14 +99,13 @@ export default function Dashboard() {
 
                 <div className="event-meta-row" style={{ color: "#555", fontWeight: "600", marginBottom: "15px" }}>
                   <span className="event-icon" style={{ marginRight: "8px" }}>🕒</span>
-                  {e.date || e.timingISO ? new Date(e.date || e.timingISO).toLocaleString() : "Date coming soon"}
+                  {e.date || e.timingISO ? new Date(e.date || e.timingISO).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : "Date coming soon"}
                 </div>
 
                 <p style={{ color: "#666", fontSize: "0.95rem", lineHeight: "1.5", flexGrow: 1 }}>
-                  {e.description?.substring(0, 100) || "No event description available yet."}...
+                  {e.description?.substring(0, 120) || "No event description available yet."}...
                 </p>
 
-                {/* Action Link */}
                 <Link to={`/event/${e.id}`} className="event-btn" style={{ marginTop: "20px" }}>
                   View Details →
                 </Link>
@@ -112,6 +114,41 @@ export default function Dashboard() {
           ))}
         </div>
       </section>
+
+      <style>{`
+        .hero-content-wrapper {
+          max-width: 680px;
+        }
+        .finesse-description-container {
+          margin: 25px 0 45px 0;
+          padding-left: 20px;
+          border-left: 3px solid rgba(255, 204, 51, 0.4);
+        }
+        .hero-description {
+          color: rgba(255, 255, 255, 0.8);
+          font-size: 1.15rem;
+          line-height: 1.8;
+          font-weight: 400;
+          letter-spacing: 0.01em;
+          animation: fadeInUp 1s ease-out;
+        }
+        .hero-accent {
+          display: block;
+          color: #ffffff;
+          font-size: 1.35rem;
+          font-weight: 800;
+          margin-bottom: 12px;
+          letter-spacing: -0.01em;
+          line-height: 1.3;
+        }
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(15px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .hero-title {
+          margin-bottom: 20px;
+        }
+      `}</style>
     </>
   );
 }

@@ -35,8 +35,8 @@ export default function Toolbar() {
     transition: 'all 0.3s ease',
     display: 'block',
     letterSpacing: '0.5px',
-    background: isActive 
-      ? 'linear-gradient(90deg, #ff7a00, #ffcc33)' 
+    background: isActive
+      ? 'linear-gradient(90deg, #ff7a00, #ffcc33)'
       : 'transparent',
     WebkitBackgroundClip: isActive ? 'text' : 'unset',
     WebkitTextFillColor: isActive ? 'transparent' : 'white',
@@ -44,9 +44,9 @@ export default function Toolbar() {
   });
 
   return (
-    <header className="app-header" style={{ 
-      display: 'flex', 
-      alignItems: 'center', 
+    <header className="app-header" style={{
+      display: 'flex',
+      alignItems: 'center',
       justifyContent: 'space-between',
       padding: '0 30px',
       position: 'fixed',
@@ -54,14 +54,14 @@ export default function Toolbar() {
       top: 0,
       left: 0,
       zIndex: 1000,
-      background: 'rgba(255, 255, 255, 0.03)', 
+      background: 'rgba(255, 255, 255, 0.03)',
       backdropFilter: 'blur(15px)',
       WebkitBackdropFilter: 'blur(15px)',
       height: '80px',
       borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
       boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)'
     }}>
-      
+
       {/* LEFT: BRAND SECTION */}
       <Link to="/dashboard" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', flex: 1 }}>
         <img src={logo} alt="Momentum EMS" style={{ height: '42px', marginRight: '12px' }} />
@@ -71,10 +71,10 @@ export default function Toolbar() {
       </Link>
 
       {/* MIDDLE: WELCOME MESSAGE (Centered) */}
-      <div className="toolbar-welcome" style={{ 
-        flex: 1, 
-        textAlign: 'center', 
-        color: 'white', 
+      <div className="toolbar-welcome" style={{
+        flex: 1,
+        textAlign: 'center',
+        color: 'white',
         fontWeight: '600',
         fontSize: '1.1rem',
         letterSpacing: '1px',
@@ -85,7 +85,7 @@ export default function Toolbar() {
 
       {/* RIGHT: HAMBURGER TRIGGER */}
       <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
-        <button 
+        <button
           onClick={toggleMenu}
           className="hamburger-btn"
           style={{
@@ -116,7 +116,7 @@ export default function Toolbar() {
         right: menuOpen ? 0 : '-100%',
         width: '320px',
         height: '100vh',
-        background: 'rgba(15, 15, 15, 0.85)', 
+        background: 'rgba(15, 15, 15, 0.85)',
         backdropFilter: 'blur(25px)',
         WebkitBackdropFilter: 'blur(25px)',
         boxShadow: '-10px 0 40px rgba(0,0,0,0.6)',
@@ -135,7 +135,7 @@ export default function Toolbar() {
         <NavLink to="/create" onClick={toggleMenu} style={getNavLinkStyle} className="nav-drawer-link">Host Event</NavLink>
         <NavLink to="/organizer-dashboard" onClick={toggleMenu} style={getNavLinkStyle} className="nav-drawer-link">Organizer Lab</NavLink>
         <NavLink to="/profile" onClick={toggleMenu} style={getNavLinkStyle} className="nav-drawer-link">My Profile</NavLink>
-        
+
         <div style={{ marginTop: 'auto', paddingTop: '20px' }}>
           <button onClick={handleLogout} style={{
             width: '100%',
@@ -149,8 +149,8 @@ export default function Toolbar() {
             fontSize: '1rem',
             transition: '0.3s'
           }}
-          onMouseOver={(e) => e.target.style.background = 'rgba(255, 68, 68, 0.2)'}
-          onMouseOut={(e) => e.target.style.background = 'rgba(255, 68, 68, 0.1)'}
+            onMouseOver={(e) => e.target.style.background = 'rgba(255, 68, 68, 0.2)'}
+            onMouseOut={(e) => e.target.style.background = 'rgba(255, 68, 68, 0.1)'}
           >
             LOGOUT
           </button>
@@ -159,7 +159,7 @@ export default function Toolbar() {
 
       {/* DARK BACKDROP BLUR */}
       {menuOpen && (
-        <div 
+        <div
           onClick={toggleMenu}
           style={{
             position: 'fixed',
@@ -175,7 +175,7 @@ export default function Toolbar() {
         />
       )}
 
-      {/* Embedded Style for Hovers */}
+      {/* Embedded Style for Hovers and Mobile Responsiveness */}
       <style>{`
         .nav-drawer-link:hover {
           padding-left: 10px !important;
@@ -185,6 +185,14 @@ export default function Toolbar() {
         .hamburger-btn:hover {
           background: rgba(255, 255, 255, 0.15) !important;
           transform: scale(1.05);
+        }
+        @media (max-width: 768px) {
+          .toolbar-welcome {
+            display: none !important;
+          }
+          .app-header {
+            padding: 0 15px !important;
+          }
         }
       `}</style>
     </header>

@@ -1,6 +1,6 @@
 // src/App.jsx
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -12,24 +12,27 @@ import Settings from "./pages/Settings";
 import PrivateRoute from "./components/PrivateRoute";
 import OrganizerDashboard from "./pages/OrganizerDashboard"; 
 import EditEvent from "./pages/EditEvent"; 
-
-// ✅ IMPORT YOUR SCHEDULE COMPONENT
-// Create this file if you haven't already
 import MySchedule from "./pages/MySchedule"; 
 
 export default function App() {
   return (
-    <>
+    <div style={{ 
+      minHeight: "100vh", 
+      background: "radial-gradient(circle at 15% 15%, #8b4513 0%, #3d1f0a 35%, #0f0e0e 75%, #0a0a0a 100%)",
+      backgroundAttachment: "fixed"
+    }}>
       <Routes>
-        <Route path="/" element={<Login />} />
+        {/* Force "/" and invalid paths to Login if not authenticated */}
+        <Route path="/" element={<Navigate to="/login" replace />} />
+        
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
-        {/* ✅ Public Event Routes */}
+        {/* Public Event Routes */}
         <Route path="/events" element={<EventPage />} />
         <Route path="/event/:id" element={<EventDetails />} />
 
-        {/* ✅ Protected Dashboard & Profile Routes */}
+        {/* Protected Dashboard & Profile Routes */}
         <Route
           path="/dashboard"
           element={
@@ -48,7 +51,6 @@ export default function App() {
           }
         />
 
-        {/* ✅ FIX: ADDED MY-SCHEDULE ROUTE */}
         <Route
           path="/my-schedule"
           element={
@@ -58,7 +60,7 @@ export default function App() {
           }
         />
 
-        {/* ✅ Event Management Routes */}
+        {/* Event Management Routes */}
         <Route
           path="/create"
           element={
@@ -94,7 +96,10 @@ export default function App() {
             </PrivateRoute>
           }
         />
+
+        {/* Catch-all: Redirect unknown routes back to Login */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
-    </>
+    </div>
   );
 }
