@@ -4,7 +4,9 @@ import { collection, getDocs } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Toolbar from "../components/Toolbar";
+import { getCategoryImage } from "../utils/categoryImages";
 import logo from "/assets/momentum-logo.svg";
+import { sendUpcomingEventReminder } from "../utils/emailService";
 
 export default function MySchedule() {
   const [myEvents, setMyEvents] = useState([]);
@@ -32,6 +34,28 @@ export default function MySchedule() {
         }));
 
         setMyEvents(fetched);
+
+        // ── 24-hour reminder logic ───────────────────────────────
+        const NOW = Date.now();
+        const H24 = 24 * 60 * 60 * 1000;
+        const sentKey = `momentum_reminders_${user.uid}`;
+        const alreadySent = JSON.parse(localStorage.getItem(sentKey) || "{}");
+
+        fetched.forEach(event => {
+          const eventDate = new Date(event.date || event.eventDate).getTime();
+          const isWithin24h = eventDate > NOW && eventDate - NOW <= H24;
+          if (isWithin24h && !alreadySent[event.eventId || event.enrollmentId]) {
+            sendUpcomingEventReminder(user, {
+              name: event.eventName || event.name,
+              date: event.date || event.eventDate,
+              link: event.link,
+              speaker: event.speaker,
+            });
+            alreadySent[event.eventId || event.enrollmentId] = true;
+          }
+        });
+        localStorage.setItem(sentKey, JSON.stringify(alreadySent));
+        // ────────────────────────────────────────────────────────
       } catch (err) {
         console.error("Fetch Error:", err);
       } finally {
@@ -41,6 +65,7 @@ export default function MySchedule() {
 
     fetchMyEnrollments();
   }, []);
+
 
   const filteredAndSortedMyEvents = myEvents
     .filter((item) => {
@@ -124,7 +149,27 @@ export default function MySchedule() {
                   className="event-card-curve"
                 >
                   <div className="event-card-body">
-                    <img src={logo} alt="Momentum" className="event-thumb-img" style={{ objectFit: 'contain', padding: '10px' }} />
+                    <div style={{
+                      width: '100%',
+                      height: '160px',
+                      borderRadius: '12px',
+                      overflow: 'hidden',
+                      marginBottom: '20px',
+                      background: 'rgba(255,255,255,0.03)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}>
+                      <img
+                        src={getCategoryImage(item.category || item.eventCategory)}
+                        alt="Momentum"
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover'
+                        }}
+                      />
+                    </div>
 
                     <h3>
                       {item.eventName || item.eventTitle || "Untitled Webinar"}

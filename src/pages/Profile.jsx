@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { auth, db } from "../firebase/config";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { 
-  updateProfile, 
-  deleteUser, 
-  verifyBeforeUpdateEmail, 
+import {
+  updateProfile,
+  deleteUser,
+  verifyBeforeUpdateEmail,
   sendPasswordResetEmail,
-  signOut 
+  signOut
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import Toolbar from "../components/Toolbar";
+import ConfirmationModal from "../components/ConfirmationModal";
 
 export default function Profile() {
   const user = auth.currentUser;
@@ -19,7 +20,14 @@ export default function Profile() {
   const [email, setEmail] = useState(user?.email || "");
   const [saving, setSaving] = useState(false);
   const [statusMsg, setStatusMsg] = useState({ type: "", text: "" });
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [modal, setModal] = useState({
+    isOpen: false,
+    title: "",
+    message: "",
+    type: "info",
+    onConfirm: () => { },
+    onCancel: null
+  });
 
   useEffect(() => {
     async function loadProfile() {
@@ -78,9 +86,27 @@ export default function Profile() {
       await deleteUser(user);
       window.location.href = "/login";
     } catch (err) {
-      alert("❌ Re-authenticate to delete account.");
+      setModal({
+        isOpen: true,
+        title: "Error",
+        message: "❌ Re-authenticate to delete account.",
+        type: "danger",
+        onConfirm: () => setModal({ ...modal, isOpen: false }),
+        onCancel: null
+      });
     }
   }
+
+  const handleDeleteRequest = () => {
+    setModal({
+      isOpen: true,
+      title: "Delete Account",
+      message: "Are you sure? This action is irreversible.",
+      type: "danger",
+      onConfirm: confirmDelete,
+      onCancel: () => setModal({ ...modal, isOpen: false })
+    });
+  };
 
   return (
     <div style={{
@@ -91,10 +117,10 @@ export default function Profile() {
     }}>
       <Toolbar />
       <div style={{ maxWidth: "500px", margin: "0 auto", padding: "0 20px" }}>
-        <div style={{ 
-          background: "rgba(255, 255, 255, 0.05)", 
-          backdropFilter: "blur(15px)", 
-          borderRadius: "30px", 
+        <div style={{
+          background: "rgba(255, 255, 255, 0.05)",
+          backdropFilter: "blur(15px)",
+          borderRadius: "30px",
           padding: "40px",
           border: "1px solid rgba(255,255,255,0.1)",
           color: "white"
@@ -102,21 +128,21 @@ export default function Profile() {
           <h2 style={{ fontSize: "2.2rem", fontWeight: "900", marginBottom: "30px", textAlign: "center" }}>Account Settings</h2>
 
           {statusMsg.text && (
-            <p style={{ 
-              textAlign: "center", 
+            <p style={{
+              textAlign: "center",
               color: statusMsg.type === "error" ? "#ff4444" : "#ffcc33",
               fontWeight: "600",
-              marginBottom: "20px" 
+              marginBottom: "20px"
             }}>{statusMsg.text}</p>
           )}
 
           <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
             <div>
               <label style={{ display: "block", marginBottom: "8px", opacity: 0.8, fontSize: "0.9rem" }}>Display Name</label>
-              <input 
+              <input
                 style={inputStyle}
-                value={username} 
-                onChange={(e) => setUsername(e.target.value)} 
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </div>
 
@@ -136,25 +162,21 @@ export default function Profile() {
 
             <div style={{ marginTop: "20px", padding: "20px", borderRadius: "20px", background: "rgba(255, 68, 68, 0.1)" }}>
               <h4 style={{ color: "#ff4444", margin: "0 0 10px 0" }}>Danger Zone</h4>
-              <button style={{ ...primaryBtn, background: "#ff4444", marginBottom: "10px" }} onClick={() => setShowDeleteModal(true)}>Delete Account</button>
+              <button style={{ ...primaryBtn, background: "#ff4444", marginBottom: "10px" }} onClick={handleDeleteRequest}>Delete Account</button>
               <button style={outlineBtn} onClick={handleLogout}>Logout from Momentum</button>
             </div>
           </div>
         </div>
       </div>
 
-      {showDeleteModal && (
-        <div style={modalOverlay}>
-          <div style={modalContent}>
-            <h3>Are you sure?</h3>
-            <p>This action is irreversible.</p>
-            <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
-              <button style={{ ...primaryBtn, background: "#ff4444" }} onClick={confirmDelete}>Confirm</button>
-              <button style={{ ...primaryBtn, background: "#444" }} onClick={() => setShowDeleteModal(false)}>Cancel</button>
-            </div>
-          </div>
-        </div>
-      )}
+      <ConfirmationModal
+        isOpen={modal.isOpen}
+        title={modal.title}
+        message={modal.message}
+        type={modal.type}
+        onConfirm={modal.onConfirm}
+        onCancel={modal.onCancel}
+      />
     </div>
   );
 }

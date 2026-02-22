@@ -5,26 +5,27 @@ import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import CreateEvent from "./pages/CreateEvent";
-import EventPage from "./pages/EventPage"; 
-import EventDetails from "./pages/EventDetails"; 
+import EventPage from "./pages/EventPage";
+import EventDetails from "./pages/EventDetails";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import PrivateRoute from "./components/PrivateRoute";
-import OrganizerDashboard from "./pages/OrganizerDashboard"; 
-import EditEvent from "./pages/EditEvent"; 
-import MySchedule from "./pages/MySchedule"; 
+import OrganizerDashboard from "./pages/OrganizerDashboard";
+import EditEvent from "./pages/EditEvent";
+import MySchedule from "./pages/MySchedule";
+import AccessibilityWidget from "./components/AccessibilityWidget";
 
 export default function App() {
   return (
-    <div style={{ 
-      minHeight: "100vh", 
+    <div style={{
+      minHeight: "100vh",
       background: "radial-gradient(circle at 15% 15%, #8b4513 0%, #3d1f0a 35%, #0f0e0e 75%, #0a0a0a 100%)",
       backgroundAttachment: "fixed"
     }}>
       <Routes>
         {/* Force "/" and invalid paths to Login if not authenticated */}
         <Route path="/" element={<Navigate to="/login" replace />} />
-        
+
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
@@ -100,6 +101,7 @@ export default function App() {
         {/* Catch-all: Redirect unknown routes back to Login */}
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
+      <AccessibilityWidget />
     </div>
   );
 }

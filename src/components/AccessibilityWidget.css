@@ -1,0 +1,317 @@
+/* ────────────────────────────────────────────────────────────
+   Accessibility Widget — Momentum EMS
+   ──────────────────────────────────────────────────────────── */
+
+/* Root anchor — fixed bottom-right */
+.a11y-widget-root {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+/* ── Trigger button ─────────────────────────────────────────── */
+.a11y-trigger {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2a1800, #1a0f00);
+    border: 2px solid #ffcc33;
+    box-shadow: 0 0 20px rgba(255, 122, 0, 0.35), 0 4px 16px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.a11y-trigger:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 30px rgba(255, 122, 0, 0.55), 0 6px 20px rgba(0, 0, 0, 0.6);
+    border-color: #ff7a00;
+}
+
+.a11y-trigger:focus-visible {
+    outline: 3px solid #ffcc33;
+    outline-offset: 3px;
+}
+
+/* ── Speech bubble panel ────────────────────────────────────── */
+.a11y-panel {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    width: 300px;
+    background: rgba(18, 10, 2, 0.95);
+    border: 1px solid rgba(255, 204, 51, 0.3);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 122, 0, 0.15);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    animation: a11y-pop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Callout arrow pointing down towards the trigger */
+.a11y-arrow {
+    position: absolute;
+    bottom: -10px;
+    right: 20px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid rgba(255, 204, 51, 0.3);
+}
+
+.a11y-arrow::after {
+    content: "";
+    position: absolute;
+    top: -11px;
+    left: -9px;
+    width: 0;
+    height: 0;
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    border-top: 9px solid rgba(18, 10, 2, 0.95);
+}
+
+@keyframes a11y-pop {
+    from {
+        opacity: 0;
+        transform: scale(0.85) translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* ── Panel header ───────────────────────────────────────────── */
+.a11y-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 204, 51, 0.15);
+}
+
+.a11y-panel-title {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #ffcc33;
+    letter-spacing: 0.5px;
+}
+
+.a11y-close-btn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 1rem;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.a11y-close-btn:hover {
+    color: #fff;
+}
+
+/* ── Option buttons ─────────────────────────────────────────── */
+.a11y-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.a11y-option-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-align: left;
+    color: #fff;
+}
+
+.a11y-option-btn:hover {
+    background: rgba(255, 204, 51, 0.08);
+    border-color: rgba(255, 204, 51, 0.25);
+    transform: translateX(-2px);
+}
+
+.a11y-option-btn.a11y-active {
+    background: rgba(255, 204, 51, 0.1);
+    border-color: rgba(255, 204, 51, 0.4);
+}
+
+.a11y-option-icon {
+    font-size: 1.4rem;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.a11y-option-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.a11y-option-label {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.a11y-option-desc {
+    font-size: 0.73rem;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+/* ── Toggle switch ──────────────────────────────────────────── */
+.a11y-toggle {
+    width: 36px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    position: relative;
+    flex-shrink: 0;
+    transition: background 0.3s;
+}
+
+.a11y-toggle::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.a11y-toggle.on {
+    background: linear-gradient(90deg, #ff7a00, #ffcc33);
+}
+
+.a11y-toggle.on::after {
+    transform: translateX(16px);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LIGHT MODE — proper warm color scheme for readability
+   ═══════════════════════════════════════════════════════════ */
+
+/* Page root background */
+body.momentum-light-mode,
+body.momentum-light-mode>div {
+    background: #f5f0ea !important;
+    color: #1a1410 !important;
+}
+
+/* App.jsx radial-gradient wrapper */
+body.momentum-light-mode>div[style] {
+    background: linear-gradient(135deg, #f7f2eb 0%, #ede6db 60%, #e8dfd4 100%) !important;
+}
+
+/* Text elements */
+body.momentum-light-mode h1,
+body.momentum-light-mode h2,
+body.momentum-light-mode h3,
+body.momentum-light-mode h4,
+body.momentum-light-mode h5,
+body.momentum-light-mode p,
+body.momentum-light-mode span,
+body.momentum-light-mode label,
+body.momentum-light-mode li {
+    color: #1a1410 !important;
+}
+
+/* Links */
+body.momentum-light-mode a {
+    color: #b07800 !important;
+}
+
+body.momentum-light-mode a:hover {
+    color: #7a5200 !important;
+}
+
+/* Cards / surface containers */
+body.momentum-light-mode [class*="card"],
+body.momentum-light-mode [class*="Card"],
+body.momentum-light-mode [class*="panel"],
+body.momentum-light-mode [class*="wrapper"],
+body.momentum-light-mode [class*="container"] {
+    background: rgba(255, 252, 248, 0.98) !important;
+    border-color: rgba(180, 140, 60, 0.2) !important;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08) !important;
+    color: #1a1410 !important;
+}
+
+/* Inputs & selects */
+body.momentum-light-mode input,
+body.momentum-light-mode textarea,
+body.momentum-light-mode select {
+    background: #fff !important;
+    color: #1a1410 !important;
+    border-color: rgba(160, 120, 40, 0.35) !important;
+}
+
+body.momentum-light-mode input::placeholder,
+body.momentum-light-mode textarea::placeholder {
+    color: #9a8a78 !important;
+}
+
+/* Scrollbar */
+body.momentum-light-mode ::-webkit-scrollbar-track {
+    background: #ede6db;
+}
+
+body.momentum-light-mode ::-webkit-scrollbar-thumb {
+    background: rgba(160, 120, 40, 0.4);
+    border-radius: 4px;
+}
+
+/* Keep the accessibility widget panel always dark */
+body.momentum-light-mode .a11y-panel,
+body.momentum-light-mode .a11y-panel * {
+    background: unset;
+    color: unset;
+}
+
+body.momentum-light-mode .a11y-panel {
+    background: rgba(18, 10, 2, 0.96) !important;
+}
+
+body.momentum-light-mode .a11y-option-label {
+    color: #fff !important;
+}
+
+body.momentum-light-mode .a11y-panel-title {
+    color: #ffcc33 !important;
+}
+
+body.momentum-light-mode .a11y-close-btn {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   KEYBOARD NAVIGATION — visible focus outlines
+   ═══════════════════════════════════════════════════════════ */
+body.momentum-keyboard-nav *:focus-visible {
+    outline: 3px solid #ffcc33 !important;
+    outline-offset: 3px !important;
+    box-shadow: 0 0 0 6px rgba(255, 204, 51, 0.2) !important;
+}

@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { auth } from "../firebase/config";
 import logo from "/assets/momentum-logo.svg";
+import MomentumAI from "./MomentumAI";
 
 export default function Toolbar() {
   const [displayName, setDisplayName] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [aiOpen, setAiOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -62,9 +64,12 @@ export default function Toolbar() {
       boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)'
     }}>
 
-      {/* LEFT: BRAND SECTION */}
       <Link to="/dashboard" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', flex: 1 }}>
-        <img src={logo} alt="Momentum EMS" style={{ height: '42px', marginRight: '12px' }} />
+        <img
+          src={logo}
+          alt="Momentum EMS"
+          style={{ height: '42px', marginRight: '12px' }}
+        />
         <h1 style={{ color: 'white', fontSize: '1.6rem', margin: 0, fontWeight: '800', letterSpacing: '-1px' }}>
           Momentum
         </h1>
@@ -113,30 +118,52 @@ export default function Toolbar() {
       <div style={{
         position: 'fixed',
         top: 0,
-        right: menuOpen ? 0 : '-100%',
+        right: 0,
         width: '320px',
         height: '100vh',
         background: 'rgba(15, 15, 15, 0.85)',
         backdropFilter: 'blur(25px)',
         WebkitBackdropFilter: 'blur(25px)',
         boxShadow: '-10px 0 40px rgba(0,0,0,0.6)',
+        transform: menuOpen ? 'translateX(0)' : 'translateX(100%)',
         transition: '0.5s cubic-bezier(0.4, 0, 0.2, 1)',
         display: 'flex',
         flexDirection: 'column',
         padding: '120px 40px',
         gap: '20px',
         zIndex: 1050,
-        borderLeft: '1px solid rgba(255, 255, 255, 0.1)'
+        borderLeft: '1px solid rgba(255, 255, 255, 0.1)',
+        willChange: 'transform'
       }}>
         {/* Navigation Links with Active State Gradient and Hover Styling */}
         <NavLink to="/dashboard" onClick={toggleMenu} style={getNavLinkStyle} className="nav-drawer-link">Home</NavLink>
         <NavLink to="/my-schedule" onClick={toggleMenu} style={getNavLinkStyle} className="nav-drawer-link">My Schedule</NavLink>
         <NavLink to="/events" onClick={toggleMenu} style={getNavLinkStyle} className="nav-drawer-link">Explore Events</NavLink>
         <NavLink to="/create" onClick={toggleMenu} style={getNavLinkStyle} className="nav-drawer-link">Host Event</NavLink>
-        <NavLink to="/organizer-dashboard" onClick={toggleMenu} style={getNavLinkStyle} className="nav-drawer-link">Organizer Lab</NavLink>
+        <NavLink to="/organizer-dashboard" onClick={toggleMenu} style={getNavLinkStyle} className="nav-drawer-link">Organizer Hub</NavLink>
         <NavLink to="/profile" onClick={toggleMenu} style={getNavLinkStyle} className="nav-drawer-link">My Profile</NavLink>
 
+
+
         <div style={{ marginTop: 'auto', paddingTop: '20px' }}>
+          <button
+            onClick={() => { setAiOpen(true); toggleMenu(); }}
+            className="nav-drawer-link"
+            style={{
+              ...getNavLinkStyle({ isActive: false }),
+              background: 'none',
+              border: 'none',
+              padding: '10px 0',
+              textAlign: 'left',
+              cursor: 'pointer',
+              width: '100%',
+              color: '#ffcc33',
+              marginBottom: '10px'
+            }}
+          >
+            ✨ Momentum AI
+          </button>
+
           <button onClick={handleLogout} style={{
             width: '100%',
             background: 'rgba(255, 68, 68, 0.1)',
@@ -156,6 +183,8 @@ export default function Toolbar() {
           </button>
         </div>
       </div>
+
+      <MomentumAI isOpen={aiOpen} onClose={() => setAiOpen(false)} />
 
       {/* DARK BACKDROP BLUR */}
       {menuOpen && (

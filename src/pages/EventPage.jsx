@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { subscribeUpcomingEvents } from "../firebase/events";
 import { Link } from "react-router-dom";
 import Toolbar from "../components/Toolbar";
+import { getCategoryImage } from "../utils/categoryImages";
 import logo from "/assets/momentum-logo.svg";
 
 export default function EventPage() {
@@ -110,10 +111,10 @@ export default function EventPage() {
                 cursor: "pointer"
               }}
             >
-              <option value="dateAsc">📅 Date: Closest First</option>
-              <option value="dateDesc">📅 Date: Furthest First</option>
-              <option value="nameAsc">🔤 Name: A to Z</option>
-              <option value="nameDesc">🔤 Name: Z to A</option>
+              <option value="dateAsc">Date: Closest First</option>
+              <option value="dateDesc">Date: Furthest First</option>
+              <option value="nameAsc">Name: A to Z</option>
+              <option value="nameDesc">Name: Z to A</option>
             </select>
           </div>
         </div>
@@ -131,7 +132,23 @@ export default function EventPage() {
           {filteredAndSortedEvents.map((e) => (
             <div key={e.id} className="event-card-curve">
               <div className="event-card-body">
-                <img src={logo} alt="logo" style={{ width: "40px", marginBottom: "15px" }} />
+                <div style={{
+                  width: '100%',
+                  height: '160px',
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  marginBottom: '20px',
+                  background: 'rgba(255,255,255,0.03)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <img src={getCategoryImage(e.category)} alt={e.name} style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover'
+                  }} />
+                </div>
 
                 {e.category && (
                   <span style={{

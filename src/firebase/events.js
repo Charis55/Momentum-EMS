@@ -15,6 +15,13 @@ import {
   increment,
 } from "firebase/firestore";
 import { db } from "./config";
+import {
+  sendEventCreatedEmail,
+  sendEventDeletedEmail,
+  sendEnrollmentEmail,
+  sendUnenrollmentEmail,
+} from "../utils/emailService";
+
 
 // ✅ CREATE EVENT: Standardized for Organizer Dashboard visibility
 export async function createEvent(eventPayload, user) {
@@ -22,23 +29,25 @@ export async function createEvent(eventPayload, user) {
 
   const payload = {
     name: eventPayload.name || "",
-    speaker: eventPayload.speaker || "", 
-    date: eventPayload.date || "", 
+    speaker: eventPayload.speaker || "",
+    date: eventPayload.date || "",
     timezone: eventPayload.timezone || "Africa/Lagos",
     link: eventPayload.link || "",
     description: eventPayload.description || "",
     objectives: eventPayload.objectives || "",
     relevance: eventPayload.relevance || "",
-    isPrivate: Boolean(eventPayload.isPrivate), 
+    isPrivate: Boolean(eventPayload.isPrivate),
     organizerId: user.uid, // Required for Dashboard filter
     organizerEmail: user.email || null,
     createdBy: user.uid,
     createdAt: serverTimestamp(), // Required for orderBy
     maxCapacity: Number(eventPayload.maxCapacity) || 100,
-    enrolledCount: 0, 
+    enrolledCount: 0,
   };
 
   const ref = await addDoc(collection(db, "events"), payload);
+  // 📧 Notify organiser their event is now live
+  sendEventCreatedEmail(user, { ...payload, id: ref.id });
   return ref.id;
 }
 
@@ -53,8 +62,10 @@ export async function updateEvent(eventId, eventPayload) {
 }
 
 // ✅ DELETE EVENT
-export async function deleteEventById(eventId) {
+export async function deleteEventById(eventId, user, eventData) {
   await deleteDoc(doc(db, "events", eventId));
+  // 📧 Notify organiser the event has been removed
+  if (user && eventData) sendEventDeletedEmail(user, eventData);
 }
 
 // ✅ GET EVENT BY ID
@@ -85,7 +96,7 @@ export function subscribeOrganizerEvents(organizerId, cb) {
 // ✅ SUBSCRIBE UPCOMING EVENTS
 export function subscribeUpcomingEvents(cb) {
   const q = query(
-    collection(db, "events"), 
+    collection(db, "events"),
     where("isPrivate", "==", false),
     orderBy("createdAt", "desc")
   );
@@ -144,11 +155,13 @@ export async function enrollInEvent(eventId, user) {
     enrolledAt: serverTimestamp()
   });
 
+  // 📧 Send enrollment confirmation email
+  sendEnrollmentEmail(user, { ...eventData, id: eventId });
   return { success: true, message: "Successfully enrolled" };
 }
 
 // ✅ UNENROLLMENT WORKFLOW: Correctly decrements count
-export async function unenrollFromEvent(eventId, uid) {
+export async function unenrollFromEvent(eventId, uid, user, eventData) {
   if (!uid) throw new Error("User ID required.");
 
   const eventRef = doc(db, "events", eventId);
@@ -162,6 +175,8 @@ export async function unenrollFromEvent(eventId, uid) {
   });
   await deleteDoc(userEventRef);
 
+  // 📧 Notify attendee they have unenrolled
+  if (user && eventData) sendUnenrollmentEmail(user, eventData);
   return { success: true, message: "Successfully unenrolled" };
 }
 

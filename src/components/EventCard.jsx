@@ -2,12 +2,15 @@
 import React, { useState, useEffect } from "react";
 import { enrollUser, unenrollUser, isUserEnrolled, getAttendeesCount } from "../firebase/events";
 import { useAuth } from "../context/AuthContext";
+import { getCategoryImage } from "../utils/categoryImages";
+import ConfirmationModal from "./ConfirmationModal";
 
-export default function EventCard({ event, onDeleted = () => {}, isOrganizerView = false }) {
+export default function EventCard({ event, onDeleted = () => { }, isOrganizerView = false }) {
   const { user } = useAuth();
   const [enrolled, setEnrolled] = useState(false);
   const [count, setCount] = useState(null);
   const [processing, setProcessing] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const timing = event.timingISO || "";
   const timezone = event.timeZone || "UTC";
@@ -22,7 +25,10 @@ export default function EventCard({ event, onDeleted = () => {}, isOrganizerView
   }, [event.id, user]);
 
   async function handleEnroll() {
-    if (!user) return alert("Please sign in to enroll");
+    if (!user) {
+      setModalOpen(true);
+      return;
+    }
     setProcessing(true);
     try {
       await enrollUser(event.id, user);
@@ -53,7 +59,7 @@ export default function EventCard({ event, onDeleted = () => {}, isOrganizerView
     <article className="event-card" aria-labelledby={`ev-${event.id}`}>
       <div style={{ display: "flex", gap: 12 }}>
         <img
-          src={event.image}
+          src={getCategoryImage(event.category)}
           alt={event.name}
           style={{ width: 110, height: 80, objectFit: "cover", borderRadius: 8 }}
         />
@@ -93,6 +99,14 @@ export default function EventCard({ event, onDeleted = () => {}, isOrganizerView
           </>
         )}
       </div>
+
+      <ConfirmationModal
+        isOpen={modalOpen}
+        title="Authentication Required"
+        message="Please sign in to enroll in this webinar."
+        type="info"
+        onConfirm={() => setModalOpen(false)}
+      />
     </article>
   );
 }

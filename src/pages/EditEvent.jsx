@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { doc, getDoc, updateDoc, deleteField } from "firebase/firestore";
 import { db } from "../firebase/config";
 import Toolbar from "../components/Toolbar";
 import { motion } from "framer-motion";
+import ConfirmationModal from "../components/ConfirmationModal";
 import logo from "/assets/momentum-logo.svg";
 import "./CreateEvent.css";
 
@@ -35,8 +36,66 @@ const WEBINAR_CATEGORIES = [
   "Writing & Publishing"
 ];
 
+const TIMEZONES = [
+  "Africa/Abidjan", "Africa/Accra", "Africa/Addis_Ababa", "Africa/Algiers", "Africa/Asmara",
+  "Africa/Bamako", "Africa/Bangui", "Africa/Banjul", "Africa/Bissau", "Africa/Blantyre",
+  "Africa/Brazzaville", "Africa/Bujumbura", "Africa/Cairo", "Africa/Casablanca", "Africa/Ceuta",
+  "Africa/Conakry", "Africa/Dakar", "Africa/Dar_es_Salaam", "Africa/Djibouti", "Africa/Douala",
+  "Africa/El_Aaiun", "Africa/Freetown", "Africa/Gaborone", "Africa/Harare", "Africa/Johannesburg",
+  "Africa/Juba", "Africa/Kampala", "Africa/Khartoum", "Africa/Kigali", "Africa/Kinshasa",
+  "Africa/Lagos", "Africa/Libreville", "Africa/Lome", "Africa/Luanda", "Africa/Lubumbashi",
+  "Africa/Lusaka", "Africa/Malabo", "Africa/Maputo", "Africa/Maseru", "Africa/Mbabane",
+  "Africa/Mogadishu", "Africa/Monrovia", "Africa/Nairobi", "Africa/Ndjamena", "Africa/Niamey",
+  "Africa/Nouakchott", "Africa/Ouagadougou", "Africa/Porto-Novo", "Africa/Sao_Tome", "Africa/Tripoli",
+  "Africa/Tunis", "Africa/Windhoek",
+  "America/Anchorage", "America/Argentina/Buenos_Aires", "America/Asuncion", "America/Bahia", "America/Barbados",
+  "America/Belize", "America/Bogota", "America/Cancun", "America/Caracas", "America/Chicago",
+  "America/Costa_Rica", "America/Denver", "America/Detroit", "America/El_Salvador", "America/Guatemala",
+  "America/Guyana", "America/Havana", "America/Jamaica", "America/La_Paz", "America/Lima",
+  "America/Los_Angeles", "America/Managua", "America/Manaus", "America/Mazatlan", "America/Mexico_City",
+  "America/Montevideo", "America/Nassau", "America/New_York", "America/Panama", "America/Paramaribo",
+  "America/Phoenix", "America/Port-au-Prince", "America/Port_of_Spain", "America/Puerto_Rico", "America/Santiago",
+  "America/Santo_Domingo", "America/Sao_Paulo", "America/St_Johns", "America/Tegucigalpa", "America/Toronto",
+  "America/Vancouver", "America/Winnipeg",
+  "Asia/Almaty", "Asia/Amman", "Asia/Anadyr", "Asia/Baghdad", "Asia/Baku",
+  "Asia/Bangkok", "Asia/Beirut", "Asia/Bishkek", "Asia/Brunei", "Asia/Colombo",
+  "Asia/Damascus", "Asia/Dhaka", "Asia/Dubai", "Asia/Gaza", "Asia/Ho_Chi_Minh",
+  "Asia/Hong_Kong", "Asia/Irkutsk", "Asia/Jakarta", "Asia/Jayapura", "Asia/Jerusalem",
+  "Asia/Kabul", "Asia/Kamchatka", "Asia/Karachi", "Asia/Kathmandu", "Asia/Kolkata",
+  "Asia/Kuala_Lumpur", "Asia/Kuwait", "Asia/Macau", "Asia/Magadan", "Asia/Makassar",
+  "Asia/Manila", "Asia/Muscat", "Asia/Nicosia", "Asia/Novosibirsk", "Asia/Omsk",
+  "Asia/Oral", "Asia/Pontianak", "Asia/Pyongyang", "Asia/Qatar", "Asia/Qyzylorda",
+  "Asia/Riyadh", "Asia/Sakhalin", "Asia/Samarkand", "Asia/Seoul", "Asia/Shanghai",
+  "Asia/Singapore", "Asia/Taipei", "Asia/Tashkent", "Asia/Tbilisi", "Asia/Tehran",
+  "Asia/Thimphu", "Asia/Tokyo", "Asia/Ulaanbaatar", "Asia/Urumqi", "Asia/Vientiane",
+  "Asia/Vladivostok", "Asia/Yakutsk", "Asia/Yangon", "Asia/Yekaterinburg", "Asia/Yerevan",
+  "Atlantic/Azores", "Atlantic/Bermuda", "Atlantic/Canary", "Atlantic/Cape_Verde", "Atlantic/Faroe",
+  "Atlantic/Madeira", "Atlantic/Reykjavik", "Atlantic/South_Georgia", "Atlantic/Stanley",
+  "Australia/Adelaide", "Australia/Brisbane", "Australia/Darwin", "Australia/Hobart", "Australia/Melbourne",
+  "Australia/Perth", "Australia/Sydney",
+  "Europe/Amsterdam", "Europe/Andorra", "Europe/Athens", "Europe/Belfast", "Europe/Belgrade",
+  "Europe/Berlin", "Europe/Bratislava", "Europe/Brussels", "Europe/Bucharest", "Europe/Budapest",
+  "Europe/Chisinau", "Europe/Copenhagen", "Europe/Dublin", "Europe/Gibraltar", "Europe/Helsinki",
+  "Europe/Istanbul", "Europe/Kaliningrad", "Europe/Kiev", "Europe/Lisbon", "Europe/London",
+  "Europe/Luxembourg", "Europe/Madrid", "Europe/Malta", "Europe/Minsk", "Europe/Monaco",
+  "Europe/Moscow", "Europe/Oslo", "Europe/Paris", "Europe/Prague", "Europe/Riga",
+  "Europe/Rome", "Europe/Samara", "Europe/Sarajevo", "Europe/Simferopol", "Europe/Sofia",
+  "Europe/Stockholm", "Europe/Tallinn", "Europe/Tirane", "Europe/Uzhgorod", "Europe/Vaduz",
+  "Europe/Vienna", "Europe/Vilnius", "Europe/Volgograd", "Europe/Warsaw", "Europe/Zagreb", "Europe/Zaporozhye", "Europe/Zurich",
+  "Indian/Antananarivo", "Indian/Chagos", "Indian/Christmas", "Indian/Cocos", "Indian/Comoro",
+  "Indian/Kerguelen", "Indian/Mahe", "Indian/Maldives", "Indian/Mauritius", "Indian/Mayotte", "Indian/Reunion",
+  "Pacific/Apia", "Pacific/Auckland", "Pacific/Chatham", "Pacific/Chuuk", "Pacific/Easter",
+  "Pacific/Efate", "Pacific/Enderbury", "Pacific/Fakaofo", "Pacific/Fiji", "Pacific/Funafuti",
+  "Pacific/Galapagos", "Pacific/Gambier", "Pacific/Guadalcanal", "Pacific/Guam", "Pacific/Honolulu",
+  "Pacific/Kiritimati", "Pacific/Kosrae", "Pacific/Kwajalein", "Pacific/Majuro", "Pacific/Marquesas",
+  "Pacific/Midway", "Pacific/Nauru", "Pacific/Niue", "Pacific/Norfolk", "Pacific/Noumea",
+  "Pacific/Pago_Pago", "Pacific/Palau", "Pacific/Pitcairn", "Pacific/Pohnpei", "Pacific/Port_Moresby",
+  "Pacific/Rarotonga", "Pacific/Saipan", "Pacific/Tahiti", "Pacific/Tarawa", "Pacific/Tongatapu",
+  "Pacific/Wake", "Pacific/Wallis", "UTC"
+];
+
 // Custom Searchable Dropdown Component
-const SearchableDropdownEdit = ({ options, value, name, onSelect }) => {
+const SearchableDropdownEdit = ({ options, value, name, onSelect, placeholder }) => {
   const [searchTerm, setSearchTerm] = useState(value || "");
   const [isOpen, setIsOpen] = useState(false);
 
@@ -53,7 +112,7 @@ const SearchableDropdownEdit = ({ options, value, name, onSelect }) => {
       <input
         type="text"
         className="form-input stencil-input"
-        placeholder="Search or select category..."
+        placeholder={placeholder || "Search or select..."}
         value={searchTerm}
         onChange={(e) => {
           setSearchTerm(e.target.value);
@@ -100,7 +159,7 @@ const SearchableDropdownEdit = ({ options, value, name, onSelect }) => {
             ))
           ) : (
             <li style={{ padding: "12px 16px", color: "#888", fontSize: "0.95rem" }}>
-              No categories found
+              No items found
             </li>
           )}
         </ul>
@@ -113,18 +172,30 @@ export default function EditEvent() {
   const { eventId } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const fileInputRef = useRef(null);
 
   const [formData, setFormData] = useState({
     name: "",
     speaker: "",
-    category: "Technology & Software", // ADDED CATEGORY FIELD
+    category: "",
     date: "",
-    timeZone: "Africa/Lagos",
+    timezone: "",
     isPrivate: true,
-    externalLink: "",
+    link: "",
     description: "",
-    learningObjectives: ""
+    objectives: "",
+    relevance: "",
+    imageUrl: ""
   });
+
+  const [modal, setModal] = useState({
+    isOpen: false,
+    title: "",
+    message: "",
+    type: "info",
+    onConfirm: () => { }
+  });
+
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -144,6 +215,10 @@ export default function EditEvent() {
           setFormData({
             ...formData,
             ...data,
+            timezone: data.timezone || data.timeZone || "",
+            link: data.link || data.externalLink || "",
+            objectives: data.objectives || data.learningObjectives || "",
+            relevance: data.relevance || "",
             isPrivate: initialPrivateStatus
           });
         } else {
@@ -158,11 +233,14 @@ export default function EditEvent() {
     fetchEvent();
   }, [eventId, navigate]);
 
+
   const handleUpdate = async (e) => {
     e.preventDefault();
+    setLoading("Processing...");
     try {
       const docRef = doc(db, "events", eventId);
 
+      setLoading("Saving Changes...");
       const cleanData = {
         ...formData,
         isPublic: deleteField(),
@@ -170,10 +248,27 @@ export default function EditEvent() {
       };
 
       await updateDoc(docRef, cleanData);
-      navigate("/organizer-dashboard");
+      setModal({
+        isOpen: true,
+        title: "Success",
+        message: "✅ Event Updated Successfully!",
+        type: "success",
+        onConfirm: () => {
+          setModal({ ...modal, isOpen: false });
+          navigate("/organizer-dashboard");
+        }
+      });
     } catch (error) {
       console.error("Firestore Update Error:", error);
-      alert("Failed to update: Check Firestore permissions.");
+      setModal({
+        isOpen: true,
+        title: "Error",
+        message: "❌ " + error.message,
+        type: "danger",
+        onConfirm: () => setModal({ ...modal, isOpen: false })
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -197,6 +292,7 @@ export default function EditEvent() {
 
         <div className="create-form-card-wide">
           <form onSubmit={handleUpdate} className="form-wide-layout">
+
             <div className="form-grid-2col">
               <div className="form-group">
                 <label>Event Name</label>
@@ -216,7 +312,13 @@ export default function EditEvent() {
               </div>
               <div className="form-group">
                 <label>Time Zone</label>
-                <input type="text" name="timeZone" value={formData.timeZone} onChange={(e) => setFormData({ ...formData, timeZone: e.target.value })} className="form-input stencil-input" />
+                <SearchableDropdownEdit
+                  options={TIMEZONES}
+                  value={formData.timezone}
+                  name="timezone"
+                  onSelect={handleCategorySelect}
+                  placeholder="Select Time Zone"
+                />
               </div>
               <div className="form-group">
                 <label>Category</label>
@@ -225,6 +327,7 @@ export default function EditEvent() {
                   value={formData.category}
                   name="category"
                   onSelect={handleCategorySelect}
+                  placeholder="Select Category"
                 />
               </div>
             </div>
@@ -232,7 +335,7 @@ export default function EditEvent() {
             <div className="form-grid-2col">
               <div className="form-group">
                 <label>External Link (Optional)</label>
-                <input type="url" name="externalLink" value={formData.externalLink} onChange={(e) => setFormData({ ...formData, externalLink: e.target.value })} className="form-input stencil-input" />
+                <input type="url" name="link" value={formData.link} onChange={(e) => setFormData({ ...formData, link: e.target.value })} className="form-input stencil-input" />
               </div>
 
               <div className="form-group toggle-container stencil-input">
@@ -246,7 +349,7 @@ export default function EditEvent() {
               </div>
             </div>
 
-            <div className="form-grid-2col">
+            <div className="form-grid-3col-textareas">
               <div className="form-group">
                 <label>Description</label>
                 <textarea name="description" value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} className="form-textarea stencil-input" required></textarea>
@@ -254,13 +357,18 @@ export default function EditEvent() {
 
               <div className="form-group">
                 <label>Learning Objectives</label>
-                <textarea name="learningObjectives" value={formData.learningObjectives} onChange={(e) => setFormData({ ...formData, learningObjectives: e.target.value })} className="form-textarea stencil-input" required></textarea>
+                <textarea name="objectives" value={formData.objectives} onChange={(e) => setFormData({ ...formData, objectives: e.target.value })} className="form-textarea stencil-input" required></textarea>
+              </div>
+
+              <div className="form-group">
+                <label>Topic Relevance</label>
+                <textarea name="relevance" value={formData.relevance} onChange={(e) => setFormData({ ...formData, relevance: e.target.value })} className="form-textarea stencil-input" required></textarea>
               </div>
             </div>
 
             <div style={{ display: "flex", gap: "20px", marginTop: "20px" }}>
-              <button className="btn-primary form-submit-btn stencil-btn" style={{ flex: 2 }} disabled={loading}>
-                Update Webinar →
+              <button className="btn-primary form-submit-btn stencil-btn" style={{ flex: 2 }} disabled={!!loading}>
+                {loading && typeof loading === 'string' ? loading : loading ? "Updating..." : "Update Webinar →"}
               </button>
               <button
                 type="button"
@@ -274,6 +382,14 @@ export default function EditEvent() {
           </form>
         </div>
       </section>
+
+      <ConfirmationModal
+        isOpen={modal.isOpen}
+        title={modal.title}
+        message={modal.message}
+        type={modal.type}
+        onConfirm={modal.onConfirm}
+      />
     </>
   );
 }

@@ -7,6 +7,7 @@ import {
   isUserEnrolled
 } from "../firebase/events";
 import { auth } from "../firebase/config";
+import { getCategoryImage } from "../utils/categoryImages";
 import Toolbar from "../components/Toolbar";
 import ConfirmationModal from "../components/ConfirmationModal"; //
 
@@ -107,7 +108,7 @@ export default function EventDetails() {
           setModal({ ...modal, show: false });
           setIsProcessing(true);
           try {
-            await unenrollFromEvent(id, user.uid);
+            await unenrollFromEvent(id, user.uid, user, event);
             setAlreadyEnrolled(false);
           } catch (e) { console.error(e); }
           finally { setIsProcessing(false); }
@@ -141,11 +142,35 @@ export default function EventDetails() {
             </div>
           </div>
 
-          <div className="event-main-card">
+          <div className="details-card-ultra">
+            <div style={{
+              width: '100%',
+              height: '400px',
+              borderRadius: '24px',
+              overflow: 'hidden',
+              marginBottom: '40px',
+              boxShadow: '0 20px 50px rgba(0,0,0,0.4)',
+              border: '1px solid rgba(255,255,255,0.1)'
+            }}>
+              <img
+                src={getCategoryImage(event?.category)}
+                alt={event?.name}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            </div>
+
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "20px" }}>
+              <div style={{ flex: 1 }}>
+                <span className="badge-ui" style={{ background: "#ffcc33", color: "#000", padding: "6px 14px", borderRadius: "20px", fontSize: "0.75rem", fontWeight: "900", letterSpacing: "1px", textTransform: "uppercase" }}>
+                  {event?.category || "WEBINAR"}
+                </span>
+                <h1 className="form-title-glow" style={{ marginTop: "20px", marginBottom: "10px" }}>{event?.name}</h1>
+                <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "1.1rem" }}>Organized by <span style={{ color: "#ffcc33", fontWeight: "700" }}>{event?.speaker}</span></p>
+              </div>
+            </div>
+
             <div className="event-content-layout">
               <div className="event-text-column">
-                <span className="category-tag-ui">{event?.category?.toUpperCase() || "WEBINAR"}</span>
-                <h1 className="event-main-title">{event?.name}</h1>
                 <div className="info-block-ui">
                   <label className="ui-heading-label">EVENT DESCRIPTION</label>
                   <p className="ui-body-text">{event?.description}</p>
@@ -180,6 +205,21 @@ export default function EventDetails() {
                     </h2>
                     <p className="timezone-subtext">{event?.timezone}</p>
                   </div>
+
+                  {event?.link && (
+                    <div className="sidebar-field" style={{ marginTop: '25px' }}>
+                      <label className="ui-heading-label">EVENT LINK</label>
+                      <a
+                        href={event.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="event-external-link"
+                      >
+                        Join Webinar ↗
+                      </a>
+                    </div>
+                  )}
+
                   <button
                     onClick={handleToggleEnrollment}
                     disabled={isProcessing}
@@ -234,6 +274,30 @@ export default function EventDetails() {
         .register-btn-ui { width: 100%; padding: 22px; border-radius: 16px; margin-top: 30px; font-size: 1.2rem; font-weight: 900; cursor: pointer; letter-spacing: 1px; }
         .register-btn-ui:not(.enrolled) { background: #ffcc33; color: #000; border: none; }
         .register-btn-ui.enrolled { background: rgba(255, 68, 68, 0.05); border: 1px solid #ff4444; color: #ff4444; }
+
+        .event-external-link {
+          display: inline-block;
+          background: rgba(255, 204, 51, 0.1);
+          color: #ffcc33;
+          padding: 12px 20px;
+          border-radius: 10px;
+          text-decoration: none;
+          font-weight: 800;
+          font-size: 0.9rem;
+          letter-spacing: 0.5px;
+          border: 1px solid rgba(255, 204, 51, 0.2);
+          transition: all 0.3s ease;
+          width: 100%;
+          text-align: center;
+          box-sizing: border-box;
+        }
+
+        .event-external-link:hover {
+          background: #ffcc33;
+          color: #000;
+          transform: translateY(-2px);
+          box-shadow: 0 5px 15px rgba(255, 204, 51, 0.2);
+        }
 
         @media (max-width: 900px) {
           .details-container { padding: 0 20px; }

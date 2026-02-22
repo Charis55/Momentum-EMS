@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { createEvent, updateEvent, getEventById } from "../firebase/events";
 import { auth } from "../firebase/config";
 import { useNavigate, useParams } from "react-router-dom";
 import Toolbar from "../components/Toolbar";
+import ConfirmationModal from "../components/ConfirmationModal";
 import logo from "/assets/momentum-logo.svg";
 import "./CreateEvent.css";
 
@@ -34,8 +35,66 @@ const WEBINAR_CATEGORIES = [
   "Writing & Publishing"
 ];
 
+const TIMEZONES = [
+  "Africa/Abidjan", "Africa/Accra", "Africa/Addis_Ababa", "Africa/Algiers", "Africa/Asmara",
+  "Africa/Bamako", "Africa/Bangui", "Africa/Banjul", "Africa/Bissau", "Africa/Blantyre",
+  "Africa/Brazzaville", "Africa/Bujumbura", "Africa/Cairo", "Africa/Casablanca", "Africa/Ceuta",
+  "Africa/Conakry", "Africa/Dakar", "Africa/Dar_es_Salaam", "Africa/Djibouti", "Africa/Douala",
+  "Africa/El_Aaiun", "Africa/Freetown", "Africa/Gaborone", "Africa/Harare", "Africa/Johannesburg",
+  "Africa/Juba", "Africa/Kampala", "Africa/Khartoum", "Africa/Kigali", "Africa/Kinshasa",
+  "Africa/Lagos", "Africa/Libreville", "Africa/Lome", "Africa/Luanda", "Africa/Lubumbashi",
+  "Africa/Lusaka", "Africa/Malabo", "Africa/Maputo", "Africa/Maseru", "Africa/Mbabane",
+  "Africa/Mogadishu", "Africa/Monrovia", "Africa/Nairobi", "Africa/Ndjamena", "Africa/Niamey",
+  "Africa/Nouakchott", "Africa/Ouagadougou", "Africa/Porto-Novo", "Africa/Sao_Tome", "Africa/Tripoli",
+  "Africa/Tunis", "Africa/Windhoek",
+  "America/Anchorage", "America/Argentina/Buenos_Aires", "America/Asuncion", "America/Bahia", "America/Barbados",
+  "America/Belize", "America/Bogota", "America/Cancun", "America/Caracas", "America/Chicago",
+  "America/Costa_Rica", "America/Denver", "America/Detroit", "America/El_Salvador", "America/Guatemala",
+  "America/Guyana", "America/Havana", "America/Jamaica", "America/La_Paz", "America/Lima",
+  "America/Los_Angeles", "America/Managua", "America/Manaus", "America/Mazatlan", "America/Mexico_City",
+  "America/Montevideo", "America/Nassau", "America/New_York", "America/Panama", "America/Paramaribo",
+  "America/Phoenix", "America/Port-au-Prince", "America/Port_of_Spain", "America/Puerto_Rico", "America/Santiago",
+  "America/Santo_Domingo", "America/Sao_Paulo", "America/St_Johns", "America/Tegucigalpa", "America/Toronto",
+  "America/Vancouver", "America/Winnipeg",
+  "Asia/Almaty", "Asia/Amman", "Asia/Anadyr", "Asia/Baghdad", "Asia/Baku",
+  "Asia/Bangkok", "Asia/Beirut", "Asia/Bishkek", "Asia/Brunei", "Asia/Colombo",
+  "Asia/Damascus", "Asia/Dhaka", "Asia/Dubai", "Asia/Gaza", "Asia/Ho_Chi_Minh",
+  "Asia/Hong_Kong", "Asia/Irkutsk", "Asia/Jakarta", "Asia/Jayapura", "Asia/Jerusalem",
+  "Asia/Kabul", "Asia/Kamchatka", "Asia/Karachi", "Asia/Kathmandu", "Asia/Kolkata",
+  "Asia/Kuala_Lumpur", "Asia/Kuwait", "Asia/Macau", "Asia/Magadan", "Asia/Makassar",
+  "Asia/Manila", "Asia/Muscat", "Asia/Nicosia", "Asia/Novosibirsk", "Asia/Omsk",
+  "Asia/Oral", "Asia/Pontianak", "Asia/Pyongyang", "Asia/Qatar", "Asia/Qyzylorda",
+  "Asia/Riyadh", "Asia/Sakhalin", "Asia/Samarkand", "Asia/Seoul", "Asia/Shanghai",
+  "Asia/Singapore", "Asia/Taipei", "Asia/Tashkent", "Asia/Tbilisi", "Asia/Tehran",
+  "Asia/Thimphu", "Asia/Tokyo", "Asia/Ulaanbaatar", "Asia/Urumqi", "Asia/Vientiane",
+  "Asia/Vladivostok", "Asia/Yakutsk", "Asia/Yangon", "Asia/Yekaterinburg", "Asia/Yerevan",
+  "Atlantic/Azores", "Atlantic/Bermuda", "Atlantic/Canary", "Atlantic/Cape_Verde", "Atlantic/Faroe",
+  "Atlantic/Madeira", "Atlantic/Reykjavik", "Atlantic/South_Georgia", "Atlantic/Stanley",
+  "Australia/Adelaide", "Australia/Brisbane", "Australia/Darwin", "Australia/Hobart", "Australia/Melbourne",
+  "Australia/Perth", "Australia/Sydney",
+  "Europe/Amsterdam", "Europe/Andorra", "Europe/Athens", "Europe/Belfast", "Europe/Belgrade",
+  "Europe/Berlin", "Europe/Bratislava", "Europe/Brussels", "Europe/Bucharest", "Europe/Budapest",
+  "Europe/Chisinau", "Europe/Copenhagen", "Europe/Dublin", "Europe/Gibraltar", "Europe/Helsinki",
+  "Europe/Istanbul", "Europe/Kaliningrad", "Europe/Kiev", "Europe/Lisbon", "Europe/London",
+  "Europe/Luxembourg", "Europe/Madrid", "Europe/Malta", "Europe/Minsk", "Europe/Monaco",
+  "Europe/Moscow", "Europe/Oslo", "Europe/Paris", "Europe/Prague", "Europe/Riga",
+  "Europe/Rome", "Europe/Samara", "Europe/Sarajevo", "Europe/Simferopol", "Europe/Sofia",
+  "Europe/Stockholm", "Europe/Tallinn", "Europe/Tirane", "Europe/Uzhgorod", "Europe/Vaduz",
+  "Europe/Vienna", "Europe/Vilnius", "Europe/Volgograd", "Europe/Warsaw", "Europe/Zagreb", "Europe/Zaporozhye", "Europe/Zurich",
+  "Indian/Antananarivo", "Indian/Chagos", "Indian/Christmas", "Indian/Cocos", "Indian/Comoro",
+  "Indian/Kerguelen", "Indian/Mahe", "Indian/Maldives", "Indian/Mauritius", "Indian/Mayotte", "Indian/Reunion",
+  "Pacific/Apia", "Pacific/Auckland", "Pacific/Chatham", "Pacific/Chuuk", "Pacific/Easter",
+  "Pacific/Efate", "Pacific/Enderbury", "Pacific/Fakaofo", "Pacific/Fiji", "Pacific/Funafuti",
+  "Pacific/Galapagos", "Pacific/Gambier", "Pacific/Guadalcanal", "Pacific/Guam", "Pacific/Honolulu",
+  "Pacific/Kiritimati", "Pacific/Kosrae", "Pacific/Kwajalein", "Pacific/Majuro", "Pacific/Marquesas",
+  "Pacific/Midway", "Pacific/Nauru", "Pacific/Niue", "Pacific/Norfolk", "Pacific/Noumea",
+  "Pacific/Pago_Pago", "Pacific/Palau", "Pacific/Pitcairn", "Pacific/Pohnpei", "Pacific/Port_Moresby",
+  "Pacific/Rarotonga", "Pacific/Saipan", "Pacific/Tahiti", "Pacific/Tarawa", "Pacific/Tongatapu",
+  "Pacific/Wake", "Pacific/Wallis", "UTC"
+];
+
 // Custom Searchable Dropdown Component
-const SearchableDropdown = ({ options, value, name, onSelect }) => {
+const SearchableDropdown = ({ options, value, name, onSelect, placeholder }) => {
   const [searchTerm, setSearchTerm] = useState(value || "");
   const [isOpen, setIsOpen] = useState(false);
 
@@ -52,7 +111,7 @@ const SearchableDropdown = ({ options, value, name, onSelect }) => {
       <input
         type="text"
         className="form-input stencil-input"
-        placeholder="Search or select category..."
+        placeholder={placeholder || "Search or select..."}
         value={searchTerm}
         onChange={(e) => {
           setSearchTerm(e.target.value);
@@ -112,20 +171,31 @@ export default function CreateEvent() {
   const { id } = useParams();
   const nav = useNavigate();
   const [loading, setLoading] = useState(false);
+  const fileInputRef = useRef(null);
 
   const [form, setForm] = useState({
     name: "",
     speaker: "",
     date: "",
-    timezone: "Africa/Lagos",
-    category: "Technology & Software", // Updated Default
+    timezone: "",
+    category: "",
     link: "",
     description: "",
     objectives: "",
     relevance: "",
     isPrivate: false,
     maxCapacity: 100,
+    imageUrl: ""
   });
+
+  const [modal, setModal] = useState({
+    isOpen: false,
+    title: "",
+    message: "",
+    type: "info",
+    onConfirm: () => { }
+  });
+
 
   useEffect(() => {
     if (id) {
@@ -151,6 +221,7 @@ export default function CreateEvent() {
     });
   };
 
+
   const handleCategorySelect = (name, value) => {
     setForm({ ...form, [name]: value });
   };
@@ -161,22 +232,53 @@ export default function CreateEvent() {
 
     const user = auth.currentUser;
     if (!user) {
-      alert("You must be logged in.");
+      setModal({
+        isOpen: true,
+        title: "Authentication Required",
+        message: "You must be logged in to create or edit an event.",
+        type: "danger",
+        onConfirm: () => setModal({ ...modal, isOpen: false })
+      });
       setLoading(false);
       return;
     }
 
     try {
       if (id) {
+        setLoading("Updating Event...");
         await updateEvent(id, form);
-        alert("✅ Event Updated!");
+        setModal({
+          isOpen: true,
+          title: "Success",
+          message: "✅ Event Updated Successfully!",
+          type: "success",
+          onConfirm: () => {
+            setModal({ ...modal, isOpen: false });
+            nav("/dashboard");
+          }
+        });
       } else {
+        setLoading("Creating Event...");
         await createEvent(form, user);
-        alert(`✅ Event Published!`);
+        setModal({
+          isOpen: true,
+          title: "Success",
+          message: "✅ Event Published Successfully!",
+          type: "success",
+          onConfirm: () => {
+            setModal({ ...modal, isOpen: false });
+            nav("/dashboard");
+          }
+        });
       }
-      nav("/dashboard");
     } catch (err) {
-      alert("❌ Error: " + err.message);
+      setModal({
+        isOpen: true,
+        title: "Error",
+        message: "❌ " + err.message,
+        type: "danger",
+        onConfirm: () => setModal({ ...modal, isOpen: false })
+      });
     } finally {
       setLoading(false);
     }
@@ -196,6 +298,7 @@ export default function CreateEvent() {
 
         <div className="create-form-card-wide">
           <form onSubmit={submit} className="form-wide-layout">
+
             <div className="form-grid-2col">
               <div className="form-group">
                 <label>Event Name</label>
@@ -215,7 +318,13 @@ export default function CreateEvent() {
               </div>
               <div className="form-group">
                 <label>Time Zone</label>
-                <input type="text" name="timezone" value={form.timezone} onChange={handleChange} className="form-input stencil-input" />
+                <SearchableDropdown
+                  options={TIMEZONES}
+                  value={form.timezone}
+                  name="timezone"
+                  onSelect={handleCategorySelect}
+                  placeholder="Select Time Zone"
+                />
               </div>
               <div className="form-group">
                 <label>Category</label>
@@ -224,6 +333,7 @@ export default function CreateEvent() {
                   value={form.category}
                   name="category"
                   onSelect={handleCategorySelect}
+                  placeholder="Select Category"
                 />
               </div>
             </div>
@@ -263,11 +373,19 @@ export default function CreateEvent() {
             </div>
 
             <button className="btn-primary form-submit-btn stencil-btn" disabled={loading}>
-              {loading ? "Processing..." : id ? "Update Event" : "Publish Event →"}
+              {loading ? (typeof loading === 'string' ? loading : "Processing...") : id ? "Update Event" : "Publish Event →"}
             </button>
           </form>
         </div>
       </section>
+
+      <ConfirmationModal
+        isOpen={modal.isOpen}
+        title={modal.title}
+        message={modal.message}
+        type={modal.type}
+        onConfirm={modal.onConfirm}
+      />
     </>
   );
 }

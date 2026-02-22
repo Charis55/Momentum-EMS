@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useAuth } from "../context/AuthContext";
-import { 
-  subscribeOrganizerEvents, 
-  deleteEventById, 
-  subscribeToAttendees 
+import {
+  subscribeOrganizerEvents,
+  deleteEventById,
+  subscribeToAttendees
 } from "../firebase/events";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -36,7 +36,7 @@ export default function OrganizerDashboard() {
   const { user } = useAuth();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [counts, setCounts] = useState({}); 
+  const [counts, setCounts] = useState({});
   const nav = useNavigate();
 
   const [modal, setModal] = useState({ show: false, title: "", message: "", onConfirm: null });
@@ -54,7 +54,7 @@ export default function OrganizerDashboard() {
     setCounts(prev => ({ ...prev, [id]: count }));
   };
 
-  const totalEnrollments = useMemo(() => 
+  const totalEnrollments = useMemo(() =>
     Object.values(counts).reduce((acc, curr) => acc + curr, 0), [counts]
   );
 
@@ -73,7 +73,8 @@ export default function OrganizerDashboard() {
       type: "danger",
       onConfirm: async () => {
         try {
-          await deleteEventById(id);
+          const eventData = events.find(e => e.id === id);
+          await deleteEventById(id, user, eventData);
           setModal({ ...modal, show: false });
         } catch (err) { console.error(err); }
       }
@@ -85,7 +86,7 @@ export default function OrganizerDashboard() {
   return (
     <div className="org-dash-wrapper">
       <Toolbar />
-      
+
       <main className="org-content">
         {/* ✅ ANALYTICS BAR - Retaining the Orange/Red Mood */}
         <section className="analytics-bar">
@@ -109,7 +110,7 @@ export default function OrganizerDashboard() {
             <p className="dash-sub-text">Monitor your webinar performance and attendee counts.</p>
           </div>
 
-          <motion.button 
+          <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="create-event-btn"
@@ -122,8 +123,8 @@ export default function OrganizerDashboard() {
         <section className="events-list-grid">
           <AnimatePresence>
             {events.map((ev) => (
-              <motion.div 
-                key={ev.id} 
+              <motion.div
+                key={ev.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
@@ -156,7 +157,7 @@ export default function OrganizerDashboard() {
         </section>
       </main>
 
-      <ConfirmationModal 
+      <ConfirmationModal
         isOpen={modal.show}
         title={modal.title}
         message={modal.message}
