@@ -1,22 +1,45 @@
 /* ======================================================
     ✅ PROFILE LAYOUT & CARD
 ====================================================== */
+.profile-page-root {
+  min-height: 100vh;
+  background: radial-gradient(circle at 15% 15%, #8b4513 0%, #3d1f0a 35%, #0f0e0e 75%, #0a0a0a 100%);
+  padding-top: 100px;
+  font-family: 'Inter', sans-serif;
+  color: white;
+}
+
+.profile-settings-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(15px);
+  border-radius: 30px;
+  padding: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.danger-zone-card {
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 20px;
+  background: rgba(255, 68, 68, 0.1);
+}
+
 .profile-container {
   display: flex;
   justify-content: center;
-  padding: 80px 5%; 
+  padding: 80px 5%;
 }
 
 .profile-card {
-  width: 480px; 
-  background: rgba(9, 9, 28, 0.75); 
+  width: 480px;
+  background: rgba(9, 9, 28, 0.75);
   padding: 40px;
   border-radius: 24px;
   text-align: center;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  box-shadow: 0 25px 60px rgba(0,0,0,0.5);
-  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .profile-title {
@@ -24,6 +47,7 @@
   font-weight: 900;
   margin-bottom: 30px;
   background: linear-gradient(90deg, #ff7a00, #ffcc33);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -39,7 +63,8 @@
 }
 
 .profile-photo-section p {
-  color: #ffffff !important; /* Force white for visibility */
+  color: #ffffff !important;
+  /* Force white for visibility */
   font-size: 0.85rem;
   font-weight: 500;
   margin-top: 12px;
@@ -59,7 +84,7 @@
   border-radius: 50%;
   border: 3px solid var(--gold);
   object-fit: cover;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
 }
 
 .avatar-edit-badge {
@@ -75,7 +100,8 @@
   align-items: center;
   cursor: pointer;
   border: 3px solid #09091c;
-  color: white !important; /* Ensure the plus sign is white */
+  color: white !important;
+  /* Ensure the plus sign is white */
   font-size: 1.2rem;
   font-weight: bold;
   transition: transform 0.2s ease;
@@ -94,11 +120,13 @@
   width: 100%;
 }
 
-.input-group label {
+.input-group label,
+.profile-input-label {
+  display: block;
+  margin-bottom: 8px;
   color: rgba(255, 255, 255, 0.8);
   font-size: 0.85rem;
   font-weight: 600;
-  margin-left: 4px;
 }
 
 .profile-input {
@@ -106,9 +134,10 @@
   box-sizing: border-box;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: 16px 20px; 
+  padding: 16px 20px;
   border-radius: 12px;
-  color: #ffffff !important; /* Force white text in textbox */
+  color: #ffffff !important;
+  /* Force white text in textbox */
   font-size: 1rem;
   margin-top: 8px;
   display: block;
