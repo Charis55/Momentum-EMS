@@ -362,140 +362,335 @@ body.momentum-light-mode .a11y-close-btn {
 /* ═══════════════════════════════════════════════════════════
    KEYBOARD NAVIGATION — visible focus outlines
    ═══════════════════════════════════════════════════════════ */
+.a11y-option-label {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.a11y-option-desc {
+    font-size: 0.73rem;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+/* ── Toggle switch ──────────────────────────────────────────── */
+.a11y-toggle {
+    width: 36px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    position: relative;
+    flex-shrink: 0;
+    transition: background 0.3s;
+}
+
+.a11y-toggle::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.a11y-toggle.on {
+    background: linear-gradient(90deg, #ff7a00, #ffcc33);
+}
+
+.a11y-toggle.on::after {
+    transform: translateX(16px);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LIGHT MODE — clean, high-contrast, modern professional design
+   ═══════════════════════════════════════════════════════════ */
+
+/* Page root background */
+body.momentum-light-mode,
+body.momentum-light-mode>div {
+    background: #f9fafb !important;
+    color: #111827 !important;
+}
+
+/* App.jsx radial-gradient wrapper */
+body.momentum-light-mode>div[style] {
+    background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 60%, #e5e7eb 100%) !important;
+}
+
+/* Text elements */
+body.momentum-light-mode h1,
+body.momentum-light-mode h2,
+body.momentum-light-mode h3,
+body.momentum-light-mode h4,
+body.momentum-light-mode h5,
+body.momentum-light-mode p,
+body.momentum-light-mode span,
+body.momentum-light-mode label,
+body.momentum-light-mode li {
+    color: #111827 !important;
+}
+
+/* Links */
+body.momentum-light-mode a {
+    color: #2563eb !important;
+}
+
+body.momentum-light-mode a:hover {
+    color: #1d4ed8 !important;
+}
+
+/* Specialty Text Adjustments */
+body.momentum-light-mode .hero-sub,
+body.momentum-light-mode .section-sub-fancy,
+body.momentum-light-mode .event-card-body p,
+body.momentum-light-mode .timezone-subtext,
+body.momentum-light-mode .stat-label {
+    color: #4b5563 !important;
+}
+
+body.momentum-light-mode .ui-heading-label,
+body.momentum-light-mode .category-tag-ui {
+    color: #d97706 !important;
+    /* Muted orange/gold for contrast */
+}
+
+body.momentum-light-mode .category-tag-ui {
+    background: rgba(217, 119, 6, 0.1) !important;
+}
+
+/* Navigation and Headers */
+body.momentum-light-mode .app-header {
+    background: rgba(255, 255, 255, 0.85) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+body.momentum-light-mode .toolbar-nav a {
+    color: #374151 !important;
+}
+
+body.momentum-light-mode .brand h1 {
+    color: #111827 !important;
+}
+
+/* Cards / surface containers */
+body.momentum-light-mode [class*="card"],
+body.momentum-light-mode [class*="Card"],
+body.momentum-light-mode [class*="panel"],
+body.momentum-light-mode [class*="wrapper"],
+body.momentum-light-mode [class*="container"],
+body.momentum-light-mode .sidebar-glass-box {
+    background: #ffffff !important;
+    border-color: rgba(0, 0, 0, 0.06) !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+    color: #111827 !important;
+}
+
+/* Hover effects for cards */
+body.momentum-light-mode .event-card-curve:hover,
+body.momentum-light-mode .stat-card:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+    border-color: rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Inputs & selects */
+body.momentum-light-mode input,
+body.momentum-light-mode textarea,
+body.momentum-light-mode select {
+    background: #ffffff !important;
+    color: #111827 !important;
+    border: 1px solid #d1d5db !important;
+}
+
+body.momentum-light-mode input:focus,
+body.momentum-light-mode textarea:focus {
+    border-color: #3b82f6 !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
+}
+
+body.momentum-light-mode input::placeholder,
+body.momentum-light-mode textarea::placeholder {
+    color: #9ca3af !important;
+}
+
+/* Scrollbar */
+body.momentum-light-mode ::-webkit-scrollbar-track {
+    background: #f3f4f6;
+}
+
+body.momentum-light-mode ::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 4px;
+}
+
+body.momentum-light-mode ::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+}
+
+/* Keep the accessibility widget panel always dark */
+body.momentum-light-mode .a11y-panel,
+body.momentum-light-mode .a11y-panel * {
+    background: unset;
+    color: unset;
+}
+
+body.momentum-light-mode .a11y-panel {
+    background: rgba(18, 10, 2, 0.96) !important;
+}
+
+body.momentum-light-mode .a11y-option-label {
+    color: #fff !important;
+}
+
+body.momentum-light-mode .a11y-panel-title {
+    color: #ffcc33 !important;
+}
+
+body.momentum-light-mode .a11y-close-btn {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   KEYBOARD NAVIGATION — visible focus outlines
+   ═══════════════════════════════════════════════════════════ */
 body.momentum-keyboard-nav *:focus-visible {
     outline: 3px solid #ffcc33 !important;
     outline-offset: 3px !important;
     box-shadow: 0 0 0 6px rgba(255, 204, 51, 0.2) !important;
 }
- / *   P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%
-       A c c e s s i b i l i t y   S c r o l l a b l e   P a n e l 
-       P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%  * / 
- . a 1 1 y - s c r o l l a b l e   { 
-         m a x - h e i g h t :   5 0 v h ; 
-         o v e r f l o w - y :   a u t o ; 
-         p a d d i n g - r i g h t :   8 p x ; 
- } 
- . a 1 1 y - s c r o l l a b l e : : - w e b k i t - s c r o l l b a r   { 
-         w i d t h :   6 p x ; 
- } 
- . a 1 1 y - s c r o l l a b l e : : - w e b k i t - s c r o l l b a r - t r a c k   { 
-         b a c k g r o u n d :   r g b a ( 2 5 5 ,   2 5 5 ,   2 5 5 ,   0 . 0 5 ) ; 
-         b o r d e r - r a d i u s :   4 p x ; 
- } 
- . a 1 1 y - s c r o l l a b l e : : - w e b k i t - s c r o l l b a r - t h u m b   { 
-         b a c k g r o u n d :   r g b a ( 2 5 5 ,   2 0 4 ,   5 1 ,   0 . 4 ) ; 
-         b o r d e r - r a d i u s :   4 p x ; 
- } 
- . a 1 1 y - s c r o l l a b l e : : - w e b k i t - s c r o l l b a r - t h u m b : h o v e r   { 
-         b a c k g r o u n d :   r g b a ( 2 5 5 ,   2 0 4 ,   5 1 ,   0 . 8 ) ; 
- } 
- 
- / *   T e x t   C o n t r o l s   * / 
- . a 1 1 y - o p t i o n - g r o u p   { 
-         b a c k g r o u n d :   r g b a ( 2 5 5 ,   2 5 5 ,   2 5 5 ,   0 . 0 4 ) ; 
-         b o r d e r :   1 p x   s o l i d   r g b a ( 2 5 5 ,   2 5 5 ,   2 5 5 ,   0 . 0 8 ) ; 
-         b o r d e r - r a d i u s :   1 4 p x ; 
-         p a d d i n g :   1 2 p x   1 4 p x ; 
-         m a r g i n - b o t t o m :   4 p x ; 
- } 
- . a 1 1 y - g r o u p - t i t l e   { 
-         d i s p l a y :   b l o c k ; 
-         f o n t - s i z e :   0 . 8 8 r e m ; 
-         f o n t - w e i g h t :   7 0 0 ; 
-         c o l o r :   # f f f ; 
-         m a r g i n - b o t t o m :   8 p x ; 
- } 
- . a 1 1 y - t e x t - c o n t r o l s   { 
-         d i s p l a y :   f l e x ; 
-         g a p :   8 p x ; 
-         j u s t i f y - c o n t e n t :   s p a c e - b e t w e e n ; 
- } 
- . a 1 1 y - t e x t - c o n t r o l s   b u t t o n   { 
-         f l e x :   1 ; 
-         b a c k g r o u n d :   r g b a ( 2 5 5 ,   2 5 5 ,   2 5 5 ,   0 . 1 ) ; 
-         b o r d e r :   1 p x   s o l i d   r g b a ( 2 5 5 ,   2 5 5 ,   2 5 5 ,   0 . 2 ) ; 
-         c o l o r :   # f f f ; 
-         b o r d e r - r a d i u s :   6 p x ; 
-         p a d d i n g :   6 p x   0 ; 
-         f o n t - s i z e :   0 . 8 5 r e m ; 
-         f o n t - w e i g h t :   6 0 0 ; 
-         c u r s o r :   p o i n t e r ; 
-         t r a n s i t i o n :   a l l   0 . 2 s ; 
- } 
- . a 1 1 y - t e x t - c o n t r o l s   b u t t o n : h o v e r : n o t ( : d i s a b l e d )   { 
-         b a c k g r o u n d :   r g b a ( 2 5 5 ,   2 0 4 ,   5 1 ,   0 . 2 ) ; 
-         b o r d e r - c o l o r :   r g b a ( 2 5 5 ,   2 0 4 ,   5 1 ,   0 . 5 ) ; 
-         c o l o r :   # f f c c 3 3 ; 
- } 
- . a 1 1 y - t e x t - c o n t r o l s   b u t t o n : d i s a b l e d   { 
-         o p a c i t y :   0 . 4 ; 
-         c u r s o r :   n o t - a l l o w e d ; 
- } 
- 
- / *   P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%
-       E X T R A   S P A C I N G   ( D y s l e x i a / R e a d i n g   A i d ) 
-       P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%  * / 
- b o d y . m o m e n t u m - e x t r a - s p a c i n g   *   { 
-         l i n e - h e i g h t :   1 . 8   ! i m p o r t a n t ; 
-         l e t t e r - s p a c i n g :   0 . 0 8 e m   ! i m p o r t a n t ; 
-         w o r d - s p a c i n g :   0 . 1 5 e m   ! i m p o r t a n t ; 
- } 
- 
- / *   P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%
-       B I G   C U R S O R 
-       P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%  * / 
- b o d y . m o m e n t u m - b i g - c u r s o r ,   
- b o d y . m o m e n t u m - b i g - c u r s o r   * , 
- b o d y . m o m e n t u m - b i g - c u r s o r   a , 
- b o d y . m o m e n t u m - b i g - c u r s o r   b u t t o n   { 
-         c u r s o r :   u r l ( \  
- d a t a : i m a g e / s v g + x m l  
- % 3 C s v g  
- w i d t h = 4 8  
- h e i g h t = 4 8  
- v i e w B o x = 0   0   4 8   4 8  
- f i l l = n o n e  
- x m l n s = h t t p : / / w w w . w 3 . o r g / 2 0 0 0 / s v g % 3 E % 3 C p a t h  
- d = M 1 0   1 0 l 2 8   1 2 . 5 - 1 2 . 5   4 . 5 - 5   1 3 L 1 0   1 0 z  
- f i l l = % 2 3 f f c c 3 3  
- s t r o k e = % 2 3 0 0 0  
- s t r o k e - w i d t h = 2 / % 3 E % 3 C / s v g % 3 E \ ) ,   a u t o   ! i m p o r t a n t ; 
- } 
- 
- / *   P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%
-       M O N O C H R O M E   /   G R A Y S C A L E 
-       P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%  * / 
- b o d y . m o m e n t u m - m o n o c h r o m e   { 
-         f i l t e r :   g r a y s c a l e ( 1 0 0 % )   c o n t r a s t ( 1 1 0 % )   ! i m p o r t a n t ; 
- } 
- 
- / *   P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%
-       P A U S E   A N I M A T I O N S 
-       P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%  * / 
- b o d y . m o m e n t u m - p a u s e - a n i m a t i o n s   *   { 
-         a n i m a t i o n :   n o n e   ! i m p o r t a n t ; 
-         t r a n s i t i o n :   n o n e   ! i m p o r t a n t ; 
-         s c r o l l - b e h a v i o r :   a u t o   ! i m p o r t a n t ; 
- } 
- 
- / *   P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%
-       R E A D I N G   M A S K 
-       P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%P%  * / 
- . a 1 1 y - r e a d i n g - m a s k - t o p , 
- . a 1 1 y - r e a d i n g - m a s k - b o t t o m   { 
-         p o s i t i o n :   f i x e d ; 
-         l e f t :   0 ; 
-         r i g h t :   0 ; 
-         b a c k g r o u n d :   r g b a ( 0 ,   0 ,   0 ,   0 . 8 5 ) ; 
-         z - i n d e x :   9 9 9 8 ;   / *   J u s t   b e l o w   t h e   w i d g e t   p a n e l   i t s e l f   * / 
-         p o i n t e r - e v e n t s :   n o n e ;   / *   L e t   c l i c k s   p a s s   t h r o u g h   t o   t h e   s i t e   b e l o w   * / 
-         b a c k d r o p - f i l t e r :   b l u r ( 2 p x ) ; 
- } 
- . a 1 1 y - r e a d i n g - m a s k - t o p   { 
-         t o p :   0 ; 
- } 
- . a 1 1 y - r e a d i n g - m a s k - b o t t o m   { 
-         b o t t o m :   0 ; 
- } 
-  
- 
+
+/* ═══════════════════════════════════════════════════════════
+   Accessibility Scrollable Panel
+   ═══════════════════════════════════════════════════════════ */
+.a11y-scrollable {
+    max-height: 50vh;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+.a11y-scrollable::-webkit-scrollbar {
+    width: 6px;
+}
+
+.a11y-scrollable::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+.a11y-scrollable::-webkit-scrollbar-thumb {
+    background: rgba(255, 204, 51, 0.4);
+    border-radius: 4px;
+}
+
+.a11y-scrollable::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 204, 51, 0.8);
+}
+
+/* Text Controls */
+.a11y-option-group {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 12px 14px;
+    margin-bottom: 4px;
+}
+
+.a11y-group-title {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.a11y-text-controls {
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+}
+
+.a11y-text-controls button {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    border-radius: 6px;
+    padding: 6px 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.a11y-text-controls button:hover:not(:disabled) {
+    background: rgba(255, 204, 51, 0.2);
+    border-color: rgba(255, 204, 51, 0.5);
+    color: #ffcc33;
+}
+
+.a11y-text-controls button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   EXTRA SPACING (Dyslexia/Reading Aid)
+   ═══════════════════════════════════════════════════════════ */
+body.momentum-extra-spacing * {
+    line-height: 1.8 !important;
+    letter-spacing: 0.08em !important;
+    word-spacing: 0.15em !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BIG CURSOR
+   ═══════════════════════════════════════════════════════════ */
+body.momentum-big-cursor,
+body.momentum-big-cursor *,
+body.momentum-big-cursor a,
+body.momentum-big-cursor button {
+    cursor: url("data:image/svg+xml,%3Csvg width='48' height='48' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 10l28 12.5-12.5 4.5-5 13L10 10z' fill='%23ffcc33' stroke='%23000' stroke-width='2'/%3E%3C/svg%3E"), auto !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MONOCHROME / GRAYSCALE
+   ═══════════════════════════════════════════════════════════ */
+body.momentum-monochrome {
+    filter: grayscale(100%) contrast(110%) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PAUSE ANIMATIONS
+   ═══════════════════════════════════════════════════════════ */
+body.momentum-pause-animations * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   READING MASK
+   ═══════════════════════════════════════════════════════════ */
+.a11y-reading-mask-top,
+.a11y-reading-mask-bottom {
+    position: fixed;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 9998;
+    /* Just below the widget panel itself */
+    pointer-events: none;
+    /* Let clicks pass through to the site below */
+    backdrop-filter: blur(2px);
+}
+
+.a11y-reading-mask-top {
+    top: 0;
+}
+
+.a11y-reading-mask-bottom {
+    bottom: 0;
+}
