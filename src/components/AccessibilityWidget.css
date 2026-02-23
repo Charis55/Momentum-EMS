@@ -253,14 +253,12 @@ body.momentum-light-mode .hero-sub,
 body.momentum-light-mode .section-sub-fancy,
 body.momentum-light-mode .event-card-body p,
 body.momentum-light-mode .timezone-subtext,
-body.momentum-light-mode .stat-label,
-body.momentum-light-mode .hero-body-text {
+body.momentum-light-mode .stat-label {
     color: #4b5563 !important;
 }
 
 body.momentum-light-mode .ui-heading-label,
-body.momentum-light-mode .category-tag-ui,
-body.momentum-light-mode .hero-accent-new {
+body.momentum-light-mode .category-tag-ui {
     color: #d97706 !important;
     /* Muted orange/gold for contrast */
 }
@@ -301,16 +299,6 @@ body.momentum-light-mode .event-card-curve:hover,
 body.momentum-light-mode .stat-card:hover {
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
     border-color: rgba(0, 0, 0, 0.15) !important;
-}
-
-/* Secondary Buttons */
-body.momentum-light-mode .btn-secondary-outline {
-    color: #111827 !important;
-    border-color: #d1d5db !important;
-}
-
-body.momentum-light-mode .btn-secondary-outline:hover {
-    background: rgba(0, 0, 0, 0.05) !important;
 }
 
 /* Inputs & selects */

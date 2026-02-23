@@ -124,11 +124,11 @@ export default function Dashboard() {
           maxWidth: "1200px",
           margin: "0 auto"
         }}>
-          {loading && <p style={{ gridColumn: "1 / -1", textAlign: "center" }}>Loading events...</p>}
+          {loading && <p style={{ color: "#fff", gridColumn: "1 / -1", textAlign: "center" }}>Loading events...</p>}
 
           {!loading && events.length === 0 && (
             <div style={{ gridColumn: "1 / -1", textAlign: "center", padding: "40px" }}>
-              <p style={{ opacity: 0.8, marginBottom: "20px" }}>No upcoming events yet.</p>
+              <p style={{ opacity: 0.8, color: "#fff", marginBottom: "20px" }}>No upcoming events yet.</p>
               <Link to="/create" className="btn-primary" style={{ fontSize: "0.9rem" }}>Be the first to host</Link>
             </div>
           )}
