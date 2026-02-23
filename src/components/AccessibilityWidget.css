@@ -211,19 +211,19 @@
 }
 
 /* ═══════════════════════════════════════════════════════════
-   LIGHT MODE — proper warm color scheme for readability
+   LIGHT MODE — clean, high-contrast, modern professional design
    ═══════════════════════════════════════════════════════════ */
 
 /* Page root background */
 body.momentum-light-mode,
 body.momentum-light-mode>div {
-    background: #f5f0ea !important;
-    color: #1a1410 !important;
+    background: #f9fafb !important;
+    color: #111827 !important;
 }
 
 /* App.jsx radial-gradient wrapper */
 body.momentum-light-mode>div[style] {
-    background: linear-gradient(135deg, #f7f2eb 0%, #ede6db 60%, #e8dfd4 100%) !important;
+    background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 60%, #e5e7eb 100%) !important;
 }
 
 /* Text elements */
@@ -236,16 +236,49 @@ body.momentum-light-mode p,
 body.momentum-light-mode span,
 body.momentum-light-mode label,
 body.momentum-light-mode li {
-    color: #1a1410 !important;
+    color: #111827 !important;
 }
 
 /* Links */
 body.momentum-light-mode a {
-    color: #b07800 !important;
+    color: #2563eb !important;
 }
 
 body.momentum-light-mode a:hover {
-    color: #7a5200 !important;
+    color: #1d4ed8 !important;
+}
+
+/* Specialty Text Adjustments */
+body.momentum-light-mode .hero-sub,
+body.momentum-light-mode .section-sub-fancy,
+body.momentum-light-mode .event-card-body p,
+body.momentum-light-mode .timezone-subtext,
+body.momentum-light-mode .stat-label {
+    color: #4b5563 !important;
+}
+
+body.momentum-light-mode .ui-heading-label,
+body.momentum-light-mode .category-tag-ui {
+    color: #d97706 !important;
+    /* Muted orange/gold for contrast */
+}
+
+body.momentum-light-mode .category-tag-ui {
+    background: rgba(217, 119, 6, 0.1) !important;
+}
+
+/* Navigation and Headers */
+body.momentum-light-mode .app-header {
+    background: rgba(255, 255, 255, 0.85) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+body.momentum-light-mode .toolbar-nav a {
+    color: #374151 !important;
+}
+
+body.momentum-light-mode .brand h1 {
+    color: #111827 !important;
 }
 
 /* Cards / surface containers */
@@ -253,35 +286,54 @@ body.momentum-light-mode [class*="card"],
 body.momentum-light-mode [class*="Card"],
 body.momentum-light-mode [class*="panel"],
 body.momentum-light-mode [class*="wrapper"],
-body.momentum-light-mode [class*="container"] {
-    background: rgba(255, 252, 248, 0.98) !important;
-    border-color: rgba(180, 140, 60, 0.2) !important;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08) !important;
-    color: #1a1410 !important;
+body.momentum-light-mode [class*="container"],
+body.momentum-light-mode .sidebar-glass-box {
+    background: #ffffff !important;
+    border-color: rgba(0, 0, 0, 0.06) !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+    color: #111827 !important;
+}
+
+/* Hover effects for cards */
+body.momentum-light-mode .event-card-curve:hover,
+body.momentum-light-mode .stat-card:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+    border-color: rgba(0, 0, 0, 0.15) !important;
 }
 
 /* Inputs & selects */
 body.momentum-light-mode input,
 body.momentum-light-mode textarea,
 body.momentum-light-mode select {
-    background: #fff !important;
-    color: #1a1410 !important;
-    border-color: rgba(160, 120, 40, 0.35) !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+    border: 1px solid #d1d5db !important;
+}
+
+body.momentum-light-mode input:focus,
+body.momentum-light-mode textarea:focus {
+    border-color: #3b82f6 !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
 }
 
 body.momentum-light-mode input::placeholder,
 body.momentum-light-mode textarea::placeholder {
-    color: #9a8a78 !important;
+    color: #9ca3af !important;
 }
 
 /* Scrollbar */
 body.momentum-light-mode ::-webkit-scrollbar-track {
-    background: #ede6db;
+    background: #f3f4f6;
 }
 
 body.momentum-light-mode ::-webkit-scrollbar-thumb {
-    background: rgba(160, 120, 40, 0.4);
+    background: #d1d5db;
     border-radius: 4px;
+}
+
+body.momentum-light-mode ::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
 }
 
 /* Keep the accessibility widget panel always dark */
