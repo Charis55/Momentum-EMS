@@ -136,7 +136,7 @@ export default function EventDetails() {
             <button onClick={() => nav(-1)} className="back-explore-btn">← BACK TO EXPLORE</button>
             <div className="social-share-group">
               <button onClick={shareWhatsApp} className="social-pill whatsapp-pill">WHATSAPP</button>
-              <button onClick={shareTwitter} className="social-pill twitter-pill">X</button>
+              <button onClick={shareTwitter} className="social-pill twitter-pill">   X   </button>
               <button onClick={shareInstagram} className="social-pill insta-pill">INSTAGRAM</button>
               <button onClick={shareMessages} className="social-pill msg-pill">MESSAGES</button>
             </div>
