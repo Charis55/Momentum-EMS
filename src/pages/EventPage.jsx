@@ -48,7 +48,7 @@ export default function EventPage() {
     <div style={{
       minHeight: "100vh",
       display: "block",
-      background: "radial-gradient(circle at 15% 15%, #8b4513 0%, #3d1f0a 35%, #0f0e0e 75%, #0a0a0a 100%)",
+      background: "var(--bg-main)",
       backgroundAttachment: "fixed"
     }}>
       <Toolbar />
@@ -56,7 +56,7 @@ export default function EventPage() {
         <h2 className="section-title-glow" style={{ textAlign: "center", marginBottom: "10px" }}>
           Explore All <span className="gradient-text">Webinars</span>
         </h2>
-        <p style={{ textAlign: "center", color: "rgba(255,255,255,0.8)", marginBottom: "40px", fontSize: "1.1rem" }}>
+        <p style={{ textAlign: "center", color: "var(--text-muted)", marginBottom: "40px", fontSize: "1.1rem" }}>
           Discover upcoming sessions, expert speakers, and niche categories.
         </p>
 
@@ -66,11 +66,11 @@ export default function EventPage() {
           flexWrap: "wrap",
           gap: "20px",
           marginBottom: "50px",
-          background: "rgba(0, 0, 0, 0.4)",
+          background: "var(--card-bg)",
           padding: "25px",
           borderRadius: "20px",
           backdropFilter: "blur(10px)",
-          border: "1px solid rgba(255, 255, 255, 0.1)",
+          border: "1px solid var(--card-border)",
           boxShadow: "0 10px 30px rgba(0,0,0,0.3)"
         }}>
           <div style={{ flex: "1 1 300px" }}>
@@ -84,9 +84,9 @@ export default function EventPage() {
                 width: "100%",
                 padding: "15px 20px",
                 borderRadius: "12px",
-                border: "1px solid rgba(255,255,255,0.1)",
-                background: "rgba(255,255,255,0.9)",
-                color: "#000",
+                border: "1px solid var(--input-border)",
+                background: "var(--input-bg)",
+                color: "var(--text-inverted)",
                 fontSize: "1rem",
                 fontWeight: "600",
                 outline: "none"
@@ -102,9 +102,9 @@ export default function EventPage() {
                 width: "100%",
                 padding: "15px 20px",
                 borderRadius: "12px",
-                border: "1px solid rgba(255,255,255,0.1)",
-                background: "rgba(255,255,255,0.9)",
-                color: "#000",
+                border: "1px solid var(--input-border)",
+                background: "var(--input-bg)",
+                color: "var(--text-inverted)",
                 fontSize: "1rem",
                 fontWeight: "600",
                 outline: "none",
@@ -120,12 +120,12 @@ export default function EventPage() {
         </div>
 
         <div className="event-grid">
-          {loading && <p style={{ color: "#fff", textAlign: "center", gridColumn: "1 / -1" }}>Loading events...</p>}
+          {loading && <p style={{ color: "var(--text-main)", textAlign: "center", gridColumn: "1 / -1" }}>Loading events...</p>}
 
           {!loading && filteredAndSortedEvents.length === 0 && (
-            <div style={{ textAlign: "center", gridColumn: "1 / -1", padding: "60px 40px", background: "rgba(0,0,0,0.2)", borderRadius: "20px", border: "1px dashed rgba(255,255,255,0.2)" }}>
-              <p style={{ color: "#fff", fontSize: "1.2rem", fontWeight: "bold" }}>No matching events found.</p>
-              <p style={{ color: "rgba(255,255,255,0.6)", marginTop: "10px" }}>Try adjusting your search terms.</p>
+            <div style={{ textAlign: "center", gridColumn: "1 / -1", padding: "60px 40px", background: "var(--card-bg)", borderRadius: "20px", border: "1px dashed var(--card-border)" }}>
+              <p style={{ color: "var(--card-text)", fontSize: "1.2rem", fontWeight: "bold" }}>No matching events found.</p>
+              <p style={{ color: "var(--card-text-muted)", marginTop: "10px" }}>Try adjusting your search terms.</p>
             </div>
           )}
 

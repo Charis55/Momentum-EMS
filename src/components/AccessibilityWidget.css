@@ -45,8 +45,8 @@
     bottom: 70px;
     right: 0;
     width: 300px;
-    background: rgba(18, 10, 2, 0.95);
-    border: 1px solid rgba(255, 204, 51, 0.3);
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
     border-radius: 20px;
     padding: 20px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 122, 0, 0.15);
@@ -111,7 +111,7 @@
 .a11y-close-btn {
     background: none;
     border: none;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--card-text-muted);
     font-size: 1rem;
     cursor: pointer;
     line-height: 1;
@@ -119,7 +119,7 @@
 }
 
 .a11y-close-btn:hover {
-    color: #fff;
+    color: var(--card-text);
 }
 
 /* ── Option buttons ─────────────────────────────────────────── */
@@ -134,14 +134,14 @@
     align-items: center;
     gap: 12px;
     width: 100%;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
     border-radius: 14px;
     padding: 12px 14px;
     cursor: pointer;
     transition: all 0.25s ease;
     text-align: left;
-    color: #fff;
+    color: var(--card-text);
 }
 
 .a11y-option-btn:hover {
@@ -171,19 +171,19 @@
 .a11y-option-label {
     font-size: 0.88rem;
     font-weight: 700;
-    color: #fff;
+    color: var(--card-text);
 }
 
 .a11y-option-desc {
     font-size: 0.73rem;
-    color: rgba(255, 255, 255, 0.45);
+    color: var(--card-text-muted);
 }
 
 /* ── Toggle switch ──────────────────────────────────────────── */
 .a11y-toggle {
     width: 36px;
     height: 20px;
-    background: rgba(255, 255, 255, 0.15);
+    background: var(--input-border);
     border-radius: 20px;
     position: relative;
     flex-shrink: 0;
@@ -197,7 +197,7 @@
     left: 2px;
     width: 16px;
     height: 16px;
-    background: #fff;
+    background: var(--card-text);
     border-radius: 50%;
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -208,358 +208,6 @@
 
 .a11y-toggle.on::after {
     transform: translateX(16px);
-}
-
-/* ═══════════════════════════════════════════════════════════
-   LIGHT MODE — clean, high-contrast, modern professional design
-   ═══════════════════════════════════════════════════════════ */
-
-/* Page root background */
-body.momentum-light-mode,
-body.momentum-light-mode>div {
-    background: #f9fafb !important;
-    color: #111827 !important;
-}
-
-/* App.jsx radial-gradient wrapper */
-body.momentum-light-mode>div[style] {
-    background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 60%, #e5e7eb 100%) !important;
-}
-
-/* Text elements */
-body.momentum-light-mode h1,
-body.momentum-light-mode h2,
-body.momentum-light-mode h3,
-body.momentum-light-mode h4,
-body.momentum-light-mode h5,
-body.momentum-light-mode p,
-body.momentum-light-mode span,
-body.momentum-light-mode label,
-body.momentum-light-mode li {
-    color: #111827 !important;
-}
-
-/* Links */
-body.momentum-light-mode a {
-    color: #2563eb !important;
-}
-
-body.momentum-light-mode a:hover {
-    color: #1d4ed8 !important;
-}
-
-/* Specialty Text Adjustments */
-body.momentum-light-mode .hero-sub,
-body.momentum-light-mode .section-sub-fancy,
-body.momentum-light-mode .event-card-body p,
-body.momentum-light-mode .timezone-subtext,
-body.momentum-light-mode .stat-label {
-    color: #4b5563 !important;
-}
-
-body.momentum-light-mode .ui-heading-label,
-body.momentum-light-mode .category-tag-ui {
-    color: #d97706 !important;
-    /* Muted orange/gold for contrast */
-}
-
-body.momentum-light-mode .category-tag-ui {
-    background: rgba(217, 119, 6, 0.1) !important;
-}
-
-/* Navigation and Headers */
-body.momentum-light-mode .app-header {
-    background: rgba(255, 255, 255, 0.85) !important;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
-}
-
-body.momentum-light-mode .toolbar-nav a {
-    color: #374151 !important;
-}
-
-body.momentum-light-mode .brand h1 {
-    color: #111827 !important;
-}
-
-/* Cards / surface containers */
-body.momentum-light-mode [class*="card"],
-body.momentum-light-mode [class*="Card"],
-body.momentum-light-mode [class*="panel"],
-body.momentum-light-mode [class*="wrapper"],
-body.momentum-light-mode [class*="container"],
-body.momentum-light-mode .sidebar-glass-box {
-    background: #ffffff !important;
-    border-color: rgba(0, 0, 0, 0.06) !important;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
-    color: #111827 !important;
-}
-
-/* Hover effects for cards */
-body.momentum-light-mode .event-card-curve:hover,
-body.momentum-light-mode .stat-card:hover {
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
-    border-color: rgba(0, 0, 0, 0.15) !important;
-}
-
-/* Inputs & selects */
-body.momentum-light-mode input,
-body.momentum-light-mode textarea,
-body.momentum-light-mode select {
-    background: #ffffff !important;
-    color: #111827 !important;
-    border: 1px solid #d1d5db !important;
-}
-
-body.momentum-light-mode input:focus,
-body.momentum-light-mode textarea:focus {
-    border-color: #3b82f6 !important;
-    outline: none !important;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
-}
-
-body.momentum-light-mode input::placeholder,
-body.momentum-light-mode textarea::placeholder {
-    color: #9ca3af !important;
-}
-
-/* Scrollbar */
-body.momentum-light-mode ::-webkit-scrollbar-track {
-    background: #f3f4f6;
-}
-
-body.momentum-light-mode ::-webkit-scrollbar-thumb {
-    background: #d1d5db;
-    border-radius: 4px;
-}
-
-body.momentum-light-mode ::-webkit-scrollbar-thumb:hover {
-    background: #9ca3af;
-}
-
-/* Keep the accessibility widget panel always dark */
-body.momentum-light-mode .a11y-panel,
-body.momentum-light-mode .a11y-panel * {
-    background: unset;
-    color: unset;
-}
-
-body.momentum-light-mode .a11y-panel {
-    background: rgba(18, 10, 2, 0.96) !important;
-}
-
-body.momentum-light-mode .a11y-option-label {
-    color: #fff !important;
-}
-
-body.momentum-light-mode .a11y-panel-title {
-    color: #ffcc33 !important;
-}
-
-body.momentum-light-mode .a11y-close-btn {
-    color: rgba(255, 255, 255, 0.5) !important;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   KEYBOARD NAVIGATION — visible focus outlines
-   ═══════════════════════════════════════════════════════════ */
-.a11y-option-label {
-    font-size: 0.88rem;
-    font-weight: 700;
-    color: #fff;
-}
-
-.a11y-option-desc {
-    font-size: 0.73rem;
-    color: rgba(255, 255, 255, 0.45);
-}
-
-/* ── Toggle switch ──────────────────────────────────────────── */
-.a11y-toggle {
-    width: 36px;
-    height: 20px;
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 20px;
-    position: relative;
-    flex-shrink: 0;
-    transition: background 0.3s;
-}
-
-.a11y-toggle::after {
-    content: "";
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 16px;
-    height: 16px;
-    background: #fff;
-    border-radius: 50%;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.a11y-toggle.on {
-    background: linear-gradient(90deg, #ff7a00, #ffcc33);
-}
-
-.a11y-toggle.on::after {
-    transform: translateX(16px);
-}
-
-/* ═══════════════════════════════════════════════════════════
-   LIGHT MODE — clean, high-contrast, modern professional design
-   ═══════════════════════════════════════════════════════════ */
-
-/* Page root background */
-body.momentum-light-mode,
-body.momentum-light-mode>div {
-    background: #f9fafb !important;
-    color: #111827 !important;
-}
-
-/* App.jsx radial-gradient wrapper */
-body.momentum-light-mode>div[style] {
-    background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 60%, #e5e7eb 100%) !important;
-}
-
-/* Text elements */
-body.momentum-light-mode h1,
-body.momentum-light-mode h2,
-body.momentum-light-mode h3,
-body.momentum-light-mode h4,
-body.momentum-light-mode h5,
-body.momentum-light-mode p,
-body.momentum-light-mode span,
-body.momentum-light-mode label,
-body.momentum-light-mode li {
-    color: #111827 !important;
-}
-
-/* Links */
-body.momentum-light-mode a {
-    color: #2563eb !important;
-}
-
-body.momentum-light-mode a:hover {
-    color: #1d4ed8 !important;
-}
-
-/* Specialty Text Adjustments */
-body.momentum-light-mode .hero-sub,
-body.momentum-light-mode .section-sub-fancy,
-body.momentum-light-mode .event-card-body p,
-body.momentum-light-mode .timezone-subtext,
-body.momentum-light-mode .stat-label {
-    color: #4b5563 !important;
-}
-
-body.momentum-light-mode .ui-heading-label,
-body.momentum-light-mode .category-tag-ui {
-    color: #d97706 !important;
-    /* Muted orange/gold for contrast */
-}
-
-body.momentum-light-mode .category-tag-ui {
-    background: rgba(217, 119, 6, 0.1) !important;
-}
-
-/* Navigation and Headers */
-body.momentum-light-mode .app-header {
-    background: rgba(255, 255, 255, 0.85) !important;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
-}
-
-body.momentum-light-mode .toolbar-nav a {
-    color: #374151 !important;
-}
-
-body.momentum-light-mode .brand h1 {
-    color: #111827 !important;
-}
-
-/* Cards / surface containers */
-body.momentum-light-mode [class*="card"],
-body.momentum-light-mode [class*="Card"],
-body.momentum-light-mode [class*="panel"],
-body.momentum-light-mode [class*="wrapper"],
-body.momentum-light-mode [class*="container"],
-body.momentum-light-mode .sidebar-glass-box {
-    background: #ffffff !important;
-    border-color: rgba(0, 0, 0, 0.06) !important;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
-    color: #111827 !important;
-}
-
-/* Hover effects for cards */
-body.momentum-light-mode .event-card-curve:hover,
-body.momentum-light-mode .stat-card:hover {
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
-    border-color: rgba(0, 0, 0, 0.15) !important;
-}
-
-/* Inputs & selects */
-body.momentum-light-mode input,
-body.momentum-light-mode textarea,
-body.momentum-light-mode select {
-    background: #ffffff !important;
-    color: #111827 !important;
-    border: 1px solid #d1d5db !important;
-}
-
-body.momentum-light-mode input:focus,
-body.momentum-light-mode textarea:focus {
-    border-color: #3b82f6 !important;
-    outline: none !important;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
-}
-
-body.momentum-light-mode input::placeholder,
-body.momentum-light-mode textarea::placeholder {
-    color: #9ca3af !important;
-}
-
-/* Scrollbar */
-body.momentum-light-mode ::-webkit-scrollbar-track {
-    background: #f3f4f6;
-}
-
-body.momentum-light-mode ::-webkit-scrollbar-thumb {
-    background: #d1d5db;
-    border-radius: 4px;
-}
-
-body.momentum-light-mode ::-webkit-scrollbar-thumb:hover {
-    background: #9ca3af;
-}
-
-/* Keep the accessibility widget panel always dark */
-body.momentum-light-mode .a11y-panel,
-body.momentum-light-mode .a11y-panel * {
-    background: unset;
-    color: unset;
-}
-
-body.momentum-light-mode .a11y-panel {
-    background: rgba(18, 10, 2, 0.96) !important;
-}
-
-body.momentum-light-mode .a11y-option-label {
-    color: #fff !important;
-}
-
-body.momentum-light-mode .a11y-panel-title {
-    color: #ffcc33 !important;
-}
-
-body.momentum-light-mode .a11y-close-btn {
-    color: rgba(255, 255, 255, 0.5) !important;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   KEYBOARD NAVIGATION — visible focus outlines
-   ═══════════════════════════════════════════════════════════ */
-body.momentum-keyboard-nav *:focus-visible {
-    outline: 3px solid #ffcc33 !important;
-    outline-offset: 3px !important;
-    box-shadow: 0 0 0 6px rgba(255, 204, 51, 0.2) !important;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -591,8 +239,8 @@ body.momentum-keyboard-nav *:focus-visible {
 
 /* Text Controls */
 .a11y-option-group {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
     border-radius: 14px;
     padding: 12px 14px;
     margin-bottom: 4px;
@@ -602,7 +250,7 @@ body.momentum-keyboard-nav *:focus-visible {
     display: block;
     font-size: 0.88rem;
     font-weight: 700;
-    color: #fff;
+    color: var(--card-text);
     margin-bottom: 8px;
 }
 
@@ -614,9 +262,9 @@ body.momentum-keyboard-nav *:focus-visible {
 
 .a11y-text-controls button {
     flex: 1;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #fff;
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--card-text);
     border-radius: 6px;
     padding: 6px 0;
     font-size: 0.85rem;

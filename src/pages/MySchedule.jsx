@@ -155,7 +155,7 @@ export default function MySchedule() {
                       borderRadius: '12px',
                       overflow: 'hidden',
                       marginBottom: '20px',
-                      background: 'rgba(255,255,255,0.03)',
+                      background: 'var(--input-bg)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center'
@@ -218,7 +218,7 @@ export default function MySchedule() {
         .schedule-wrapper {
           min-height: 100vh;
           /* Updated radial gradient from Organizer Dashboard */
-          background: radial-gradient(circle at 15% 15%, #8b4513 0%, #3d1f0a 35%, #0f0e0e 75%, #0a0a0a 100%);
+          background: var(--bg-main);
           padding: 120px 20px 60px;
           font-family: 'Inter', sans-serif;
         }
@@ -232,12 +232,12 @@ export default function MySchedule() {
           margin-bottom: 60px;
         }
         .hero-main-card {
-          background: rgba(255, 255, 255, 0.1);
+          background: var(--card-bg);
           backdrop-filter: blur(10px);
           padding: 40px;
           border-radius: 30px;
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          color: white;
+          border: 1px solid var(--card-border);
+          color: var(--card-text);
         }
         .badge {
           background: #ffcc33;
@@ -251,7 +251,7 @@ export default function MySchedule() {
         .hero-title { font-size: 3.5rem; font-weight: 900; margin: 15px 0; }
         .hero-desc { font-size: 1.1rem; opacity: 0.9; margin-bottom: 25px; max-width: 500px; }
         .browse-btn {
-          background: #fff;
+          background: var(--card-text);
           color: #d35400;
           border: none;
           padding: 12px 24px;
@@ -261,7 +261,7 @@ export default function MySchedule() {
         }
 
         .stat-card {
-          background: rgba(255, 255, 255, 0.15);
+          background: var(--card-bg);
           backdrop-filter: blur(10px);
           padding: 30px;
           border-radius: 30px;
@@ -269,9 +269,9 @@ export default function MySchedule() {
           flex-direction: column;
           justify-content: center;
           align-items: center;
-          color: white;
+          color: var(--card-text);
           text-align: center;
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          border: 1px solid var(--card-border);
         }
         .stat-label { font-size: 0.9rem; font-weight: 600; opacity: 0.8; margin-bottom: 10px; }
         .stat-value { font-size: 4rem; font-weight: 900; }
@@ -284,13 +284,15 @@ export default function MySchedule() {
           align-items: center; 
           margin-bottom: 30px;
         }
-        .section-subtitle { color: #fff; font-size: 2rem; font-weight: 800; }
+        .section-subtitle { color: var(--text-main); font-size: 2rem; font-weight: 800; }
         
         .filter-bar { display: flex; gap: 15px; }
         .search-input, .sort-select {
           padding: 12px 20px;
           border-radius: 15px;
-          border: none;
+          border: 1px solid var(--input-border);
+          background: var(--input-bg);
+          color: var(--text-inverted);
           font-weight: 600;
         }
 
@@ -305,7 +307,7 @@ export default function MySchedule() {
         .loader-box, .empty-state {
           grid-column: 1 / -1;
           text-align: center;
-          color: white;
+          color: var(--text-main);
           padding: 100px;
           font-size: 1.2rem;
           font-weight: 700;

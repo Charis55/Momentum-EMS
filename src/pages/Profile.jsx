@@ -111,19 +111,19 @@ export default function Profile() {
   return (
     <div style={{
       minHeight: "100vh",
-      background: "radial-gradient(circle at 15% 15%, #8b4513 0%, #3d1f0a 35%, #0f0e0e 75%, #0a0a0a 100%)",
+      background: "var(--bg-main)",
       paddingTop: "100px",
       fontFamily: "'Inter', sans-serif"
     }}>
       <Toolbar />
       <div style={{ maxWidth: "500px", margin: "0 auto", padding: "0 20px" }}>
         <div style={{
-          background: "rgba(255, 255, 255, 0.05)",
+          background: "var(--card-bg)",
           backdropFilter: "blur(15px)",
           borderRadius: "30px",
           padding: "40px",
-          border: "1px solid rgba(255,255,255,0.1)",
-          color: "white"
+          border: "1px solid var(--card-border)",
+          color: "var(--card-text)"
         }}>
           <h2 style={{ fontSize: "2.2rem", fontWeight: "900", marginBottom: "30px", textAlign: "center" }}>Account Settings</h2>
 
@@ -138,7 +138,7 @@ export default function Profile() {
 
           <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
             <div>
-              <label style={{ display: "block", marginBottom: "8px", opacity: 0.8, fontSize: "0.9rem" }}>Display Name</label>
+              <label style={{ display: "block", marginBottom: "8px", color: "var(--card-text-muted)", fontSize: "0.9rem" }}>Display Name</label>
               <input
                 style={inputStyle}
                 value={username}
@@ -153,7 +153,7 @@ export default function Profile() {
             <hr style={{ border: "0", borderTop: "1px solid rgba(255,255,255,0.1)", margin: "10px 0" }} />
 
             <div>
-              <label style={{ display: "block", marginBottom: "8px", opacity: 0.8, fontSize: "0.9rem" }}>Account Email</label>
+              <label style={{ display: "block", marginBottom: "8px", color: "var(--card-text-muted)", fontSize: "0.9rem" }}>Account Email</label>
               <input style={inputStyle} type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
               <button style={outlineBtn} onClick={handleEmailUpdate}>Update & Verify Email</button>
             </div>
@@ -181,8 +181,8 @@ export default function Profile() {
   );
 }
 
-const inputStyle = { width: "100%", padding: "12px", borderRadius: "10px", border: "none", background: "rgba(255,255,255,0.9)", color: "#333", fontWeight: "600", marginBottom: "10px" };
+const inputStyle = { width: "100%", padding: "12px", borderRadius: "10px", border: "1px solid var(--input-border)", background: "var(--input-bg)", color: "var(--card-text)", fontWeight: "600", marginBottom: "10px" };
 const primaryBtn = { width: "100%", padding: "14px", borderRadius: "12px", border: "none", background: "linear-gradient(90deg, #ff7e00, #ffcc33)", color: "white", fontWeight: "800", cursor: "pointer" };
-const outlineBtn = { width: "100%", padding: "12px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.3)", background: "transparent", color: "white", fontWeight: "600", cursor: "pointer", marginTop: "5px" };
+const outlineBtn = { width: "100%", padding: "12px", borderRadius: "12px", border: "1px solid var(--card-border)", background: "transparent", color: "var(--card-text)", fontWeight: "600", cursor: "pointer", marginTop: "5px" };
 const modalOverlay = { position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.8)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 };
 const modalContent = { background: "#1a1a1a", padding: "40px", borderRadius: "30px", textAlign: "center", color: "white", border: "1px solid rgba(255,255,255,0.1)" };

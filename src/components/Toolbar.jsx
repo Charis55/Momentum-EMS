@@ -29,7 +29,7 @@ export default function Toolbar() {
 
   // Common styling for NavLinks including the orange gradient for active state
   const getNavLinkStyle = ({ isActive }) => ({
-    color: 'white',
+    color: 'var(--card-text)',
     textDecoration: 'none',
     fontSize: '1.3rem',
     fontWeight: '700',
@@ -41,7 +41,7 @@ export default function Toolbar() {
       ? 'linear-gradient(90deg, #ff7a00, #ffcc33)'
       : 'transparent',
     WebkitBackgroundClip: isActive ? 'text' : 'unset',
-    WebkitTextFillColor: isActive ? 'transparent' : 'white',
+    WebkitTextFillColor: isActive ? 'transparent' : 'var(--card-text)',
     // Hover effect is handled via the className logic in your CSS or inline styles
   });
 
@@ -70,7 +70,7 @@ export default function Toolbar() {
           alt="Momentum EMS"
           style={{ height: '42px', marginRight: '12px' }}
         />
-        <h1 style={{ color: 'white', fontSize: '1.6rem', margin: 0, fontWeight: '800', letterSpacing: '-1px' }}>
+        <h1 style={{ color: 'var(--text-main)', fontSize: '1.6rem', margin: 0, fontWeight: '800', letterSpacing: '-1px' }}>
           Momentum
         </h1>
       </Link>
@@ -79,7 +79,7 @@ export default function Toolbar() {
       <div className="toolbar-welcome" style={{
         flex: 1,
         textAlign: 'center',
-        color: 'white',
+        color: 'var(--text-main)',
         fontWeight: '600',
         fontSize: '1.1rem',
         letterSpacing: '1px',
@@ -94,8 +94,8 @@ export default function Toolbar() {
           onClick={toggleMenu}
           className="hamburger-btn"
           style={{
-            background: 'rgba(255, 255, 255, 0.05)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
+            background: 'var(--input-bg)',
+            border: '1px solid var(--input-border)',
             borderRadius: '12px',
             cursor: 'pointer',
             display: 'flex',
@@ -121,7 +121,7 @@ export default function Toolbar() {
         right: 0,
         width: '320px',
         height: '100vh',
-        background: 'rgba(15, 15, 15, 0.85)',
+        background: 'var(--card-bg)',
         backdropFilter: 'blur(25px)',
         WebkitBackdropFilter: 'blur(25px)',
         boxShadow: '-10px 0 40px rgba(0,0,0,0.6)',
@@ -132,7 +132,7 @@ export default function Toolbar() {
         padding: '120px 40px',
         gap: '20px',
         zIndex: 1050,
-        borderLeft: '1px solid rgba(255, 255, 255, 0.1)',
+        borderLeft: '1px solid var(--card-border)',
         willChange: 'transform'
       }}>
         {/* Navigation Links with Active State Gradient and Hover Styling */}
@@ -217,7 +217,8 @@ export default function Toolbar() {
         }
         @media (max-width: 768px) {
           .toolbar-welcome {
-            display: none !important;
+            font-size: 0.85rem !important;
+            letter-spacing: 0.5px !important;
           }
           .app-header {
             padding: 0 15px !important;

@@ -7,6 +7,8 @@ export default function MomentumAI({ isOpen, onClose }) {
     const [step, setStep] = useState(0);
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [goal, setGoal] = useState("");
+    const [experience, setExperience] = useState("");
+    const [stylePref, setStylePref] = useState("");
     const [events, setEvents] = useState([]);
     const [recommendations, setRecommendations] = useState([]);
 
@@ -26,7 +28,7 @@ export default function MomentumAI({ isOpen, onClose }) {
     };
 
     const handleNext = () => {
-        if (step === 2) {
+        if (step === 4) {
             generateRecommendations();
         }
         setStep(s => s + 1);
@@ -51,6 +53,8 @@ export default function MomentumAI({ isOpen, onClose }) {
         setStep(0);
         setSelectedCategories([]);
         setGoal("");
+        setExperience("");
+        setStylePref("");
         setRecommendations([]);
         onClose();
     };
@@ -143,6 +147,62 @@ export default function MomentumAI({ isOpen, onClose }) {
 
                         {step === 3 && (
                             <div style={styles.content}>
+                                <h3 style={styles.subtitle}>What is your <span style={styles.highlight}>experience level</span>?</h3>
+                                <div style={styles.goalList}>
+                                    {["Beginner / Student", "Junior Professional", "Mid-Level Professional", "Senior / Executive"].map(lvl => (
+                                        <button
+                                            key={lvl}
+                                            onClick={() => setExperience(lvl)}
+                                            style={{
+                                                ...styles.goalItem,
+                                                border: experience === lvl ? '2px solid #ffcc33' : '1px solid rgba(255,255,255,0.1)',
+                                                background: experience === lvl ? 'rgba(255,204,51,0.1)' : 'transparent'
+                                            }}
+                                        >
+                                            {lvl}
+                                        </button>
+                                    ))}
+                                </div>
+                                <button
+                                    style={styles.primaryBtn}
+                                    onClick={handleNext}
+                                    disabled={!experience}
+                                >
+                                    NEXT STEP
+                                </button>
+                            </div>
+                        )}
+
+                        {step === 4 && (
+                            <div style={styles.content}>
+                                <h3 style={styles.subtitle}>Preferred <span style={styles.highlight}>learning style</span>?</h3>
+                                <div style={styles.goalList}>
+                                    {["Hands-on Workshops", "Expert Panels & Discussions", "Quick Bite-sized Sessions", "Deep Dive Lectures"].map(style => (
+                                        <button
+                                            key={style}
+                                            onClick={() => setStylePref(style)}
+                                            style={{
+                                                ...styles.goalItem,
+                                                border: stylePref === style ? '2px solid #ffcc33' : '1px solid rgba(255,255,255,0.1)',
+                                                background: stylePref === style ? 'rgba(255,204,51,0.1)' : 'transparent'
+                                            }}
+                                        >
+                                            {style}
+                                        </button>
+                                    ))}
+                                </div>
+                                <button
+                                    style={styles.primaryBtn}
+                                    onClick={handleNext}
+                                    disabled={!stylePref}
+                                >
+                                    GENERATE RECOMMENDATIONS
+                                </button>
+                            </div>
+                        )}
+
+                        {step === 5 && (
+                            <div style={styles.content}>
                                 <h3 style={styles.subtitle}>Your Personalized <span style={styles.highlight}>Picks</span></h3>
                                 <div style={styles.recList}>
                                     {recommendations.length > 0 ? recommendations.map(e => (
@@ -156,7 +216,7 @@ export default function MomentumAI({ isOpen, onClose }) {
                                         </div>
                                     )) : (
                                         <p style={{ color: 'rgba(255,255,255,0.6)', textAlign: 'center' }}>
-                                            No live events found yet for <strong style={{ color: '#ffcc33' }}>{selectedCategories.join(", ")}</strong>. Check back soon — new sessions are added regularly!
+                                            No live events found yet matching your profile criteria. Check back soon — new sessions are added regularly!
                                         </p>
                                     )}
                                 </div>

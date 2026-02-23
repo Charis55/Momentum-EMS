@@ -127,7 +127,7 @@ const SearchableDropdown = ({ options, value, name, onSelect, placeholder }) => 
           left: 0,
           right: 0,
           zIndex: 50,
-          background: "#1c1c1c",
+          background: "var(--input-bg)",
           maxHeight: "220px",
           overflowY: "auto",
           margin: "5px 0 0 0",
@@ -135,7 +135,7 @@ const SearchableDropdown = ({ options, value, name, onSelect, placeholder }) => 
           listStyle: "none",
           borderRadius: "8px",
           boxShadow: "0 10px 25px rgba(0,0,0,0.5)",
-          border: "1px solid #2a2a2a"
+          border: "1px solid var(--input-border)"
         }}>
           {filteredOptions.length > 0 ? (
             filteredOptions.map((opt) => (
@@ -144,20 +144,20 @@ const SearchableDropdown = ({ options, value, name, onSelect, placeholder }) => 
                 style={{
                   padding: "12px 16px",
                   cursor: "pointer",
-                  color: "#ffffff",
-                  borderBottom: "1px solid #2a2a2a",
+                  color: "var(--card-text)",
+                  borderBottom: "1px solid var(--input-border)",
                   fontSize: "0.95rem",
                   transition: "background 0.2s"
                 }}
                 onMouseDown={() => onSelect(name, opt)}
-                onMouseEnter={(e) => e.currentTarget.style.background = "#2a2a2a"}
-                onMouseLeave={(e) => e.currentTarget.style.background = "#1c1c1c"}
+                onMouseEnter={(e) => e.currentTarget.style.background = "var(--input-border)"}
+                onMouseLeave={(e) => e.currentTarget.style.background = "var(--input-bg)"}
               >
                 {opt}
               </li>
             ))
           ) : (
-            <li style={{ padding: "12px 16px", color: "#888", fontSize: "0.95rem" }}>
+            <li style={{ padding: "12px 16px", color: "var(--card-text-muted)", fontSize: "0.95rem" }}>
               No categories found
             </li>
           )}

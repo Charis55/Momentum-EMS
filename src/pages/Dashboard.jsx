@@ -124,11 +124,11 @@ export default function Dashboard() {
           maxWidth: "1200px",
           margin: "0 auto"
         }}>
-          {loading && <p style={{ color: "#fff", gridColumn: "1 / -1", textAlign: "center" }}>Loading events...</p>}
+          {loading && <p style={{ color: "var(--text-main)", gridColumn: "1 / -1", textAlign: "center" }}>Loading events...</p>}
 
           {!loading && events.length === 0 && (
             <div style={{ gridColumn: "1 / -1", textAlign: "center", padding: "40px" }}>
-              <p style={{ opacity: 0.8, color: "#fff", marginBottom: "20px" }}>No upcoming events yet.</p>
+              <p style={{ opacity: 0.8, color: "var(--text-main)", marginBottom: "20px" }}>No upcoming events yet.</p>
               <Link to="/create" className="btn-primary" style={{ fontSize: "0.9rem" }}>Be the first to host</Link>
             </div>
           )}
@@ -191,9 +191,9 @@ export default function Dashboard() {
         .mission-card-glass {
           margin: 35px 0 55px 0;
           padding: 30px;
-          background: rgba(255, 255, 255, 0.03);
+          background: var(--mission-bg);
           backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.05);
+          border: 1px solid var(--mission-border);
           border-radius: 24px;
           position: relative;
           overflow: hidden;
@@ -212,7 +212,7 @@ export default function Dashboard() {
         }
         .hero-accent-new {
           display: block;
-          color: #ffffff;
+          color: var(--mission-text);
           font-size: 1.4rem;
           font-weight: 850;
           margin-bottom: 16px;
@@ -221,7 +221,7 @@ export default function Dashboard() {
         }
         .hero-body-text {
           display: block;
-          color: rgba(255, 255, 255, 0.7);
+          color: var(--mission-text-muted);
           font-size: 1.1rem;
           line-height: 1.7;
           font-weight: 400;

@@ -43,10 +43,15 @@ export const CATEGORIES = Object.keys(CATEGORY_IMAGES).filter(k => k !== "genera
  */
 const FITNESS_CATEGORIES = new Set(["fitness & wellness", "fitness", "wellness"]);
 
+const SCIENCE_RESEARCH_CATEGORIES = new Set(["science & research", "science", "research"]);
+
 export const getCategoryImage = (category) => {
     const normalizedKey = (category || "").trim().toLowerCase();
     if (FITNESS_CATEGORIES.has(normalizedKey)) {
         return "/assets/fitness.jpg";
+    }
+    if (SCIENCE_RESEARCH_CATEGORIES.has(normalizedKey)) {
+        return "/assets/Research.png";
     }
     const photoId = CATEGORY_IMAGES[normalizedKey] || CATEGORY_IMAGES["general"];
     return `https://images.unsplash.com/${photoId}?auto=format&fit=crop&q=80&w=1200`;

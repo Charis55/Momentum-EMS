@@ -66,7 +66,7 @@ export default function AccessibilityWidget() {
 
     // ── Apply / Sync LocalStorage for Toggles ──────────────
     useEffect(() => {
-        document.body.classList.toggle("momentum-light-mode", lightMode);
+        document.body.classList.toggle("momentum-light-theme", lightMode);
         localStorage.setItem("a11y_light", lightMode);
     }, [lightMode]);
 

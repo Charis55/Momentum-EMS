@@ -3,20 +3,20 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: radial-gradient(circle at 15% 15%, #8b4513 0%, #3d1f0a 35%, #0f0e0e 75%, #0a0a0a 100%);
+  background: var(--bg-main);
   padding: 40px;
 }
 
 .auth-box {
-  background: rgba(18, 18, 18, 0.85);
+  background: var(--auth-card-bg);
   backdrop-filter: blur(25px);
   -webkit-backdrop-filter: blur(25px);
   padding: 48px 42px;
   border-radius: 22px;
   width: 380px;
   text-align: center;
-  border: 1px solid rgba(255, 204, 51, 0.15);
-  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6), var(--card-highlight);
 }
 
 .auth-logo {
@@ -42,18 +42,16 @@
 .auth-input {
   width: 100%;
   padding: 14px;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: var(--auth-input-bg);
+  border: 1px solid var(--auth-input-border);
   border-radius: 10px;
-  color: #ffffff !important;
-  /* Changed to White */
+  color: var(--auth-text-main) !important;
   font-size: 1rem;
   box-sizing: border-box;
 }
 
 .auth-input::placeholder {
-  color: rgba(255, 255, 255, 0.6) !important;
-  /* Brighter placeholder */
+  color: var(--auth-text-muted) !important;
 }
 
 .auth-input:focus {
@@ -66,7 +64,7 @@
   padding: 14px;
   background: linear-gradient(90deg, #ff7a00, #ffcc33);
   font-weight: 700;
-  color: white;
+  color: var(--text-inverted);
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -82,8 +80,7 @@
 
 .auth-switch {
   margin-top: 14px;
-  color: #ffffff !important;
-  /* Changed to White */
+  color: var(--auth-text-main) !important;
 }
 
 .auth-switch a {
@@ -97,4 +94,109 @@
   margin-top: 12px;
   font-size: .9rem;
   font-weight: 600;
+}
+
+/* Password Requirements Popover */
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-popover {
+  position: absolute;
+  top: 110%;
+  /* Place right below input */
+  left: 0;
+  width: 100%;
+  background: var(--auth-card-bg);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), var(--card-highlight);
+  z-index: 100;
+  color: var(--auth-text-main);
+  text-align: left;
+}
+
+.popover-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.popover-header h4 {
+  margin: 0;
+  font-size: 1.05rem;
+  color: #ffcc33;
+  font-weight: 600;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: var(--auth-text-muted);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.close-btn:hover {
+  color: var(--auth-text-main);
+}
+
+.popover-desc {
+  font-size: 0.85rem;
+  color: var(--auth-text-muted);
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.requirements-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px 0;
+}
+
+.requirements-list li {
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.requirements-list .icon {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.requirements-list .met {
+  color: #4CAF50;
+  /* Green color for met requirements */
+}
+
+.requirements-list .unmet {
+  color: var(--auth-text-muted);
+  /* Dimmed text for unmet requirements */
+}
+
+.got-it-btn {
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  color: #ffcc33;
+  border: 1px solid rgba(255, 204, 51, 0.4);
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.got-it-btn:hover {
+  background: rgba(255, 204, 51, 0.1);
+  border-color: #ffcc33;
 }

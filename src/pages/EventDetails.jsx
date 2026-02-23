@@ -136,7 +136,7 @@ export default function EventDetails() {
             <button onClick={() => nav(-1)} className="back-explore-btn">← BACK TO EXPLORE</button>
             <div className="social-share-group">
               <button onClick={shareWhatsApp} className="social-pill whatsapp-pill">WHATSAPP</button>
-              <button onClick={shareTwitter} className="social-pill twitter-pill">•  X  •</button>
+              <button onClick={shareTwitter} className="social-pill twitter-pill">X</button>
               <button onClick={shareInstagram} className="social-pill insta-pill">INSTAGRAM</button>
               <button onClick={shareMessages} className="social-pill msg-pill">MESSAGES</button>
             </div>
@@ -165,7 +165,7 @@ export default function EventDetails() {
                   {event?.category || "WEBINAR"}
                 </span>
                 <h1 className="form-title-glow" style={{ marginTop: "20px", marginBottom: "10px" }}>{event?.name}</h1>
-                <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "1.1rem" }}>Organized by <span style={{ color: "#ffcc33", fontWeight: "700" }}>{event?.speaker}</span></p>
+                <p style={{ color: "var(--card-text-muted)", fontSize: "1.1rem" }}>Organized by <span style={{ color: "#ffcc33", fontWeight: "700" }}>{event?.speaker}</span></p>
               </div>
             </div>
 
@@ -207,17 +207,14 @@ export default function EventDetails() {
                   </div>
 
                   {event?.link && (
-                    <div className="sidebar-field" style={{ marginTop: '25px' }}>
-                      <label className="ui-heading-label">EVENT LINK</label>
-                      <a
-                        href={event.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="event-external-link"
-                      >
-                        Join Webinar ↗
-                      </a>
-                    </div>
+                    <a
+                      href={event.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="event-external-link"
+                    >
+                      Join Event
+                    </a>
                   )}
 
                   <button
@@ -249,54 +246,56 @@ export default function EventDetails() {
         /* Styles remain identical to previous design to preserve background/spacing */
         .event-details-wrapper {
           min-height: 100vh; width: 100%;
-          background: radial-gradient(circle at 15% 15%, #8b4513 0%, #3d1f0a 35%, #0f0e0e 75%, #0a0a0a 100%);
+          background: var(--bg-main);
           padding-top: 100px; padding-bottom: 80px; display: flex; justify-content: center;
         }
         .details-container { max-width: 1240px; width: 100%; padding: 0 40px; }
         .details-header-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
         .back-explore-btn { background: none; border: none; color: #ffcc33; font-weight: 900; letter-spacing: 2.2px; font-size: 0.75rem; cursor: pointer; }
         .social-share-group { display: flex; gap: 10px; flex-wrap: wrap; }
-        .social-pill { padding: 10px 18px; border-radius: 6px; border: none; color: white; font-weight: 800; font-size: 0.65rem; letter-spacing: 1.5px; cursor: pointer; transition: 0.3s ease; }
+        .social-pill { min-width: 110px; padding: 10px 0; text-align: center; border-radius: 6px; border: none; color: white; display: inline-block; font-weight: 800; font-size: 0.65rem; letter-spacing: 1.5px; cursor: pointer; transition: 0.3s ease; }
         .whatsapp-pill { background: #25D366; }
         .twitter-pill { background: #000000; }
         .insta-pill { background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); }
         .msg-pill { background: #34C759; }
-        .event-main-card { background: #110f10; border-radius: 40px; padding: 70px; box-shadow: 0 0 100px rgba(139, 69, 19, 0.15), 0 20px 80px rgba(0,0,0,0.8); border: 1px solid rgba(255, 255, 255, 0.03); }
+        .event-main-card { background: var(--card-bg); border-radius: 40px; padding: 70px; box-shadow: 0 0 100px rgba(139, 69, 19, 0.15), 0 20px 80px rgba(0,0,0,0.8); border: 1px solid var(--card-border); }
         .event-content-layout { display: grid; grid-template-columns: 1.6fr 1fr; gap: 60px; }
         .category-tag-ui { background: rgba(255, 204, 51, 0.1); color: #ffcc33; padding: 6px 16px; border-radius: 20px; font-size: 0.75rem; font-weight: 900; letter-spacing: 2px; }
         .event-main-title { font-size: 4.8rem; color: #ffcc33; margin: 30px 0; font-weight: 900; letter-spacing: -1.5px; line-height: 1; }
         .ui-heading-label { color: #ffcc33; font-size: 0.72rem; font-weight: 900; letter-spacing: 3.2px; display: block; margin-bottom: 18px; opacity: 0.85; }
-        .ui-body-text { color: #e0e0e0; line-height: 1.8; font-size: 1.18rem; letter-spacing: 0.6px; }
-        .sidebar-glass-box { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 30px; padding: 45px; height: 100%; }
-        .sidebar-text-white { color: white; font-size: 1.6rem; font-weight: 700; }
-        .schedule-date-ui { color: white; font-size: 2.8rem; font-weight: 900; line-height: 1.1; margin: 0; letter-spacing: -1px; }
+        .ui-body-text { color: var(--card-text); line-height: 1.8; font-size: 1.18rem; letter-spacing: 0.6px; }
+        .sidebar-glass-box { background: var(--input-bg); border: 1px solid var(--input-border); border-radius: 30px; padding: 45px; height: 100%; }
+        .sidebar-text-white { color: var(--card-text); font-size: 1.6rem; font-weight: 700; }
+        .schedule-date-ui { color: var(--card-text); font-size: 2.8rem; font-weight: 900; line-height: 1.1; margin: 0; letter-spacing: -1px; }
         .timezone-subtext { color: #ffcc33; font-size: 0.85rem; font-weight: 800; margin-top: 15px; letter-spacing: 1px; }
         .register-btn-ui { width: 100%; padding: 22px; border-radius: 16px; margin-top: 30px; font-size: 1.2rem; font-weight: 900; cursor: pointer; letter-spacing: 1px; }
         .register-btn-ui:not(.enrolled) { background: #ffcc33; color: #000; border: none; }
         .register-btn-ui.enrolled { background: rgba(255, 68, 68, 0.05); border: 1px solid #ff4444; color: #ff4444; }
 
         .event-external-link {
-          display: inline-block;
+          display: block;
+          width: 100%;
+          padding: 22px;
+          border-radius: 16px;
+          margin-top: 20px;
+          font-size: 1.2rem;
+          font-weight: 900;
+          cursor: pointer;
+          letter-spacing: 1px;
           background: rgba(255, 204, 51, 0.1);
           color: #ffcc33;
-          padding: 12px 20px;
-          border-radius: 10px;
-          text-decoration: none;
-          font-weight: 800;
-          font-size: 0.9rem;
-          letter-spacing: 0.5px;
           border: 1px solid rgba(255, 204, 51, 0.2);
-          transition: all 0.3s ease;
-          width: 100%;
           text-align: center;
+          text-decoration: none;
           box-sizing: border-box;
+          transition: all 0.3s ease;
         }
 
         .event-external-link:hover {
           background: #ffcc33;
           color: #000;
           transform: translateY(-2px);
-          box-shadow: 0 5px 15px rgba(255, 204, 51, 0.2);
+          box-shadow: 0 10px 20px rgba(255, 204, 51, 0.2);
         }
 
         @media (max-width: 900px) {

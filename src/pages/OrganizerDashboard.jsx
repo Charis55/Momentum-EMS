@@ -171,8 +171,7 @@ export default function OrganizerDashboard() {
         .org-dash-wrapper {
           min-height: 100vh;
           width: 100%;
-          /* BACK TO THE ORIGINAL THEME: Burnt Orange to Deep Charcoal */
-          background: radial-gradient(circle at 15% 15%, #8b4513 0%, #3d1f0a 35%, #0f0e0e 75%, #0a0a0a 100%);
+          background: var(--bg-main);
           padding-top: 100px;
           padding-bottom: 80px;
         }
@@ -187,8 +186,8 @@ export default function OrganizerDashboard() {
           margin-bottom: 50px;
         }
         .analytics-pill {
-          background: rgba(255, 255, 255, 0.02);
-          border: 1px solid rgba(255, 255, 255, 0.05);
+          background: var(--card-bg);
+          border: 1px solid var(--card-border);
           padding: 25px;
           border-radius: 20px;
           backdrop-filter: blur(10px);
@@ -201,7 +200,7 @@ export default function OrganizerDashboard() {
           display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px;
         }
         .dash-main-title { font-size: 3.5rem; font-weight: 900; color: #ffcc33; letter-spacing: -1.5px; }
-        .dash-sub-text { color: rgba(255,255,255,0.6); font-size: 1.1rem; margin-top: 5px; }
+        .dash-sub-text { color: var(--text-muted); font-size: 1.1rem; margin-top: 5px; }
         .create-event-btn {
           background: #ffcc33; color: #000; padding: 18px 32px; border-radius: 12px;
           border: none; font-weight: 900; cursor: pointer; letter-spacing: 1px;
@@ -210,8 +209,8 @@ export default function OrganizerDashboard() {
         /* EVENT CARDS - Obsidian Style */
         .events-list-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
         .organizer-card-ui {
-          background: #110f10;
-          border: 1px solid rgba(255, 255, 255, 0.03);
+          background: var(--card-bg);
+          border: 1px solid var(--card-border);
           border-radius: 30px; padding: 35px;
           box-shadow: 0 15px 40px rgba(0,0,0,0.5);
         }
@@ -219,19 +218,19 @@ export default function OrganizerDashboard() {
         .date-tag { color: #ffcc33; font-size: 0.75rem; font-weight: 900; letter-spacing: 2px; }
         
         .stat-badge-ui { text-align: right; }
-        .stat-count-ui { font-size: 2.2rem; font-weight: 900; color: #fff; line-height: 1; display: block; }
+        .stat-count-ui { font-size: 2.2rem; font-weight: 900; color: var(--card-text); line-height: 1; display: block; }
         .stat-label-ui { font-size: 0.6rem; letter-spacing: 1.5px; color: #ffcc33; font-weight: 900; }
 
-        .card-event-name { font-size: 1.8rem; font-weight: 800; color: white; margin: 15px 0 10px; }
-        .card-event-desc { color: rgba(255,255,255,0.4); font-size: 0.95rem; line-height: 1.5; min-height: 3rem; }
+        .card-event-name { font-size: 1.8rem; font-weight: 800; color: var(--card-text); margin: 15px 0 10px; }
+        .card-event-desc { color: var(--card-text-muted); font-size: 0.95rem; line-height: 1.5; min-height: 3rem; }
 
         .card-footer-actions {
-          margin-top: 30px; padding-top: 25px; border-top: 1px solid rgba(255,255,255,0.05);
+          margin-top: 30px; padding-top: 25px; border-top: 1px solid var(--card-border);
           display: flex; justify-content: space-between; align-items: center;
         }
         .view-live-btn { background: none; border: none; color: #ffcc33; font-weight: 900; cursor: pointer; font-size: 0.8rem; }
-        .icon-action { background: rgba(255,255,255,0.03); border: none; padding: 10px; border-radius: 10px; cursor: pointer; margin-left: 8px; transition: 0.2s; }
-        .icon-action:hover { background: rgba(255,255,255,0.1); }
+        .icon-action { background: var(--input-bg); border: none; padding: 10px; border-radius: 10px; cursor: pointer; margin-left: 8px; transition: 0.2s; }
+        .icon-action:hover { background: var(--input-border); }
         .delete:hover { background: rgba(239, 68, 68, 0.1); }
 
         .ui-heading-label { color: #ffcc33; font-size: 0.7rem; font-weight: 900; letter-spacing: 3px; opacity: 0.8; }
