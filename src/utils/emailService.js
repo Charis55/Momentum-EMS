@@ -5,13 +5,13 @@ import emailjs from "@emailjs/browser";
 //     Get these from https://dashboard.emailjs.com
 // ─────────────────────────────────────────────────────────────────
 const SERVICE_ID = "service_u9gzsre";   // ✅ Your service ID
-const PUBLIC_KEY = "YOUR_PUBLIC_KEY";   // e.g. "abc123XYZ"
+const PUBLIC_KEY = "DZs-LvIngg41Qmbp2";   // e.g. "abc123XYZ"
 
 // Template IDs — add more as you upgrade your EmailJS plan
 const TEMPLATES = {
-    eventCreated: "template_5q7g23d",  // ✅ Active
+    eventCreated: null,                 // Moved to enrolled
     eventDeleted: null,                 // ⏸ Needs template (EmailJS free = 2 max)
-    enrolled: null,                 // ⏸ Needs template
+    enrolled: "template_5q7g23d",       // ✅ Active (repurposed from creation)
     unenrolled: null,                 // ⏸ Needs template
     reminder: "template_ezrohyv",  // ✅ Active
 };
@@ -54,13 +54,17 @@ export function sendEventDeletedEmail(user, event) {
 
 // ── 3. Attendee enrolls in an event ──────────────────────────────
 export function sendEnrollmentEmail(user, event) {
+    // We map to the existing "Event Created" template fields.
+    // The email will say "Hi {{to_name}}, your event {{event_name}} has been successfully created and is now live!"
+    // To make this contextually an ENROLLMENT email, you need to edit the text on the EmailJS Dashboard to say:
+    // "Hi {{to_name}}, you have successfully enrolled in the event {{event_name}}! 🎉"
+
     return send(TEMPLATES.enrolled, {
         to_name: user.displayName || "Attendee",
         to_email: user.email,
         event_name: event.name,
         event_date: event.date,
         event_link: event.link || "N/A",
-        speaker: event.speaker || "TBA",
     });
 }
 
