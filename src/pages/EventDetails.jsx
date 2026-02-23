@@ -136,7 +136,7 @@ export default function EventDetails() {
             <button onClick={() => nav(-1)} className="back-explore-btn">← BACK TO EXPLORE</button>
             <div className="social-share-group">
               <button onClick={shareWhatsApp} className="social-pill whatsapp-pill">WHATSAPP</button>
-              <button onClick={shareTwitter} className="social-pill twitter-pill">TWITTER</button>
+              <button onClick={shareTwitter} className="social-pill twitter-pill">X</button>
               <button onClick={shareInstagram} className="social-pill insta-pill">INSTAGRAM</button>
               <button onClick={shareMessages} className="social-pill msg-pill">MESSAGES</button>
             </div>
@@ -258,7 +258,7 @@ export default function EventDetails() {
         .social-share-group { display: flex; gap: 10px; flex-wrap: wrap; }
         .social-pill { padding: 10px 18px; border-radius: 6px; border: none; color: white; font-weight: 800; font-size: 0.65rem; letter-spacing: 1.5px; cursor: pointer; transition: 0.3s ease; }
         .whatsapp-pill { background: #25D366; }
-        .twitter-pill { background: #1DA1F2; }
+        .twitter-pill { background: #000000; }
         .insta-pill { background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); }
         .msg-pill { background: #34C759; }
         .event-main-card { background: #110f10; border-radius: 40px; padding: 70px; box-shadow: 0 0 100px rgba(139, 69, 19, 0.15), 0 20px 80px rgba(0,0,0,0.8); border: 1px solid rgba(255, 255, 255, 0.03); }
