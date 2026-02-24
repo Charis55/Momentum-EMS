@@ -161,7 +161,7 @@ export default function Toolbar() {
               marginBottom: '10px'
             }}
           >
-            ✨ Momentum AI
+            ✨ Momentum Guide
           </button>
 
           <button onClick={handleLogout} style={{
