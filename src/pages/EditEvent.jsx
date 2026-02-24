@@ -128,7 +128,7 @@ const SearchableDropdownEdit = ({ options, value, name, onSelect, placeholder })
           left: 0,
           right: 0,
           zIndex: 50,
-          background: "#1c1c1c",
+          background: "var(--card-bg, #181615)",
           maxHeight: "220px",
           overflowY: "auto",
           margin: "5px 0 0 0",
@@ -151,8 +151,8 @@ const SearchableDropdownEdit = ({ options, value, name, onSelect, placeholder })
                   transition: "background 0.2s"
                 }}
                 onMouseDown={() => onSelect(name, opt)}
-                onMouseEnter={(e) => e.currentTarget.style.background = "#2a2a2a"}
-                onMouseLeave={(e) => e.currentTarget.style.background = "#1c1c1c"}
+                onMouseEnter={(e) => e.currentTarget.style.background = "var(--input-border, #444)"}
+                onMouseLeave={(e) => e.currentTarget.style.background = "var(--card-bg, #181615)"}
               >
                 {opt}
               </li>

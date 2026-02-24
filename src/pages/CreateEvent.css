@@ -117,6 +117,12 @@ html {
   box-shadow: 0 0 15px rgba(255, 204, 51, 0.25) !important;
 }
 
+/* Fix dropdown menu items taking transparent background */
+.stencil-input option {
+  background: var(--card-bg, #181615);
+  color: var(--card-text, #fff);
+}
+
 .form-textarea {
   resize: none;
   min-height: 120px;

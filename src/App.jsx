@@ -13,6 +13,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import OrganizerDashboard from "./pages/OrganizerDashboard";
 import EditEvent from "./pages/EditEvent";
 import MySchedule from "./pages/MySchedule";
+import ForgotPassword from "./pages/ForgotPassword";
 import AccessibilityWidget from "./components/AccessibilityWidget";
 
 export default function App() {
@@ -28,6 +29,7 @@ export default function App() {
 
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
 
         {/* Public Event Routes */}
         <Route path="/events" element={<EventPage />} />

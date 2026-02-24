@@ -231,9 +231,13 @@ export default function OrganizerDashboard() {
         .view-live-btn { background: none; border: none; color: #ffcc33; font-weight: 900; cursor: pointer; font-size: 0.8rem; }
         .icon-action { background: var(--input-bg); border: none; padding: 10px; border-radius: 10px; cursor: pointer; margin-left: 8px; transition: 0.2s; }
         .icon-action:hover { background: var(--input-border); }
-        .delete:hover { background: rgba(239, 68, 68, 0.1); }
-
         .ui-heading-label { color: #ffcc33; font-size: 0.7rem; font-weight: 900; letter-spacing: 3px; opacity: 0.8; }
+
+        @media (max-width: 900px) {
+          .analytics-bar {
+            grid-template-columns: 1fr;
+          }
+        }
       `}</style>
     </div>
   );

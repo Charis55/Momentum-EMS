@@ -298,6 +298,17 @@ export default function EventDetails() {
           box-shadow: 0 10px 20px rgba(255, 204, 51, 0.2);
         }
 
+        .form-title-glow {
+          font-size: 3.5rem;
+          font-weight: 800;
+          color: #ffcc33;
+          text-shadow: 0 0 30px rgba(255, 122, 0, 0.4);
+          line-height: 1.1;
+          margin-bottom: 20px;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
+        }
+
         @media (max-width: 900px) {
           .details-container { padding: 0 20px; }
           .event-main-card { padding: 40px 30px; }
@@ -306,6 +317,7 @@ export default function EventDetails() {
           .schedule-date-ui { font-size: 2rem; }
           .details-header-nav { flex-direction: column; gap: 20px; align-items: flex-start; }
           .event-details-wrapper { padding-top: 80px; }
+          .form-title-glow { font-size: 2.2rem; }
         }
       `}</style>
     </>
