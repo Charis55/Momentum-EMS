@@ -80,7 +80,7 @@ export default function MomentumAI({ isOpen, onClose }) {
 
                         {step === 0 && (
                             <div style={styles.content}>
-                                <h2 style={styles.title}>Meet <span style={styles.highlight}>Momentum AI</span></h2>
+                                <h2 style={styles.title}>Meet <span style={styles.highlight}>Momentum Guide</span></h2>
                                 <p style={styles.text}>I'm your personal growth agent. I help you navigate the Momentum ecosystem to find events that actually matter to your career and passion.</p>
                                 <p style={styles.text}>Ready for a 30-second interview?</p>
                                 <button style={styles.primaryBtn} onClick={handleNext}>LET'S BEGIN</button>
