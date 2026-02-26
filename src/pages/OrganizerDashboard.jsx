@@ -41,6 +41,10 @@ export default function OrganizerDashboard() {
 
   const [modal, setModal] = useState({ show: false, title: "", message: "", onConfirm: null });
 
+  // Search and Sort State
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortBy, setSortBy] = useState("dateAsc");
+
   useEffect(() => {
     if (!user) return;
     const unsubscribe = subscribeOrganizerEvents(user.uid, (data) => {
@@ -81,6 +85,34 @@ export default function OrganizerDashboard() {
     });
   };
 
+  // Filter and Sort Logic
+  const filteredAndSortedEvents = events
+    .filter((e) => {
+      const term = searchTerm.toLowerCase();
+      const matchName = e.name?.toLowerCase().includes(term);
+      const matchSpeaker = e.speaker?.toLowerCase().includes(term);
+      const matchCategory = e.category?.toLowerCase().includes(term);
+      const matchDesc = e.description?.toLowerCase().includes(term);
+      return matchName || matchSpeaker || matchCategory || matchDesc;
+    })
+    .sort((a, b) => {
+      const dateA = new Date(a.date || 0).getTime();
+      const dateB = new Date(b.date || 0).getTime();
+      const nameA = (a.name || "").toLowerCase();
+      const nameB = (b.name || "").toLowerCase();
+
+      if (sortBy === "dateAsc") return dateA - dateB;
+      if (sortBy === "dateDesc") return dateB - dateA;
+      if (sortBy === "nameAsc") return nameA.localeCompare(nameB);
+      if (sortBy === "nameDesc") return nameB.localeCompare(nameA);
+      if (sortBy === "recent") {
+        const createdA = a.createdAt?.toMillis ? a.createdAt.toMillis() : (a.createdAt?.seconds ? a.createdAt.seconds * 1000 : 0);
+        const createdB = b.createdAt?.toMillis ? b.createdAt.toMillis() : (b.createdAt?.seconds ? b.createdAt.seconds * 1000 : 0);
+        return createdB - createdA;
+      }
+      return 0;
+    });
+
   if (loading) return <main className="loader-container"><div className="loader"></div></main>;
 
   return (
@@ -120,9 +152,79 @@ export default function OrganizerDashboard() {
           </motion.button>
         </header>
 
+        {/* SEARCH AND SORT CONTROLS */}
+        <div style={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "20px",
+          marginBottom: "50px",
+          background: "var(--card-bg)",
+          padding: "25px",
+          borderRadius: "20px",
+          backdropFilter: "blur(10px)",
+          border: "1px solid var(--card-border)",
+          boxShadow: "0 10px 30px rgba(0,0,0,0.3)"
+        }}>
+          <div style={{ flex: "1 1 300px" }}>
+            <label htmlFor="search-events" style={{ color: "#ffcc33", display: "block", marginBottom: "8px", fontWeight: "700", fontSize: "0.9rem" }}>Search Sessions</label>
+            <input
+              id="search-events"
+              type="text"
+              placeholder="Search by Event, Speaker, Category..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "15px 20px",
+                borderRadius: "12px",
+                border: "1px solid var(--input-border)",
+                background: "var(--input-bg)",
+                color: "#ffffff",
+                fontSize: "1rem",
+                fontWeight: "600",
+                outline: "none"
+              }}
+            />
+          </div>
+          <div style={{ flex: "0 1 250px" }}>
+            <label htmlFor="sort-events" style={{ color: "#ffcc33", display: "block", marginBottom: "8px", fontWeight: "700", fontSize: "0.9rem" }}>Sort By</label>
+            <select
+              id="sort-events"
+              aria-label="Sort events"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "15px 20px",
+                borderRadius: "12px",
+                border: "1px solid var(--input-border)",
+                background: "var(--input-bg)",
+                color: "#ffffff",
+                fontSize: "1rem",
+                fontWeight: "600",
+                outline: "none",
+                cursor: "pointer"
+              }}
+            >
+              <option value="dateAsc">Date: Closest First</option>
+              <option value="dateDesc">Date: Furthest First</option>
+              <option value="recent">Recently Created</option>
+              <option value="nameAsc">Name: A to Z</option>
+              <option value="nameDesc">Name: Z to A</option>
+            </select>
+          </div>
+        </div>
+
         <section className="events-list-grid">
           <AnimatePresence>
-            {events.map((ev) => (
+            {filteredAndSortedEvents.length === 0 && (
+              <div style={{ textAlign: "center", gridColumn: "1 / -1", padding: "60px 40px", background: "var(--card-bg)", borderRadius: "20px", border: "1px dashed var(--card-border)" }}>
+                <p style={{ color: "var(--card-text)", fontSize: "1.2rem", fontWeight: "bold" }}>No matching events found.</p>
+                <p style={{ color: "var(--card-text-muted)", marginTop: "10px" }}>Try adjusting your search terms.</p>
+              </div>
+            )}
+
+            {filteredAndSortedEvents.map((ev) => (
               <motion.div
                 key={ev.id}
                 initial={{ opacity: 0, y: 20 }}
