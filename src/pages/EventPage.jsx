@@ -41,6 +41,11 @@ export default function EventPage() {
       if (sortBy === "dateDesc") return dateB - dateA;
       if (sortBy === "nameAsc") return nameA.localeCompare(nameB);
       if (sortBy === "nameDesc") return nameB.localeCompare(nameA);
+      if (sortBy === "recent") {
+        const createdA = a.createdAt?.toMillis ? a.createdAt.toMillis() : (a.createdAt?.seconds ? a.createdAt.seconds * 1000 : 0);
+        const createdB = b.createdAt?.toMillis ? b.createdAt.toMillis() : (b.createdAt?.seconds ? b.createdAt.seconds * 1000 : 0);
+        return createdB - createdA;
+      }
       return 0;
     });
 
@@ -52,7 +57,7 @@ export default function EventPage() {
       backgroundAttachment: "fixed"
     }}>
       <Toolbar />
-      <div className="container" style={{ paddingTop: "120px", paddingBottom: "100px" }}>
+      <main className="container" style={{ paddingTop: "120px", paddingBottom: "100px" }}>
         <h2 className="section-title-glow" style={{ textAlign: "center", marginBottom: "10px" }}>
           Explore All <span className="gradient-text">Webinars</span>
         </h2>
@@ -74,8 +79,9 @@ export default function EventPage() {
           boxShadow: "0 10px 30px rgba(0,0,0,0.3)"
         }}>
           <div style={{ flex: "1 1 300px" }}>
-            <label style={{ color: "#ffcc33", display: "block", marginBottom: "8px", fontWeight: "700", fontSize: "0.9rem" }}>Search Sessions</label>
+            <label htmlFor="search-events" style={{ color: "#ffcc33", display: "block", marginBottom: "8px", fontWeight: "700", fontSize: "0.9rem" }}>Search Sessions</label>
             <input
+              id="search-events"
               type="text"
               placeholder="Search by Event, Speaker, Category..."
               value={searchTerm}
@@ -86,7 +92,7 @@ export default function EventPage() {
                 borderRadius: "12px",
                 border: "1px solid var(--input-border)",
                 background: "var(--input-bg)",
-                color: "var(--text-inverted)",
+                color: "#ffffff",
                 fontSize: "1rem",
                 fontWeight: "600",
                 outline: "none"
@@ -94,8 +100,10 @@ export default function EventPage() {
             />
           </div>
           <div style={{ flex: "0 1 250px" }}>
-            <label style={{ color: "#ffcc33", display: "block", marginBottom: "8px", fontWeight: "700", fontSize: "0.9rem" }}>Sort By</label>
+            <label htmlFor="sort-events" style={{ color: "#ffcc33", display: "block", marginBottom: "8px", fontWeight: "700", fontSize: "0.9rem" }}>Sort By</label>
             <select
+              id="sort-events"
+              aria-label="Sort events"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
               style={{
@@ -104,7 +112,7 @@ export default function EventPage() {
                 borderRadius: "12px",
                 border: "1px solid var(--input-border)",
                 background: "var(--input-bg)",
-                color: "var(--text-inverted)",
+                color: "#ffffff",
                 fontSize: "1rem",
                 fontWeight: "600",
                 outline: "none",
@@ -113,6 +121,7 @@ export default function EventPage() {
             >
               <option value="dateAsc">Date: Closest First</option>
               <option value="dateDesc">Date: Furthest First</option>
+              <option value="recent">Recently Created</option>
               <option value="nameAsc">Name: A to Z</option>
               <option value="nameDesc">Name: Z to A</option>
             </select>
@@ -189,7 +198,7 @@ export default function EventPage() {
             </div>
           ))}
         </div>
-      </div>
+      </main>
     </div>
   );
 }

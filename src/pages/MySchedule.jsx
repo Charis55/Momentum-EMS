@@ -126,6 +126,8 @@ export default function MySchedule() {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
             <select
+              id="sort-schedule-select"
+              aria-label="Sort schedule"
               className="sort-select"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
@@ -176,12 +178,12 @@ export default function MySchedule() {
                     </h3>
 
                     <div className="event-meta-row">
-                      <span className="event-icon">🎤</span>
+                      <span className="event-icon" aria-hidden="true">🎤</span>
                       {item.speaker || item.organizerName || "Guest Speaker"}
                     </div>
 
                     <div className="event-meta-row">
-                      <span className="event-icon">🕒</span>
+                      <span className="event-icon" aria-hidden="true">🕒</span>
                       {item.date || item.eventDate
                         ? new Date(item.date || item.eventDate).toLocaleString('en-GB', {
                           day: '2-digit', month: '2-digit', year: 'numeric',
@@ -200,7 +202,7 @@ export default function MySchedule() {
                       className="event-btn"
                       onClick={() => nav(`/event/${item.eventId || item.id}`)}
                     >
-                      View Details →
+                      View Details <span aria-hidden="true">→</span>
                     </button>
                   </div>
                 </motion.div>
@@ -292,7 +294,7 @@ export default function MySchedule() {
           border-radius: 15px;
           border: 1px solid var(--input-border);
           background: var(--input-bg);
-          color: var(--text-inverted);
+          color: var(--text-main);
           font-weight: 600;
         }
 

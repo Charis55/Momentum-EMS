@@ -81,7 +81,7 @@ export default function OrganizerDashboard() {
     });
   };
 
-  if (loading) return <div className="loader-container"><div className="loader"></div></div>;
+  if (loading) return <main className="loader-container"><div className="loader"></div></main>;
 
   return (
     <div className="org-dash-wrapper">

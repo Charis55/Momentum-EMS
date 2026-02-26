@@ -8,8 +8,8 @@ export default function PrivateRoute({ children }) {
   // This prevents the "ghost" render of the dashboard while the URL is /login
   if (loading) {
     return (
-      <div style={{ 
-        minHeight: "100vh", 
+      <div style={{
+        minHeight: "100vh",
         background: "radial-gradient(circle at 15% 15%, #8b4513 0%, #3d1f0a 35%, #0f0e0e 75%, #0a0a0a 100%)",
         display: "flex",
         flexDirection: "column",

@@ -109,7 +109,7 @@ export default function Profile() {
   };
 
   return (
-    <div style={{
+    <main style={{
       minHeight: "100vh",
       background: "var(--bg-main)",
       paddingTop: "100px",
@@ -138,8 +138,9 @@ export default function Profile() {
 
           <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
             <div>
-              <label style={{ display: "block", marginBottom: "8px", color: "var(--card-text-muted)", fontSize: "0.9rem" }}>Display Name</label>
+              <label htmlFor="username" style={{ display: "block", marginBottom: "8px", color: "var(--card-text-muted)", fontSize: "0.9rem" }}>Display Name</label>
               <input
+                id="username"
                 style={inputStyle}
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
@@ -153,16 +154,16 @@ export default function Profile() {
             <hr style={{ border: "0", borderTop: "1px solid rgba(255,255,255,0.1)", margin: "10px 0" }} />
 
             <div>
-              <label style={{ display: "block", marginBottom: "8px", color: "var(--card-text-muted)", fontSize: "0.9rem" }}>Account Email</label>
-              <input style={inputStyle} type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+              <label htmlFor="email" style={{ display: "block", marginBottom: "8px", color: "var(--card-text-muted)", fontSize: "0.9rem" }}>Account Email</label>
+              <input id="email" style={inputStyle} type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
               <button style={outlineBtn} onClick={handleEmailUpdate}>Update & Verify Email</button>
             </div>
 
             <button style={outlineBtn} onClick={handlePasswordReset}>Send Password Reset Email</button>
 
             <div style={{ marginTop: "20px", padding: "20px", borderRadius: "20px", background: "rgba(255, 68, 68, 0.1)" }}>
-              <h4 style={{ color: "#ff4444", margin: "0 0 10px 0" }}>Danger Zone</h4>
-              <button style={{ ...primaryBtn, background: "#ff4444", marginBottom: "10px" }} onClick={handleDeleteRequest}>Delete Account</button>
+              <h3 style={{ color: "#ff6b6b", margin: "0 0 10px 0", fontSize: "1.2rem" }}>Danger Zone</h3>
+              <button style={{ ...primaryBtn, background: "#ff6b6b", marginBottom: "10px" }} onClick={handleDeleteRequest}>Delete Account</button>
               <button style={outlineBtn} onClick={handleLogout}>Logout from Momentum</button>
             </div>
           </div>
@@ -177,11 +178,11 @@ export default function Profile() {
         onConfirm={modal.onConfirm}
         onCancel={modal.onCancel}
       />
-    </div>
+    </main>
   );
 }
 
-const inputStyle = { width: "100%", padding: "12px", borderRadius: "10px", border: "1px solid var(--input-border)", background: "var(--input-bg)", color: "var(--card-text)", fontWeight: "600", marginBottom: "10px" };
+const inputStyle = { width: "100%", padding: "12px", borderRadius: "10px", border: "1px solid var(--input-border)", background: "var(--input-bg)", color: "#ffffff", fontWeight: "600", marginBottom: "10px" };
 const primaryBtn = { width: "100%", padding: "14px", borderRadius: "12px", border: "none", background: "linear-gradient(90deg, #ff7e00, #ffcc33)", color: "white", fontWeight: "800", cursor: "pointer" };
 const outlineBtn = { width: "100%", padding: "12px", borderRadius: "12px", border: "1px solid var(--card-border)", background: "transparent", color: "var(--card-text)", fontWeight: "600", cursor: "pointer", marginTop: "5px" };
 const modalOverlay = { position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.8)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 };

@@ -65,24 +65,32 @@ export default function Signup() {
       <section className="auth-box animate-fade">
         <img src="/assets/momentum-logo.svg" alt="Momentum Logo" className="auth-logo" />
 
-        <h2 className="auth-title">
+        <h1 className="auth-title">
           {isEmailSent ? "Verify Email" : "Create Account"}
-        </h2>
+        </h1>
 
         {!isEmailSent ? (
           <form onSubmit={submit} className="auth-form">
-            <input
-              className="auth-input"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email"
-              type="email"
-              required
-              disabled={loading}
-            />
-
-            <div className="password-wrapper">
+            <div style={{ textAlign: "left" }}>
+              <label htmlFor="signup-email" className="sr-only" style={{ display: "none" }}>Email</label>
               <input
+                id="signup-email"
+                className="auth-input"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email"
+                type="email"
+                required
+                disabled={loading}
+                aria-invalid={!!msg}
+                aria-describedby={msg ? "signup-error" : undefined}
+              />
+            </div>
+
+            <div className="password-wrapper" style={{ textAlign: "left" }}>
+              <label htmlFor="signup-password" className="sr-only" style={{ display: "none" }}>Password</label>
+              <input
+                id="signup-password"
                 className="auth-input password-input-padded"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -91,6 +99,8 @@ export default function Signup() {
                 type={showPassword ? "text" : "password"}
                 required
                 disabled={loading}
+                aria-invalid={!!msg || !isValidPassword}
+                aria-describedby={msg ? "signup-error" : showRequirements ? "password-requirements-popover" : undefined}
               />
               <button
                 type="button"
@@ -112,7 +122,7 @@ export default function Signup() {
               </button>
 
               {showRequirements && (
-                <div className="password-popover shadow-lg">
+                <div id="password-requirements-popover" className="password-popover shadow-lg" role="tooltip">
                   <div className="popover-header">
                     <h4>Password Requirements</h4>
                     <button type="button" onClick={() => setShowRequirements(false)} className="close-btn" aria-label="Close requirements">
@@ -123,19 +133,19 @@ export default function Signup() {
 
                   <ul className="requirements-list">
                     <li className={reqLength ? "met" : "unmet"}>
-                      <span className="icon">{reqLength ? "✓" : "○"}</span> Minimum 8 characters
+                      <span className="icon" aria-hidden="true">{reqLength ? "✓" : "○"}</span> Minimum 8 characters
                     </li>
                     <li className={reqUpper ? "met" : "unmet"}>
-                      <span className="icon">{reqUpper ? "✓" : "○"}</span> Require uppercase character
+                      <span className="icon" aria-hidden="true">{reqUpper ? "✓" : "○"}</span> Require uppercase character
                     </li>
                     <li className={reqLower ? "met" : "unmet"}>
-                      <span className="icon">{reqLower ? "✓" : "○"}</span> Require lowercase character
+                      <span className="icon" aria-hidden="true">{reqLower ? "✓" : "○"}</span> Require lowercase character
                     </li>
                     <li className={reqSpecial ? "met" : "unmet"}>
-                      <span className="icon">{reqSpecial ? "✓" : "○"}</span> Require special character
+                      <span className="icon" aria-hidden="true">{reqSpecial ? "✓" : "○"}</span> Require special character
                     </li>
                     <li className={reqNumber ? "met" : "unmet"}>
-                      <span className="icon">{reqNumber ? "✓" : "○"}</span> Require numeric character
+                      <span className="icon" aria-hidden="true">{reqNumber ? "✓" : "○"}</span> Require numeric character
                     </li>
                   </ul>
 
@@ -152,7 +162,7 @@ export default function Signup() {
           </form>
         ) : (
           <div style={{ textAlign: "center", padding: "20px 0" }}>
-            <p style={{ color: "white", marginBottom: "20px", lineHeight: "1.5" }}>
+            <p style={{ color: "white", marginBottom: "20px", lineHeight: "1.5" }} role="status" aria-live="polite">
               A verification link has been sent to <strong>{email}</strong>.
               Please check your inbox to activate your account.
             </p>
@@ -173,7 +183,7 @@ export default function Signup() {
         )}
 
         {/* Displays the caught error message */}
-        {msg && <p className="auth-error" style={{ marginTop: "15px", color: "#ff4d4d", fontSize: "0.9rem" }}>{msg}</p>}
+        {msg && <p id="signup-error" className="auth-error" style={{ marginTop: "15px", color: "#ff4d4d", fontSize: "0.9rem" }} aria-live="polite" role="alert">{msg}</p>}
       </section>
     </main>
   );

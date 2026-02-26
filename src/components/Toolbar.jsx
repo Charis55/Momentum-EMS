@@ -93,6 +93,8 @@ export default function Toolbar() {
         <button
           onClick={toggleMenu}
           className="hamburger-btn"
+          aria-label="Toggle navigation menu"
+          aria-expanded={menuOpen}
           style={{
             background: 'var(--input-bg)',
             border: '1px solid var(--input-border)',

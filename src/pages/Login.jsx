@@ -22,31 +22,41 @@ export default function Login() {
   };
 
   return (
-    <div className="auth-bg">
+    <main className="auth-bg">
       <div className="auth-box animate-fade">
         <img src={logo} alt="Momentum Logo" className="auth-logo" />
 
-        <h2 className="auth-title">Sign In</h2>
+        <h1 className="auth-title">Sign In</h1>
 
         <form onSubmit={submit} className="auth-form">
 
-          <input
-            className="auth-input"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email"
-            type="email"
-            required
-          />
-
-          <div className="password-wrapper">
+          <div style={{ textAlign: "left" }}>
+            <label htmlFor="login-email" className="sr-only" style={{ display: "none" }}>Email</label>
             <input
+              id="login-email"
+              className="auth-input"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
+              type="email"
+              required
+              aria-invalid={!!msg}
+              aria-describedby={msg ? "login-error" : undefined}
+            />
+          </div>
+
+          <div className="password-wrapper" style={{ textAlign: "left" }}>
+            <label htmlFor="login-password" className="sr-only" style={{ display: "none" }}>Password</label>
+            <input
+              id="login-password"
               className="auth-input password-input-padded"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
               type={showPassword ? "text" : "password"}
               required
+              aria-invalid={!!msg}
+              aria-describedby={msg ? "login-error" : undefined}
             />
             <button
               type="button"
@@ -79,8 +89,8 @@ export default function Login() {
           Don’t have an account? <Link to="/signup">Create One</Link>
         </p>
 
-        {msg && <p className="auth-error">{msg}</p>}
+        {msg && <p id="login-error" className="auth-error" aria-live="polite" role="alert">{msg}</p>}
       </div>
-    </div>
+    </main>
   );
 }

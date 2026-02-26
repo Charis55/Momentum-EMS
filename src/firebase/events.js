@@ -29,6 +29,7 @@ export async function createEvent(eventPayload, user) {
 
   const payload = {
     name: eventPayload.name || "",
+    category: eventPayload.category || "",
     speaker: eventPayload.speaker || "",
     date: eventPayload.date || "",
     timezone: eventPayload.timezone || "Africa/Lagos",
@@ -43,6 +44,7 @@ export async function createEvent(eventPayload, user) {
     createdAt: serverTimestamp(), // Required for orderBy
     maxCapacity: Number(eventPayload.maxCapacity) || 100,
     enrolledCount: 0,
+    imageUrl: eventPayload.imageUrl || "",
   };
 
   const ref = await addDoc(collection(db, "events"), payload);

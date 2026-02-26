@@ -97,6 +97,9 @@ const TIMEZONES = [
 const SearchableDropdown = ({ options, value, name, onSelect, placeholder }) => {
   const [searchTerm, setSearchTerm] = useState(value || "");
   const [isOpen, setIsOpen] = useState(false);
+  const [focusedIndex, setFocusedIndex] = useState(-1);
+  const listboxRef = useRef(null);
+  const inputRef = useRef(null);
 
   useEffect(() => {
     setSearchTerm(value);
@@ -106,58 +109,123 @@ const SearchableDropdown = ({ options, value, name, onSelect, placeholder }) => 
     opt.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  useEffect(() => {
+    if (isOpen && focusedIndex >= 0 && listboxRef.current) {
+      const optionElement = listboxRef.current.children[focusedIndex];
+      if (optionElement) {
+        optionElement.scrollIntoView({ block: "nearest" });
+      }
+    }
+  }, [focusedIndex, isOpen]);
+
+  const handleKeyDown = (e) => {
+    if (!isOpen) {
+      if (e.key === "ArrowDown" || e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        setIsOpen(true);
+      }
+      return;
+    }
+
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        setFocusedIndex(prev => (prev < filteredOptions.length - 1 ? prev + 1 : prev));
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        setFocusedIndex(prev => (prev > 0 ? prev - 1 : prev));
+        break;
+      case "Enter":
+        e.preventDefault();
+        if (focusedIndex >= 0 && focusedIndex < filteredOptions.length) {
+          onSelect(name, filteredOptions[focusedIndex]);
+          setIsOpen(false);
+          setFocusedIndex(-1);
+        }
+        break;
+      case "Escape":
+        e.preventDefault();
+        setIsOpen(false);
+        setFocusedIndex(-1);
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <div style={{ position: "relative", width: "100%" }}>
       <input
+        id={name}
         type="text"
+        ref={inputRef}
         className="form-input stencil-input"
         placeholder={placeholder || "Search or select..."}
         value={searchTerm}
         onChange={(e) => {
           setSearchTerm(e.target.value);
           setIsOpen(true);
+          setFocusedIndex(-1);
         }}
         onFocus={() => setIsOpen(true)}
         onBlur={() => setTimeout(() => setIsOpen(false), 200)} // Delay to allow click register
+        onKeyDown={handleKeyDown}
+        role="combobox"
+        aria-expanded={isOpen}
+        aria-autocomplete="list"
+        aria-controls={`${name}-listbox`}
+        aria-activedescendant={focusedIndex >= 0 ? `${name}-option-${focusedIndex}` : undefined}
       />
       {isOpen && (
-        <ul style={{
-          position: "absolute",
-          top: "100%",
-          left: 0,
-          right: 0,
-          zIndex: 50,
-          background: "var(--card-bg, #181615)",
-          maxHeight: "220px",
-          overflowY: "auto",
-          margin: "5px 0 0 0",
-          padding: "0",
-          listStyle: "none",
-          borderRadius: "8px",
-          boxShadow: "0 10px 25px rgba(0,0,0,0.5)",
-          border: "1px solid var(--input-border)"
-        }}>
+        <ul
+          id={`${name}-listbox`}
+          ref={listboxRef}
+          role="listbox"
+          style={{
+            position: "absolute",
+            top: "100%",
+            left: 0,
+            right: 0,
+            zIndex: 50,
+            background: "var(--card-bg, #181615)",
+            maxHeight: "220px",
+            overflowY: "auto",
+            margin: "5px 0 0 0",
+            padding: "0",
+            listStyle: "none",
+            borderRadius: "8px",
+            boxShadow: "0 10px 25px rgba(0,0,0,0.5)",
+            border: "1px solid var(--input-border)"
+          }}
+        >
           {filteredOptions.length > 0 ? (
-            filteredOptions.map((opt) => (
+            filteredOptions.map((opt, index) => (
               <li
                 key={opt}
+                id={`${name}-option-${index}`}
+                role="option"
+                aria-selected={focusedIndex === index || opt === value}
                 style={{
                   padding: "12px 16px",
                   cursor: "pointer",
                   color: "var(--card-text)",
                   borderBottom: "1px solid var(--input-border)",
                   fontSize: "0.95rem",
-                  transition: "background 0.2s"
+                  transition: "background 0.2s",
+                  background: focusedIndex === index ? "var(--input-border)" : "var(--card-bg, #181615)"
                 }}
-                onMouseDown={() => onSelect(name, opt)}
-                onMouseEnter={(e) => e.currentTarget.style.background = "var(--input-border)"}
-                onMouseLeave={(e) => e.currentTarget.style.background = "var(--card-bg, #181615)"}
+                onMouseDown={() => {
+                  onSelect(name, opt);
+                  setIsOpen(false);
+                }}
+                onMouseEnter={() => setFocusedIndex(index)}
               >
                 {opt}
               </li>
             ))
           ) : (
-            <li style={{ padding: "12px 16px", color: "var(--card-text-muted)", fontSize: "0.95rem" }}>
+            <li role="option" aria-disabled="true" style={{ padding: "12px 16px", color: "var(--card-text-muted)", fontSize: "0.95rem" }}>
               No categories found
             </li>
           )}
@@ -287,7 +355,7 @@ export default function CreateEvent() {
   return (
     <>
       <Toolbar />
-      <section className="create-hero-wide">
+      <main className="create-hero-wide">
         <div className="create-header-wide">
           <img src={logo} alt="Momentum Logo" className="form-hero-logo" />
           <div className="create-title-group">
@@ -301,23 +369,23 @@ export default function CreateEvent() {
 
             <div className="form-grid-2col">
               <div className="form-group">
-                <label>Event Name</label>
-                <input type="text" name="name" value={form.name} onChange={handleChange} className="form-input stencil-input" required />
+                <label htmlFor="name">Event Name</label>
+                <input id="name" type="text" name="name" value={form.name} onChange={handleChange} className="form-input stencil-input" required />
               </div>
 
               <div className="form-group">
-                <label>Speaker Name</label>
-                <input type="text" name="speaker" value={form.speaker} onChange={handleChange} className="form-input stencil-input" placeholder="Presenter name" required />
+                <label htmlFor="speaker">Speaker Name</label>
+                <input id="speaker" type="text" name="speaker" value={form.speaker} onChange={handleChange} className="form-input stencil-input" placeholder="Presenter name" required />
               </div>
             </div>
 
             <div className="form-grid-3col">
               <div className="form-group">
-                <label>Date & Time</label>
-                <input type="datetime-local" name="date" value={form.date} onChange={handleChange} className="form-input stencil-input" required />
+                <label htmlFor="date">Date & Time</label>
+                <input id="date" type="datetime-local" name="date" value={form.date} onChange={handleChange} className="form-input stencil-input" required />
               </div>
               <div className="form-group">
-                <label>Time Zone</label>
+                <label htmlFor="timezone">Time Zone</label>
                 <SearchableDropdown
                   options={TIMEZONES}
                   value={form.timezone}
@@ -327,7 +395,7 @@ export default function CreateEvent() {
                 />
               </div>
               <div className="form-group">
-                <label>Category</label>
+                <label htmlFor="category">Category</label>
                 <SearchableDropdown
                   options={WEBINAR_CATEGORIES}
                   value={form.category}
@@ -340,8 +408,8 @@ export default function CreateEvent() {
 
             <div className="form-grid-2col">
               <div className="form-group">
-                <label>External Link (Optional)</label>
-                <input type="url" name="link" value={form.link} onChange={handleChange} className="form-input stencil-input" />
+                <label htmlFor="link">External Link (Optional)</label>
+                <input id="link" type="url" name="link" value={form.link} onChange={handleChange} className="form-input stencil-input" />
               </div>
 
               <div className="form-group toggle-container stencil-input">
@@ -357,18 +425,18 @@ export default function CreateEvent() {
 
             <div className="form-grid-3col-textareas">
               <div className="form-group">
-                <label>Description</label>
-                <textarea name="description" value={form.description} onChange={handleChange} className="form-textarea stencil-input" required></textarea>
+                <label htmlFor="description">Description</label>
+                <textarea id="description" name="description" value={form.description} onChange={handleChange} className="form-textarea stencil-input" required></textarea>
               </div>
 
               <div className="form-group">
-                <label>Learning Objectives</label>
-                <textarea name="objectives" value={form.objectives} onChange={handleChange} className="form-textarea stencil-input" required></textarea>
+                <label htmlFor="objectives">Learning Objectives</label>
+                <textarea id="objectives" name="objectives" value={form.objectives} onChange={handleChange} className="form-textarea stencil-input" required></textarea>
               </div>
 
               <div className="form-group">
-                <label>Topic Relevance</label>
-                <textarea name="relevance" value={form.relevance} onChange={handleChange} className="form-textarea stencil-input" required></textarea>
+                <label htmlFor="relevance">Topic Relevance</label>
+                <textarea id="relevance" name="relevance" value={form.relevance} onChange={handleChange} className="form-textarea stencil-input" required></textarea>
               </div>
             </div>
 
@@ -377,7 +445,7 @@ export default function CreateEvent() {
             </button>
           </form>
         </div>
-      </section>
+      </main>
 
       <ConfirmationModal
         isOpen={modal.isOpen}

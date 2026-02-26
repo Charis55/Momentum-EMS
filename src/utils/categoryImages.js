@@ -53,6 +53,15 @@ export const getCategoryImage = (category) => {
     if (SCIENCE_RESEARCH_CATEGORIES.has(normalizedKey)) {
         return "/assets/Research.png";
     }
+    if (normalizedKey === "healthcare & medicine") {
+        return "/assets/DOCTOR.jpg";
+    }
+    if (normalizedKey === "human resources" || normalizedKey === "human resources (hr)") {
+        return "/assets/HR.jpg";
+    }
+    if (normalizedKey === "travel & hospitality") {
+        return "/assets/TRAVEL.jpg";
+    }
     const photoId = CATEGORY_IMAGES[normalizedKey] || CATEGORY_IMAGES["general"];
     return `https://images.unsplash.com/${photoId}?auto=format&fit=crop&q=80&w=1200`;
 };
