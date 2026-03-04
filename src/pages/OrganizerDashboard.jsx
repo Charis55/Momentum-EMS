@@ -234,7 +234,11 @@ export default function OrganizerDashboard() {
               >
                 <div className="card-top-row">
                   <span className="date-tag">
-                    {ev.date ? new Date(ev.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }).toUpperCase() : "DATE TBA"}
+                    {ev.date
+                      ? typeof ev.date === "string"
+                        ? new Date(ev.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }).toUpperCase()
+                        : new Date(ev.date?.seconds * 1000).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }).toUpperCase()
+                      : "DATE TBA"}
                   </span>
                   <AttendeeStats eventId={ev.id} onUpdate={handleCountUpdate} />
                 </div>

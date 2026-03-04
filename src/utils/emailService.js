@@ -59,12 +59,13 @@ export function sendEnrollmentEmail(user, event) {
     // To make this contextually an ENROLLMENT email, you need to edit the text on the EmailJS Dashboard to say:
     // "Hi {{to_name}}, you have successfully enrolled in the event {{event_name}}! 🎉"
 
+    const eventDetailsUrl = event.id ? `${window.location.origin}/event/${event.id}` : (event.link || "N/A");
     return send(TEMPLATES.enrolled, {
         to_name: user.displayName || "Attendee",
         to_email: user.email,
         event_name: event.name,
         event_date: event.date,
-        event_link: event.link || "N/A",
+        event_link: eventDetailsUrl,
     });
 }
 
@@ -80,12 +81,13 @@ export function sendUnenrollmentEmail(user, event) {
 
 // ── 5. Upcoming event reminder (fire within 24h of event) ────────
 export function sendUpcomingEventReminder(user, event) {
+    const eventDetailsUrl = event.id ? `${window.location.origin}/event/${event.id}` : (event.link || "N/A");
     return send(TEMPLATES.reminder, {
         to_name: user.displayName || "Attendee",
         to_email: user.email,
         event_name: event.name,
         event_date: event.date,
-        event_link: event.link || "N/A",
+        event_link: eventDetailsUrl,
         speaker: event.speaker || "TBA",
     });
 }

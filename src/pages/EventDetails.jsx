@@ -206,7 +206,7 @@ export default function EventDetails() {
                     <p className="timezone-subtext">{event?.timezone}</p>
                   </div>
 
-                  {event?.link && (
+                  {event?.link && (alreadyEnrolled || auth.currentUser?.uid === event?.organizerId) && (
                     <a
                       href={event.link}
                       target="_blank"

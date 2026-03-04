@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { db, auth } from "../firebase/config";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, getDoc, doc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Toolbar from "../components/Toolbar";
@@ -28,9 +28,16 @@ export default function MySchedule() {
         const subColRef = collection(db, "users", user.uid, "my_enrollments");
         const snapshot = await getDocs(subColRef);
 
-        const fetched = snapshot.docs.map(doc => ({
-          enrollmentId: doc.id,
-          ...doc.data()
+        const fetched = await Promise.all(snapshot.docs.map(async (d) => {
+          const enrollData = d.data();
+          const eventId = enrollData.eventId || d.id;
+          const eventRef = doc(db, "events", eventId);
+          const eventSnap = await getDoc(eventRef);
+          return {
+            enrollmentId: d.id,
+            ...enrollData,
+            ...(eventSnap.exists() ? eventSnap.data() : {})
+          };
         }));
 
         setMyEvents(fetched);
@@ -46,6 +53,7 @@ export default function MySchedule() {
           const isWithin24h = eventDate > NOW && eventDate - NOW <= H24;
           if (isWithin24h && !alreadySent[event.eventId || event.enrollmentId]) {
             sendUpcomingEventReminder(user, {
+              id: event.eventId || event.enrollmentId || event.id,
               name: event.eventName || event.name,
               date: event.date || event.eventDate,
               link: event.link,
@@ -157,7 +165,7 @@ export default function MySchedule() {
                       borderRadius: '12px',
                       overflow: 'hidden',
                       marginBottom: '20px',
-                      background: 'var(--input-bg)',
+                      background: 'rgba(255,255,255,0.03)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center'
@@ -173,28 +181,43 @@ export default function MySchedule() {
                       />
                     </div>
 
-                    <h3>
-                      {item.eventName || item.eventTitle || "Untitled Webinar"}
+                    {(item.category || item.eventCategory) && (
+                      <span style={{
+                        display: "inline-block",
+                        background: "rgba(211, 84, 0, 0.1)",
+                        color: "#d35400",
+                        padding: "5px 12px",
+                        borderRadius: "20px",
+                        fontSize: "0.8rem",
+                        fontWeight: "bold",
+                        marginBottom: "15px",
+                        alignSelf: "flex-start"
+                      }}>
+                        {item.category || item.eventCategory}
+                      </span>
+                    )}
+
+                    <h3 style={{ marginBottom: "8px" }}>
+                      {item.eventName || item.name || item.eventTitle || "Untitled Webinar"}
                     </h3>
 
-                    <div className="event-meta-row">
-                      <span className="event-icon" aria-hidden="true">🎤</span>
-                      {item.speaker || item.organizerName || "Guest Speaker"}
-                    </div>
+                    {(item.speaker || item.organizerName) && (
+                      <p className="event-meta-row" style={{ marginBottom: "5px", display: "flex", alignItems: "center", gap: "6px" }}>
+                        <span>🎤</span> {item.speaker || item.organizerName}
+                      </p>
+                    )}
 
-                    <div className="event-meta-row">
-                      <span className="event-icon" aria-hidden="true">🕒</span>
-                      {item.date || item.eventDate
-                        ? new Date(item.date || item.eventDate).toLocaleString('en-GB', {
-                          day: '2-digit', month: '2-digit', year: 'numeric',
-                          hour: '2-digit', minute: '2-digit'
-                        })
-                        : "Date TBA"}
-                    </div>
+                    <p className="event-meta-row" style={{ marginBottom: "12px", display: "flex", alignItems: "center", gap: "6px" }}>
+                      <span>🕒</span> {item.date || item.eventDate
+                        ? typeof (item.date || item.eventDate) === "string"
+                          ? new Date(item.date || item.eventDate).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+                          : new Date((item.date || item.eventDate)?.seconds * 1000).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+                        : "No Date"}
+                    </p>
 
-                    <p>
+                    <p style={{ flexGrow: 1, marginBottom: "20px" }}>
                       {item.description
-                        ? (item.description.substring(0, 80) + "...")
+                        ? (item.description.substring(0, 120) + "...")
                         : "Explore this upcoming session on the live event page."}
                     </p>
 
@@ -202,7 +225,7 @@ export default function MySchedule() {
                       className="event-btn"
                       onClick={() => nav(`/event/${item.eventId || item.id}`)}
                     >
-                      View Details <span aria-hidden="true">→</span>
+                      VIEW FULL DETAILS
                     </button>
                   </div>
                 </motion.div>
@@ -250,7 +273,7 @@ export default function MySchedule() {
           font-weight: 900;
           letter-spacing: 1px;
         }
-        .hero-title { font-size: 3.5rem; font-weight: 900; margin: 15px 0; }
+        .hero-title { font-size: 3.5rem; font-weight: 900; margin: 15px 0; color: var(--card-text); }
         .hero-desc { font-size: 1.1rem; opacity: 0.9; margin-bottom: 25px; max-width: 500px; }
         .browse-btn {
           background: var(--card-text);
@@ -294,7 +317,7 @@ export default function MySchedule() {
           border-radius: 15px;
           border: 1px solid var(--input-border);
           background: var(--input-bg);
-          color: var(--text-main);
+          color: #ffffff;
           font-weight: 600;
         }
 

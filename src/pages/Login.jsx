@@ -14,7 +14,12 @@ export default function Login() {
   const submit = async (e) => {
     e.preventDefault();
     try {
-      await loginUser(email, password);
+      const cred = await loginUser(email, password);
+      if (!cred.user.emailVerified) {
+        // Automatically sign them out so they don't have an active unverified session
+        await cred.user.auth.signOut();
+        throw new Error("Please verify your email address to log in.");
+      }
       nav("/dashboard");
     } catch (err) {
       setMsg(err.message);
