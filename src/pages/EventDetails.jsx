@@ -117,8 +117,19 @@ export default function EventDetails() {
     } else {
       setIsProcessing(true);
       try {
-        await enrollInEvent(id, user);
-        setAlreadyEnrolled(true);
+        const result = await enrollInEvent(id, user);
+        if (result && result.success === false) {
+          setModal({
+            show: true,
+            title: "Enrollment Failed",
+            message: result.message,
+            confirmText: "Okay",
+            type: "danger",
+            onConfirm: () => setModal({ ...modal, show: false })
+          });
+        } else {
+          setAlreadyEnrolled(true);
+        }
       } catch (e) { console.error(e); }
       finally { setIsProcessing(false); }
     }
