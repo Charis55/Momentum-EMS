@@ -72,7 +72,7 @@ export default function OrganizerDashboard() {
     setModal({
       show: true,
       title: "Are you sure?",
-      message: "This action is irreversible. You may need to log in again to confirm.",
+      message: "This action is irreversible.",
       confirmText: "Confirm Delete",
       type: "danger",
       onConfirm: async () => {
