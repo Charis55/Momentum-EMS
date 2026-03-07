@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import Toolbar from "../components/Toolbar";
+import Footer from "../components/Footer";
 import { subscribeUpcomingEvents } from "../firebase/events";
 import { getCategoryImage } from "../utils/categoryImages";
 import logo from "/assets/momentum-logo.svg";
@@ -242,6 +243,7 @@ export default function Dashboard() {
           }
         `}</style>
       </main>
+      <Footer />
     </>
   );
 }
