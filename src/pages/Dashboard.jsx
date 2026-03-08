@@ -5,30 +5,36 @@ import Toolbar from "../components/Toolbar";
 import Footer from "../components/Footer";
 import { subscribeUpcomingEvents } from "../firebase/events";
 import { getCategoryImage } from "../utils/categoryImages";
+import { useAuth } from "../context/AuthContext";
 import logo from "/assets/momentum-logo.svg";
 
 export default function Dashboard() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
 
   useEffect(() => {
+    // Only subscribe to events if user is authenticated
+    if (!user) {
+      setLoading(false);
+      return;
+    }
+
     const unsubscribe = subscribeUpcomingEvents((data) => {
       setEvents(data || []);
       setLoading(false);
     });
     return () => unsubscribe();
-  }, []);
+  }, [user]);
 
   const totalAttendees = events.reduce((acc, curr) => acc + (curr.enrolledCount || 0), 0);
   const activeWebinars = events.length;
-  // Mocking engagement for now as actual tracking is not implemented, but making it look more "real" or omitting if strictly "no lies"
-  // However, "Total Attendees" and "Active Webinars" are now real.
 
   const stats = [
     { label: "Active Webinars", value: activeWebinars.toString(), icon: "📽️" },
     { label: "Total Enrollments", value: totalAttendees.toString(), icon: "👥" },
-    { label: "Event Coverage", value: "Global", icon: "🌍" }, // Categorical "truth"
-    { label: "Platform Status", value: "Online", icon: "🟢" } // Real-time status
+    { label: "Event Coverage", value: "Global", icon: "🌍" },
+    { label: "Platform Status", value: "Online", icon: "🟢" }
   ];
 
   return (
@@ -48,7 +54,7 @@ export default function Dashboard() {
               Welcome to <span className="gradient-text">Momentum EMS</span>
             </motion.h1>
 
-            {/* REFINED MISSION STATEMENT WITH GLASSMORPHISM AND DYNAMIC LAYOUT */}
+            {/* REFINED MISSION STATEMENT */}
             <motion.div
               className="mission-card-glass"
               initial={{ opacity: 0, x: -30 }}
@@ -70,12 +76,25 @@ export default function Dashboard() {
             </motion.div>
 
             <div className="hero-btns">
-              <Link to="/create" className="btn-primary">
-                + Create Event
-              </Link>
-              <Link to="/events" className="btn-primary" style={{ opacity: 0.85 }}>
-                Browse Events
-              </Link>
+              {user ? (
+                <>
+                  <Link to="/create" className="btn-primary">
+                    + Create Event
+                  </Link>
+                  <Link to="/events" className="btn-primary" style={{ opacity: 0.85 }}>
+                    Browse Events
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link to="/login" className="btn-primary">
+                    Sign In
+                  </Link>
+                  <Link to="/signup" className="btn-primary" style={{ opacity: 0.85 }}>
+                    Create Account
+                  </Link>
+                </>
+              )}
             </div>
           </div>
 
@@ -89,102 +108,105 @@ export default function Dashboard() {
           </motion.div>
         </section>
 
-        {/* STATS ANALYTICS SECTION */}
-        <section className="container">
-          <div className="stats-grid">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                className="stat-card"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 * index, duration: 0.5 }}
-              >
-                <span className="stat-icon" aria-hidden="true">{stat.icon}</span>
-                <span className="stat-value">{stat.value}</span>
-                <span className="stat-label">{stat.label}</span>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
-        {/* UPCOMING WEBINARS SECTION */}
-        <section className="container" style={{ paddingTop: "20px", paddingBottom: "100px" }}>
-
-          <div className="section-header" style={{ textAlign: "center", marginBottom: "60px" }}>
-            <h2 className="section-title-glow">
-              <span className="gradient-text">Upcoming Webinars</span>
-            </h2>
-            <p className="section-sub-fancy">
-              Join inspiring sessions led by world-class innovators.
-            </p>
-            <div className="underline-accent" style={{ margin: "20px auto" }}></div>
-          </div>
-
-          {/* SYMMETRICAL EVENT GRID (Uses responsive .event-grid-dashboard from styles.css) */}
-          <div className="event-grid-dashboard" style={{
-            maxWidth: "1200px",
-            margin: "0 auto"
-          }}>
-            {loading && <p style={{ color: "var(--text-main)", gridColumn: "1 / -1", textAlign: "center" }} role="status" aria-live="polite">Loading events...</p>}
-
-            {!loading && events.length === 0 && (
-              <div style={{ gridColumn: "1 / -1", textAlign: "center", padding: "40px" }}>
-                <p style={{ opacity: 0.8, color: "var(--text-main)", marginBottom: "20px" }}>No upcoming events yet.</p>
-                <Link to="/create" className="btn-primary" style={{ fontSize: "0.9rem" }}>Be the first to host</Link>
+        {/* AUTHENTICATED CONTENT */}
+        {user && (
+          <>
+            {/* STATS ANALYTICS SECTION */}
+            <section className="container">
+              <div className="stats-grid">
+                {stats.map((stat, index) => (
+                  <motion.div
+                    key={stat.label}
+                    className="stat-card"
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 * index, duration: 0.5 }}
+                  >
+                    <span className="stat-icon" aria-hidden="true">{stat.icon}</span>
+                    <span className="stat-value">{stat.value}</span>
+                    <span className="stat-label">{stat.label}</span>
+                  </motion.div>
+                ))}
               </div>
-            )}
+            </section>
 
-            {events.slice(0, 4).map((e) => (
-              <div key={e.id} className="event-card-curve scroll-fade" style={{ width: "100%", margin: "0" }}>
-                <div className="event-card-body" style={{ height: "100%", display: "flex", flexDirection: "column" }}>
-                  <div style={{
-                    width: '100%',
-                    height: '180px',
-                    borderRadius: '12px',
-                    overflow: 'hidden',
-                    marginBottom: '20px',
-                    background: 'rgba(255,255,255,0.03)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}>
-                    <img
-                      src={getCategoryImage(e.category)}
-                      className="event-thumb-img"
-                      alt={e.name}
-                      style={{
+            {/* UPCOMING WEBINARS SECTION */}
+            <section className="container" style={{ paddingTop: "20px", paddingBottom: "100px" }}>
+              <div className="section-header" style={{ textAlign: "center", marginBottom: "60px" }}>
+                <h2 className="section-title-glow">
+                  <span className="gradient-text">Upcoming Webinars</span>
+                </h2>
+                <p className="section-sub-fancy">
+                  Join inspiring sessions led by world-class innovators.
+                </p>
+                <div className="underline-accent" style={{ margin: "20px auto" }}></div>
+              </div>
+
+              <div className="event-grid-dashboard" style={{
+                maxWidth: "1200px",
+                margin: "0 auto"
+              }}>
+                {loading && <p style={{ color: "var(--text-main)", gridColumn: "1 / -1", textAlign: "center" }} role="status" aria-live="polite">Loading events...</p>}
+
+                {!loading && events.length === 0 && (
+                  <div style={{ gridColumn: "1 / -1", textAlign: "center", padding: "40px" }}>
+                    <p style={{ opacity: 0.8, color: "var(--text-main)", marginBottom: "20px" }}>No upcoming events yet.</p>
+                    <Link to="/create" className="btn-primary" style={{ fontSize: "0.9rem" }}>Be the first to host</Link>
+                  </div>
+                )}
+
+                {events.slice(0, 4).map((e) => (
+                  <div key={e.id} className="event-card-curve scroll-fade" style={{ width: "100%", margin: "0" }}>
+                    <div className="event-card-body" style={{ height: "100%", display: "flex", flexDirection: "column" }}>
+                      <div style={{
                         width: '100%',
-                        height: '100%',
-                        objectFit: 'cover'
-                      }}
-                    />
+                        height: '180px',
+                        borderRadius: '12px',
+                        overflow: 'hidden',
+                        marginBottom: '20px',
+                        background: 'rgba(255,255,255,0.03)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}>
+                        <img
+                          src={getCategoryImage(e.category)}
+                          className="event-thumb-img"
+                          alt={e.name}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover'
+                          }}
+                        />
+                      </div>
+
+                      <h3 style={{ marginBottom: "12px" }}>{e.name}</h3>
+
+                      <div className="event-meta-row" style={{ marginBottom: "8px" }}>
+                        <span className="event-icon" style={{ marginRight: "8px" }} aria-hidden="true">🎤</span>
+                        {e.speaker || "Speaker TBA"}
+                      </div>
+
+                      <div className="event-meta-row" style={{ marginBottom: "15px" }}>
+                        <span className="event-icon" style={{ marginRight: "8px" }} aria-hidden="true">🕒</span>
+                        {e.date || e.timingISO ? new Date(e.date || e.timingISO).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : "Date coming soon"}
+                      </div>
+
+                      <p style={{ flexGrow: 1 }}>
+                        {e.description?.substring(0, 120) || "No event description available yet."}...
+                      </p>
+
+                      <Link to={`/event/${e.id}`} className="event-btn">
+                        View Details <span aria-hidden="true">→</span>
+                      </Link>
+                    </div>
                   </div>
-
-                  <h3 style={{ marginBottom: "12px" }}>{e.name}</h3>
-
-                  <div className="event-meta-row" style={{ marginBottom: "8px" }}>
-                    <span className="event-icon" style={{ marginRight: "8px" }} aria-hidden="true">🎤</span>
-                    {e.speaker || "Speaker TBA"}
-                  </div>
-
-                  <div className="event-meta-row" style={{ marginBottom: "15px" }}>
-                    <span className="event-icon" style={{ marginRight: "8px" }} aria-hidden="true">🕒</span>
-                    {e.date || e.timingISO ? new Date(e.date || e.timingISO).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : "Date coming soon"}
-                  </div>
-
-                  <p style={{ flexGrow: 1 }}>
-                    {e.description?.substring(0, 120) || "No event description available yet."}...
-                  </p>
-
-                  <Link to={`/event/${e.id}`} className="event-btn">
-                    View Details <span aria-hidden="true">→</span>
-                  </Link>
-                </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </section>
+            </section>
+          </>
+        )}
 
         <style>{`
           .hero-content-wrapper {

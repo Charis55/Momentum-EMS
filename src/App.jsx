@@ -24,8 +24,9 @@ export default function App() {
       backgroundAttachment: "fixed"
     }}>
       <Routes>
-        {/* Force "/" and invalid paths to Login if not authenticated */}
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        {/* Dashboard is now the Homepage at "/" */}
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/dashboard" element={<Navigate to="/" replace />} />
 
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
@@ -34,16 +35,6 @@ export default function App() {
         {/* Public Event Routes */}
         <Route path="/events" element={<EventPage />} />
         <Route path="/event/:id" element={<EventDetails />} />
-
-        {/* Protected Dashboard & Profile Routes */}
-        <Route
-          path="/dashboard"
-          element={
-            <PrivateRoute>
-              <Dashboard />
-            </PrivateRoute>
-          }
-        />
 
         <Route
           path="/organizer-dashboard"

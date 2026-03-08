@@ -22,6 +22,11 @@ export default function Footer() {
           gap: 15px;
           text-align: center;
         }
+        .app-footer {
+          padding: 40px 0;
+          background: transparent;
+          margin-top: 100px;
+        }
         .footer-logo {
           font-size: 1.5rem;
           font-weight: 900;

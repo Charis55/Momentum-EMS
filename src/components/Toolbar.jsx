@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { auth } from "../firebase/config";
+import { useAuth } from "../context/AuthContext";
 import logo from "/assets/momentum-logo.svg";
 import MomentumAI from "./MomentumAI";
 
@@ -8,17 +9,16 @@ export default function Toolbar() {
   const [displayName, setDisplayName] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
   const [aiOpen, setAiOpen] = useState(false);
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Listen for auth state to grab the name
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        setDisplayName(user.displayName || "User");
-      }
-    });
-    return () => unsubscribe();
-  }, []);
+    if (user) {
+      setDisplayName(user.displayName || "User");
+    } else {
+      setDisplayName("");
+    }
+  }, [user]);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
@@ -64,7 +64,7 @@ export default function Toolbar() {
       boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)'
     }}>
 
-      <Link to="/dashboard" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', flex: 1 }}>
+      <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', flex: 1 }}>
         <img
           src={logo}
           alt="Momentum EMS"
@@ -85,35 +85,37 @@ export default function Toolbar() {
         letterSpacing: '1px',
         textTransform: 'uppercase'
       }}>
-        {displayName && `WELCOME, ${displayName}`}
+        {user && displayName && `WELCOME, ${displayName}`}
       </div>
 
-      {/* RIGHT: HAMBURGER TRIGGER */}
+      {/* RIGHT: HAMBURGER TRIGGER (Only for Auth Users) */}
       <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
-        <button
-          onClick={toggleMenu}
-          className="hamburger-btn"
-          aria-label="Toggle navigation menu"
-          aria-expanded={menuOpen}
-          style={{
-            background: 'var(--input-bg)',
-            border: '1px solid var(--input-border)',
-            borderRadius: '12px',
-            cursor: 'pointer',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            gap: '5px',
-            padding: '12px',
-            zIndex: 1100,
-            transition: 'all 0.3s ease'
-          }}
-        >
-          <div style={{ width: '22px', height: '2px', background: '#ffcc33', transition: '0.3s', transform: menuOpen ? 'rotate(45deg) translate(5px, 5px)' : '' }}></div>
-          <div style={{ width: '22px', height: '2px', background: '#ffcc33', opacity: menuOpen ? 0 : 1, transition: '0.3s' }}></div>
-          <div style={{ width: '22px', height: '2px', background: '#ffcc33', transition: '0.3s', transform: menuOpen ? 'rotate(-45deg) translate(5px, -5px)' : '' }}></div>
-        </button>
+        {user && (
+          <button
+            onClick={toggleMenu}
+            className="hamburger-btn"
+            aria-label="Toggle navigation menu"
+            aria-expanded={menuOpen}
+            style={{
+              background: 'var(--input-bg)',
+              border: '1px solid var(--input-border)',
+              borderRadius: '12px',
+              cursor: 'pointer',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '5px',
+              padding: '12px',
+              zIndex: 1100,
+              transition: 'all 0.3s ease'
+            }}
+          >
+            <div style={{ width: '22px', height: '2px', background: '#ffcc33', transition: '0.3s', transform: menuOpen ? 'rotate(45deg) translate(5px, 5px)' : '' }}></div>
+            <div style={{ width: '22px', height: '2px', background: '#ffcc33', opacity: menuOpen ? 0 : 1, transition: '0.3s' }}></div>
+            <div style={{ width: '22px', height: '2px', background: '#ffcc33', transition: '0.3s', transform: menuOpen ? 'rotate(-45deg) translate(5px, -5px)' : '' }}></div>
+          </button>
+        )}
       </div>
 
       {/* GLASSMORPHIC SLIDE-OUT MENU */}
