@@ -408,7 +408,7 @@ export default function CreateEvent() {
 
             <div className="form-grid-2col">
               <div className="form-group">
-                <label htmlFor="link">External Link (Optional)</label>
+                <label htmlFor="link">Conferencing Link (Optional)</label>
                 <input id="link" type="url" name="link" value={form.link} onChange={handleChange} className="form-input stencil-input" />
               </div>
 
