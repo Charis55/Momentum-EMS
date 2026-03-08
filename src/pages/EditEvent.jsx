@@ -402,7 +402,7 @@ export default function EditEvent() {
 
             <div className="form-grid-2col">
               <div className="form-group">
-                <label htmlFor="link">External Link (Optional)</label>
+                <label htmlFor="link">Conferencing Link (Optional)</label>
                 <input id="link" type="url" name="link" value={formData.link} onChange={(e) => setFormData({ ...formData, link: e.target.value })} className="form-input stencil-input" />
               </div>
 
