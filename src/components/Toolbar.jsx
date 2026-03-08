@@ -17,12 +17,14 @@ export default function Toolbar() {
       setDisplayName(user.displayName || "User");
     } else {
       setDisplayName("");
+      setMenuOpen(false); // Close menu on logout
     }
   }, [user]);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
   const handleLogout = async () => {
+    setMenuOpen(false);
     await auth.signOut();
     navigate("/");
   };
@@ -137,7 +139,8 @@ export default function Toolbar() {
         gap: '20px',
         zIndex: 1050,
         borderLeft: '1px solid var(--card-border)',
-        willChange: 'transform'
+        willChange: 'transform',
+        display: user ? 'flex' : 'none' // Safeguard: Hide for guests
       }}>
         {/* Navigation Links with Active State Gradient and Hover Styling */}
         <NavLink to="/dashboard" onClick={toggleMenu} style={getNavLinkStyle} className="nav-drawer-link">Home</NavLink>
@@ -191,7 +194,7 @@ export default function Toolbar() {
       <MomentumAI isOpen={aiOpen} onClose={() => setAiOpen(false)} />
 
       {/* DARK BACKDROP BLUR */}
-      {menuOpen && (
+      {user && menuOpen && (
         <div
           onClick={toggleMenu}
           style={{
