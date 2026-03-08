@@ -24,7 +24,7 @@ export default function Toolbar() {
 
   const handleLogout = async () => {
     await auth.signOut();
-    navigate("/login");
+    navigate("/");
   };
 
   // Common styling for NavLinks including the orange gradient for active state

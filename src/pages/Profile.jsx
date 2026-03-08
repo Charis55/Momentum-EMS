@@ -43,7 +43,7 @@ export default function Profile() {
   async function handleLogout() {
     try {
       await signOut(auth);
-      navigate("/login");
+      navigate("/");
     } catch (err) {
       setStatusMsg({ type: "error", text: "❌ Error logging out." });
     }
@@ -84,7 +84,7 @@ export default function Profile() {
   async function confirmDelete() {
     try {
       await deleteUser(user);
-      window.location.href = "/login";
+      window.location.href = "/";
     } catch (err) {
       setModal({
         isOpen: true,
