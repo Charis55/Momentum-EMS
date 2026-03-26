@@ -121,13 +121,14 @@ export default function Dashboard() {
                     key={stat.label}
                     className="stat-card"
                     tabIndex={0}
+                    aria-label={`${stat.label}: ${stat.value}`}
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 * index, duration: 0.5 }}
                   >
                     <span className="stat-icon" aria-hidden="true">{stat.icon}</span>
-                    <span className="stat-value">{stat.value}</span>
-                    <span className="stat-label">{stat.label}</span>
+                    <span className="stat-value" aria-hidden="true">{stat.value}</span>
+                    <span className="stat-label" aria-hidden="true">{stat.label}</span>
                   </motion.div>
                 ))}
               </div>
@@ -191,9 +192,9 @@ export default function Dashboard() {
                         {e.speaker || "Speaker TBA"}
                       </div>
 
-                      <div className="event-meta-row" style={{ marginBottom: "15px" }} tabIndex={0}>
+                      <div className="event-meta-row" style={{ marginBottom: "15px" }} tabIndex={0} aria-label={`Starts at: ${e.date || e.timingISO ? new Date(e.date || e.timingISO).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : "Date coming soon"}`}>
                         <span className="event-icon" style={{ marginRight: "8px" }} aria-hidden="true">🕒</span>
-                        {e.date || e.timingISO ? new Date(e.date || e.timingISO).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : "Date coming soon"}
+                        <span aria-hidden="true">{e.date || e.timingISO ? new Date(e.date || e.timingISO).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : "Date coming soon"}</span>
                       </div>
 
                       <p style={{ flexGrow: 1 }} tabIndex={0}>

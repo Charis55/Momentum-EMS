@@ -207,12 +207,17 @@ export default function MySchedule() {
                       </p>
                     )}
 
-                    <p className="event-meta-row" style={{ marginBottom: "12px", display: "flex", alignItems: "center", gap: "6px" }} tabIndex={0}>
-                      <span>🕒</span> {item.date || item.eventDate
+                    <p className="event-meta-row" style={{ marginBottom: "12px", display: "flex", alignItems: "center", gap: "6px" }} tabIndex={0} aria-label={`Starts at: ${item.date || item.eventDate
                         ? typeof (item.date || item.eventDate) === "string"
                           ? new Date(item.date || item.eventDate).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
                           : new Date((item.date || item.eventDate)?.seconds * 1000).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
-                        : "No Date"}
+                        : "No Date"}`}>
+                      <span aria-hidden="true">🕒</span>
+                      <span aria-hidden="true">{item.date || item.eventDate
+                        ? typeof (item.date || item.eventDate) === "string"
+                          ? new Date(item.date || item.eventDate).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+                          : new Date((item.date || item.eventDate)?.seconds * 1000).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+                        : "No Date"}</span>
                     </p>
 
                     <p style={{ flexGrow: 1, marginBottom: "20px" }} tabIndex={0}>

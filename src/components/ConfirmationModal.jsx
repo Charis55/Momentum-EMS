@@ -54,13 +54,22 @@ export default function ConfirmationModal({
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onCancel]);
 
+  const stripEmojis = (str) => {
+    if (!str) return "";
+    // Regex for common emojis [success, error, sparkles, info, etc]
+    return str.replace(/[✅❌✨📽️👥🌍🟢🎤🕒💡⚠️🔥🚀📅📍🔗→]/gu, "").trim();
+  };
+
   if (!isOpen) return null;
+
+  const srTitle = stripEmojis(title);
+  const srMessage = stripEmojis(message);
 
   return (
     <div className="modal-overlay">
-      <div className="modal-card animate-pop-in" ref={modalRef} role="dialog" aria-modal="true">
-        <h2 className="modal-title" tabIndex={0}>{title}</h2>
-        <p className="modal-message" tabIndex={0}>{message}</p>
+      <div className="modal-card animate-pop-in" ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="modal-title-sr">
+        <h2 id="modal-title-sr" className="modal-title" tabIndex={0} aria-label={srTitle}>{title}</h2>
+        <p className="modal-message" tabIndex={0} aria-label={srMessage}>{message}</p>
 
         <div className="modal-actions">
           <button

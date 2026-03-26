@@ -133,7 +133,7 @@ export default function Profile() {
               color: statusMsg.type === "error" ? "#ff4444" : "#ffcc33",
               fontWeight: "600",
               marginBottom: "20px"
-            }} tabIndex={0}>{statusMsg.text}</p>
+            }} tabIndex={0} aria-label={statusMsg.text.replace(/[❌✅📧🔑]/gu, "").trim()}>{statusMsg.text}</p>
           )}
 
           <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>

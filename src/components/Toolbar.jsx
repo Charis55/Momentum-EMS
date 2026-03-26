@@ -171,7 +171,7 @@ export default function Toolbar() {
               marginBottom: '10px'
             }}
           >
-            ✨ Momentum Guide
+            <span aria-hidden="true">✨</span> Momentum Guide
           </button>
 
           <button onClick={handleLogout} tabIndex={menuOpen ? 0 : -1} style={{
