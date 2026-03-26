@@ -244,7 +244,7 @@ export default function Signup() {
           </form>
         ) : (
           <div style={{ textAlign: "center", padding: "20px 0" }}>
-            <p style={{ color: "var(--auth-text-main)", marginBottom: "20px", lineHeight: "1.5" }} role="status" aria-live="polite">
+            <p style={{ color: "var(--auth-text-main)", marginBottom: "20px", lineHeight: "1.5" }} role="status" aria-live="polite" tabIndex={0}>
               A verification link has been sent to <strong>{email}</strong>.
               Please check your inbox to activate your account.
             </p>

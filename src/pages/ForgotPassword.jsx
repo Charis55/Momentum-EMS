@@ -54,7 +54,7 @@ export default function ForgotPassword() {
                 </p>
 
                 {msg && (
-                    <p className={msgType === "success" ? "auth-success" : "auth-error"} aria-live="polite" role="alert">
+                    <p className={msgType === "success" ? "auth-success" : "auth-error"} aria-live="polite" role="alert" tabIndex={0}>
                         {msg}
                     </p>
                 )}
