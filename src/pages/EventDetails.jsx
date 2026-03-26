@@ -214,19 +214,31 @@ export default function EventDetails() {
 
               <div className="event-sidebar-column">
                 <div className="sidebar-glass-box">
-                  <div className="sidebar-field">
-                    <label className="ui-heading-label" tabIndex={0}>SPEAKER</label>
-                    <p className="sidebar-text-white" tabIndex={0}>{event?.speaker}</p>
+                  <div 
+                    className="sidebar-field focusable-field-group" 
+                    tabIndex={0} 
+                    aria-label={`Speaker: ${event?.speaker}`}
+                  >
+                    <label className="ui-heading-label" aria-hidden="true">SPEAKER</label>
+                    <p className="sidebar-text-white" aria-hidden="true">{event?.speaker}</p>
                   </div>
-                  <div className="sidebar-field">
-                    <label className="ui-heading-label" tabIndex={0}>SCHEDULE</label>
-                    <h2 className="schedule-date-ui" tabIndex={0}>
+                  <div 
+                    className="sidebar-field focusable-field-group" 
+                    tabIndex={0} 
+                    aria-label={`Schedule: ${
+                      event?.date ? new Date(event.date).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' }) : "Date TBA"
+                    } at ${
+                      event?.date ? new Date(event.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) : "00:00"
+                    } ${event?.timezone || ""}`}
+                  >
+                    <label className="ui-heading-label" aria-hidden="true">SCHEDULE</label>
+                    <h2 className="schedule-date-ui" aria-hidden="true">
                       {event?.date ? new Date(event.date).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric' }) : "Date TBA"}
                     </h2>
-                    <h2 className="schedule-date-ui" tabIndex={0}>
+                    <h2 className="schedule-date-ui" aria-hidden="true">
                       {event?.date ? new Date(event.date).toLocaleDateString('en-GB', { month: 'long' }) : ""} at {event?.date ? new Date(event.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) : "00:00"}
                     </h2>
-                    <p className="timezone-subtext" tabIndex={0}>{event?.timezone}</p>
+                    <p className="timezone-subtext" aria-hidden="true">{event?.timezone}</p>
                   </div>
 
                   {event?.link && (alreadyEnrolled || auth.currentUser?.uid === event?.organizerId) && (
@@ -296,6 +308,16 @@ export default function EventDetails() {
         .register-btn-ui { width: 100%; padding: 22px; border-radius: 16px; margin-top: 30px; font-size: 1.2rem; font-weight: 900; cursor: pointer; letter-spacing: 1px; }
         .register-btn-ui:not(.enrolled) { background: #ffcc33; color: #000; border: none; }
         .register-btn-ui.enrolled { background: rgba(255, 68, 68, 0.05); border: 1px solid #ff4444; color: #ff4444; }
+        
+        .focusable-field-group:focus {
+          outline: 2px solid #ffcc33;
+          outline-offset: 4px;
+          border-radius: 8px;
+        }
+
+        .sidebar-field {
+          margin-bottom: 30px;
+        }
 
         .event-external-link {
           display: block;
