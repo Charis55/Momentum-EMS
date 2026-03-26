@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 
 export default function ConfirmationModal({
   isOpen,
@@ -9,13 +9,58 @@ export default function ConfirmationModal({
   confirmText = "OK",
   type = "info" // danger, success, info
 }) {
+  const modalRef = useRef(null);
+
+  useEffect(() => {
+    if (isOpen && modalRef.current) {
+        const titleEl = modalRef.current.querySelector("h2");
+        if (titleEl) titleEl.focus();
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        if (onCancel) onCancel();
+        return;
+      }
+      if (e.key === "Tab") {
+        if (!modalRef.current) return;
+        const focusables = modalRef.current.querySelectorAll(
+          'a[href], button, textarea, input, select, [tabIndex]:not([tabIndex="-1"])'
+        );
+        if (focusables.length === 0) return;
+
+        const firstElement = focusables[0];
+        const lastElement = focusables[focusables.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement || document.activeElement === document.body) {
+            lastElement.focus();
+            e.preventDefault();
+          }
+        } else {
+          if (document.activeElement === lastElement) {
+            firstElement.focus();
+            e.preventDefault();
+          }
+        }
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onCancel]);
+
   if (!isOpen) return null;
 
   return (
     <div className="modal-overlay">
-      <div className="modal-card animate-pop-in">
-        <h2 className="modal-title">{title}</h2>
-        <p className="modal-message">{message}</p>
+      <div className="modal-card animate-pop-in" ref={modalRef} role="dialog" aria-modal="true">
+        <h2 className="modal-title" tabIndex={0}>{title}</h2>
+        <p className="modal-message" tabIndex={0}>{message}</p>
 
         <div className="modal-actions">
           <button

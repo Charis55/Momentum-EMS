@@ -125,7 +125,7 @@ export default function Profile() {
           border: "1px solid var(--card-border)",
           color: "var(--card-text)"
         }}>
-          <h2 style={{ fontSize: "2.2rem", fontWeight: "900", marginBottom: "30px", textAlign: "center" }}>Account Settings</h2>
+          <h2 style={{ fontSize: "2.2rem", fontWeight: "900", marginBottom: "30px", textAlign: "center" }} tabIndex={0}>Account Settings</h2>
 
           {statusMsg.text && (
             <p style={{
@@ -133,12 +133,12 @@ export default function Profile() {
               color: statusMsg.type === "error" ? "#ff4444" : "#ffcc33",
               fontWeight: "600",
               marginBottom: "20px"
-            }}>{statusMsg.text}</p>
+            }} tabIndex={0}>{statusMsg.text}</p>
           )}
 
           <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
             <div>
-              <label htmlFor="username" style={{ display: "block", marginBottom: "8px", color: "var(--card-text-muted)", fontSize: "0.9rem" }}>Display Name</label>
+              <label htmlFor="username" style={{ display: "block", marginBottom: "8px", color: "var(--card-text-muted)", fontSize: "0.9rem" }} tabIndex={0}>Display Name</label>
               <input
                 id="username"
                 style={inputStyle}
@@ -154,7 +154,7 @@ export default function Profile() {
             <hr style={{ border: "0", borderTop: "1px solid rgba(255,255,255,0.1)", margin: "10px 0" }} />
 
             <div>
-              <label htmlFor="email" style={{ display: "block", marginBottom: "8px", color: "var(--card-text-muted)", fontSize: "0.9rem" }}>Account Email</label>
+              <label htmlFor="email" style={{ display: "block", marginBottom: "8px", color: "var(--card-text-muted)", fontSize: "0.9rem" }} tabIndex={0}>Account Email</label>
               <input id="email" style={inputStyle} type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
               <button style={outlineBtn} onClick={handleEmailUpdate}>Update & Verify Email</button>
             </div>
@@ -162,7 +162,7 @@ export default function Profile() {
             <button style={outlineBtn} onClick={handlePasswordReset}>Send Password Reset Email</button>
 
             <div style={{ marginTop: "20px", padding: "20px", borderRadius: "20px", background: "rgba(255, 68, 68, 0.1)" }}>
-              <h3 style={{ color: "#ff6b6b", margin: "0 0 10px 0", fontSize: "1.2rem" }}>Danger Zone</h3>
+              <h3 style={{ color: "#ff6b6b", margin: "0 0 10px 0", fontSize: "1.2rem" }} tabIndex={0}>Danger Zone</h3>
               <button style={{ ...primaryBtn, background: "#ff6b6b", marginBottom: "10px" }} onClick={handleDeleteRequest}>Delete Account</button>
               <button style={outlineBtn} onClick={handleLogout}>Logout from Momentum</button>
             </div>

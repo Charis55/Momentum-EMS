@@ -98,9 +98,9 @@ export default function MySchedule() {
         {/* HERO SECTION - REPLICATED FROM SCREENSHOT */}
         <section className="dashboard-hero">
           <div className="hero-main-card">
-            <span className="badge">PERSONAL DASHBOARD</span>
-            <h1 className="hero-title">My Schedule</h1>
-            <p className="hero-desc">
+            <span className="badge" tabIndex={0}>PERSONAL DASHBOARD</span>
+            <h1 className="hero-title" tabIndex={0}>My Schedule</h1>
+            <p className="hero-desc" tabIndex={0}>
               Your personalized workspace for all upcoming Momentum webinars and events you've joined.
             </p>
             <button className="browse-btn" onClick={() => nav("/events")}>
@@ -109,13 +109,13 @@ export default function MySchedule() {
           </div>
 
           <div className="stat-card">
-            <span className="stat-label">Total Enrollments</span>
-            <span className="stat-value">{myEvents.length}</span>
+            <span className="stat-label" tabIndex={0}>Total Enrollments</span>
+            <span className="stat-value" tabIndex={0}>{myEvents.length}</span>
           </div>
 
           <div className="stat-card">
-            <span className="stat-label">Next Session</span>
-            <span className="stat-next-title">
+            <span className="stat-label" tabIndex={0}>Next Session</span>
+            <span className="stat-next-title" tabIndex={0}>
               {filteredAndSortedMyEvents[0]?.eventName || "None Scheduled"}
             </span>
           </div>
@@ -123,7 +123,7 @@ export default function MySchedule() {
 
         {/* CONTROLS */}
         <header className="schedule-header">
-          <h2 className="section-subtitle">Enrolled Conferences</h2>
+          <h2 className="section-subtitle" tabIndex={0}>Enrolled Conferences</h2>
 
           <div className="filter-bar">
             <input
@@ -147,7 +147,7 @@ export default function MySchedule() {
         </header>
 
         {loading ? (
-          <div className="loader-box">Loading your schedule...</div>
+          <div className="loader-box" tabIndex={0}>Loading your schedule...</div>
         ) : (
           <div className="event-grid">
             <AnimatePresence>
@@ -192,22 +192,22 @@ export default function MySchedule() {
                         fontWeight: "bold",
                         marginBottom: "15px",
                         alignSelf: "flex-start"
-                      }}>
+                      }} tabIndex={0}>
                         {item.category || item.eventCategory}
                       </span>
                     )}
 
-                    <h3 style={{ marginBottom: "8px" }}>
+                    <h3 style={{ marginBottom: "8px" }} tabIndex={0}>
                       {item.eventName || item.name || item.eventTitle || "Untitled Webinar"}
                     </h3>
 
                     {(item.speaker || item.organizerName) && (
-                      <p className="event-meta-row" style={{ marginBottom: "5px", display: "flex", alignItems: "center", gap: "6px" }}>
+                      <p className="event-meta-row" style={{ marginBottom: "5px", display: "flex", alignItems: "center", gap: "6px" }} tabIndex={0}>
                         <span>🎤</span> {item.speaker || item.organizerName}
                       </p>
                     )}
 
-                    <p className="event-meta-row" style={{ marginBottom: "12px", display: "flex", alignItems: "center", gap: "6px" }}>
+                    <p className="event-meta-row" style={{ marginBottom: "12px", display: "flex", alignItems: "center", gap: "6px" }} tabIndex={0}>
                       <span>🕒</span> {item.date || item.eventDate
                         ? typeof (item.date || item.eventDate) === "string"
                           ? new Date(item.date || item.eventDate).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
@@ -215,7 +215,7 @@ export default function MySchedule() {
                         : "No Date"}
                     </p>
 
-                    <p style={{ flexGrow: 1, marginBottom: "20px" }}>
+                    <p style={{ flexGrow: 1, marginBottom: "20px" }} tabIndex={0}>
                       {item.description
                         ? (item.description.substring(0, 120) + "...")
                         : "Explore this upcoming session on the live event page."}
@@ -233,7 +233,7 @@ export default function MySchedule() {
             </AnimatePresence>
 
             {!loading && filteredAndSortedMyEvents.length === 0 && (
-              <div className="empty-state">No events found in your schedule.</div>
+              <div className="empty-state" tabIndex={0}>No events found in your schedule.</div>
             )}
           </div>
         )}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CATEGORIES, getCategoryImage } from "../utils/categoryImages";
 import { subscribeUpcomingEvents } from "../firebase/events";
@@ -11,6 +11,7 @@ export default function MomentumAI({ isOpen, onClose }) {
     const [stylePref, setStylePref] = useState("");
     const [events, setEvents] = useState([]);
     const [recommendations, setRecommendations] = useState([]);
+    const modalRef = useRef(null);
 
     useEffect(() => {
         if (isOpen) {
@@ -20,6 +21,46 @@ export default function MomentumAI({ isOpen, onClose }) {
             return () => unsubscribe();
         }
     }, [isOpen]);
+
+    useEffect(() => {
+        if (isOpen && modalRef.current) {
+             const firstCmp = modalRef.current.querySelector("[tabIndex='0']");
+             if (firstCmp) firstCmp.focus();
+        }
+    }, [isOpen]);
+
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const handleKeyDown = (e) => {
+            if (e.key === "Escape") reset();
+            if (e.key === "Tab") {
+                if (!modalRef.current) return;
+                const focusables = modalRef.current.querySelectorAll(
+                    'a[href], button, textarea, input, select, [tabIndex]:not([tabIndex="-1"])'
+                );
+                if (focusables.length === 0) return;
+                
+                const firstElement = focusables[0];
+                const lastElement = focusables[focusables.length - 1];
+
+                if (e.shiftKey) {
+                    if (document.activeElement === firstElement || document.activeElement === document.body) {
+                        lastElement.focus();
+                        e.preventDefault();
+                    }
+                } else {
+                    if (document.activeElement === lastElement) {
+                        firstElement.focus();
+                        e.preventDefault();
+                    }
+                }
+            }
+        };
+
+        document.addEventListener("keydown", handleKeyDown);
+        return () => document.removeEventListener("keydown", handleKeyDown);
+    });
 
     const toggleCategory = (cat) => {
         setSelectedCategories(prev =>
@@ -70,6 +111,9 @@ export default function MomentumAI({ isOpen, onClose }) {
                     onClick={reset}
                 >
                     <motion.div
+                        ref={modalRef}
+                        role="dialog"
+                        aria-modal="true"
                         initial={{ scale: 0.9, y: 20, opacity: 0 }}
                         animate={{ scale: 1, y: 0, opacity: 1 }}
                         exit={{ scale: 0.9, y: 20, opacity: 0 }}
@@ -80,17 +124,17 @@ export default function MomentumAI({ isOpen, onClose }) {
 
                         {step === 0 && (
                             <div style={styles.content}>
-                                <h2 style={styles.title}>Meet <span style={styles.highlight}>Momentum Guide</span></h2>
-                                <p style={styles.text}>I'm your personal growth agent. I help you navigate the Momentum ecosystem to find events that actually matter to your career and passion.</p>
-                                <p style={styles.text}>Ready for a 30-second interview?</p>
+                                <h2 style={styles.title} tabIndex={0}>Meet <span style={styles.highlight}>Momentum Guide</span></h2>
+                                <p style={styles.text} tabIndex={0}>I'm your personal growth agent. I help you navigate the Momentum ecosystem to find events that actually matter to your career and passion.</p>
+                                <p style={styles.text} tabIndex={0}>Ready for a 30-second interview?</p>
                                 <button style={styles.primaryBtn} onClick={handleNext}>LET'S BEGIN</button>
                             </div>
                         )}
 
                         {step === 1 && (
                             <div style={styles.content}>
-                                <h3 style={styles.subtitle}>What sparks your <span style={styles.highlight}>interest</span>?</h3>
-                                <p style={styles.subtext}>Select categories you'd like to explore.</p>
+                                <h3 style={styles.subtitle} tabIndex={0}>What sparks your <span style={styles.highlight}>interest</span>?</h3>
+                                <p style={styles.subtext} tabIndex={0}>Select categories you'd like to explore.</p>
                                 <div style={styles.categoryGrid}>
                                     {CATEGORIES.map(cat => (
                                         <button
@@ -108,9 +152,9 @@ export default function MomentumAI({ isOpen, onClose }) {
                                     ))}
                                 </div>
                                 <button
-                                    style={styles.primaryBtn}
-                                    onClick={handleNext}
-                                    disabled={selectedCategories.length === 0}
+                                    style={{ ...styles.primaryBtn, opacity: selectedCategories.length === 0 ? 0.5 : 1, cursor: selectedCategories.length === 0 ? 'not-allowed' : 'pointer' }}
+                                    onClick={selectedCategories.length === 0 ? undefined : handleNext}
+                                    aria-disabled={selectedCategories.length === 0}
                                 >
                                     NEXT STEP
                                 </button>
@@ -119,7 +163,7 @@ export default function MomentumAI({ isOpen, onClose }) {
 
                         {step === 2 && (
                             <div style={styles.content}>
-                                <h3 style={styles.subtitle}>What is your <span style={styles.highlight}>primary goal</span>?</h3>
+                                <h3 style={styles.subtitle} tabIndex={0}>What is your <span style={styles.highlight}>primary goal</span>?</h3>
                                 <div style={styles.goalList}>
                                     {["Skill Acquisition", "Networking", "Industry Insights", "Personal Growth"].map(g => (
                                         <button
@@ -136,9 +180,9 @@ export default function MomentumAI({ isOpen, onClose }) {
                                     ))}
                                 </div>
                                 <button
-                                    style={styles.primaryBtn}
-                                    onClick={handleNext}
-                                    disabled={!goal}
+                                    style={{ ...styles.primaryBtn, opacity: !goal ? 0.5 : 1, cursor: !goal ? 'not-allowed' : 'pointer' }}
+                                    onClick={!goal ? undefined : handleNext}
+                                    aria-disabled={!goal}
                                 >
                                     GENERATE RECOMMENDATIONS
                                 </button>
@@ -147,7 +191,7 @@ export default function MomentumAI({ isOpen, onClose }) {
 
                         {step === 3 && (
                             <div style={styles.content}>
-                                <h3 style={styles.subtitle}>What is your <span style={styles.highlight}>experience level</span>?</h3>
+                                <h3 style={styles.subtitle} tabIndex={0}>What is your <span style={styles.highlight}>experience level</span>?</h3>
                                 <div style={styles.goalList}>
                                     {["Beginner / Student", "Junior Professional", "Mid-Level Professional", "Senior / Executive"].map(lvl => (
                                         <button
@@ -164,9 +208,9 @@ export default function MomentumAI({ isOpen, onClose }) {
                                     ))}
                                 </div>
                                 <button
-                                    style={styles.primaryBtn}
-                                    onClick={handleNext}
-                                    disabled={!experience}
+                                    style={{ ...styles.primaryBtn, opacity: !experience ? 0.5 : 1, cursor: !experience ? 'not-allowed' : 'pointer' }}
+                                    onClick={!experience ? undefined : handleNext}
+                                    aria-disabled={!experience}
                                 >
                                     NEXT STEP
                                 </button>
@@ -175,7 +219,7 @@ export default function MomentumAI({ isOpen, onClose }) {
 
                         {step === 4 && (
                             <div style={styles.content}>
-                                <h3 style={styles.subtitle}>Preferred <span style={styles.highlight}>learning style</span>?</h3>
+                                <h3 style={styles.subtitle} tabIndex={0}>Preferred <span style={styles.highlight}>learning style</span>?</h3>
                                 <div style={styles.goalList}>
                                     {["Hands-on Workshops", "Expert Panels & Discussions", "Quick Bite-sized Sessions", "Deep Dive Lectures"].map(style => (
                                         <button
@@ -192,9 +236,9 @@ export default function MomentumAI({ isOpen, onClose }) {
                                     ))}
                                 </div>
                                 <button
-                                    style={styles.primaryBtn}
-                                    onClick={handleNext}
-                                    disabled={!stylePref}
+                                    style={{ ...styles.primaryBtn, opacity: !stylePref ? 0.5 : 1, cursor: !stylePref ? 'not-allowed' : 'pointer' }}
+                                    onClick={!stylePref ? undefined : handleNext}
+                                    aria-disabled={!stylePref}
                                 >
                                     GENERATE RECOMMENDATIONS
                                 </button>
@@ -203,19 +247,19 @@ export default function MomentumAI({ isOpen, onClose }) {
 
                         {step === 5 && (
                             <div style={styles.content}>
-                                <h3 style={styles.subtitle}>Your Personalized <span style={styles.highlight}>Picks</span></h3>
+                                <h3 style={styles.subtitle} tabIndex={0}>Your Personalized <span style={styles.highlight}>Picks</span></h3>
                                 <div style={styles.recList}>
                                     {recommendations.length > 0 ? recommendations.map(e => (
                                         <div key={e.id} style={styles.recItem}>
                                             <img src={getCategoryImage(e.category)} alt={e.name} style={styles.recImg} />
                                             <div style={styles.recInfo}>
-                                                <h4 style={styles.recName}>{e.name}</h4>
-                                                <p style={styles.recMeta}>{e.speaker} • {e.category}</p>
+                                                <h4 style={styles.recName} tabIndex={0}>{e.name}</h4>
+                                                <p style={styles.recMeta} tabIndex={0}>{e.speaker} • {e.category}</p>
                                                 <a href={`/event/${e.id}`} style={styles.viewLink}>View Details →</a>
                                             </div>
                                         </div>
                                     )) : (
-                                        <p style={{ color: 'rgba(255,255,255,0.6)', textAlign: 'center' }}>
+                                        <p style={{ color: 'rgba(255,255,255,0.6)', textAlign: 'center' }} tabIndex={0}>
                                             No live events found yet matching your profile criteria. Check back soon — new sessions are added regularly!
                                         </p>
                                     )}

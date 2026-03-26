@@ -24,8 +24,8 @@ export default function FeatureGrid(){
         >
           <div className="icon" aria-hidden>{it.icon}</div>
           <div>
-            <h4>{it.title}</h4>
-            <p>{it.text}</p>
+            <h4 tabIndex={0}>{it.title}</h4>
+            <p tabIndex={0}>{it.text}</p>
           </div>
         </motion.article>
       ))}

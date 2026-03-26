@@ -26,8 +26,8 @@ function AttendeeStats({ eventId, onUpdate }) {
 
   return (
     <div className="stat-badge-ui">
-      <span className="stat-count-ui">{attendees.length}</span>
-      <span className="stat-label-ui">ENROLLED</span>
+      <span className="stat-count-ui" tabIndex={0}>{attendees.length}</span>
+      <span className="stat-label-ui" tabIndex={0}>ENROLLED</span>
     </div>
   );
 }
@@ -123,23 +123,23 @@ export default function OrganizerDashboard() {
         {/* ✅ ANALYTICS BAR - Retaining the Orange/Red Mood */}
         <section className="analytics-bar">
           <div className="analytics-pill">
-            <label className="ui-heading-label">TOTAL REACH</label>
-            <h3 className="analytics-val">{totalEnrollments}</h3>
+            <label className="ui-heading-label" tabIndex={0}>TOTAL REACH</label>
+            <h3 className="analytics-val" tabIndex={0}>{totalEnrollments}</h3>
           </div>
           <div className="analytics-pill">
-            <label className="ui-heading-label">ACTIVE EVENTS</label>
-            <h3 className="analytics-val">{events.length}</h3>
+            <label className="ui-heading-label" tabIndex={0}>ACTIVE EVENTS</label>
+            <h3 className="analytics-val" tabIndex={0}>{events.length}</h3>
           </div>
           <div className="analytics-pill top-performer">
-            <label className="ui-heading-label">TOP PERFORMER</label>
-            <h3 className="analytics-text-gold">{topEventName}</h3>
+            <label className="ui-heading-label" tabIndex={0}>TOP PERFORMER</label>
+            <h3 className="analytics-text-gold" tabIndex={0}>{topEventName}</h3>
           </div>
         </section>
 
         <header className="dashboard-header-nav">
           <div className="title-block">
-            <h1 className="dash-main-title">Organizer Hub</h1>
-            <p className="dash-sub-text">Monitor your webinar performance and attendee counts.</p>
+            <h1 className="dash-main-title" tabIndex={0}>Organizer Hub</h1>
+            <p className="dash-sub-text" tabIndex={0}>Monitor your webinar performance and attendee counts.</p>
           </div>
 
           <motion.button
@@ -219,8 +219,8 @@ export default function OrganizerDashboard() {
           <AnimatePresence>
             {filteredAndSortedEvents.length === 0 && (
               <div style={{ textAlign: "center", gridColumn: "1 / -1", padding: "60px 40px", background: "var(--card-bg)", borderRadius: "20px", border: "1px dashed var(--card-border)" }}>
-                <p style={{ color: "var(--card-text)", fontSize: "1.2rem", fontWeight: "bold" }}>No matching events found.</p>
-                <p style={{ color: "var(--card-text-muted)", marginTop: "10px" }}>Try adjusting your search terms.</p>
+                <p style={{ color: "var(--card-text)", fontSize: "1.2rem", fontWeight: "bold" }} tabIndex={0}>No matching events found.</p>
+                <p style={{ color: "var(--card-text-muted)", marginTop: "10px" }} tabIndex={0}>Try adjusting your search terms.</p>
               </div>
             )}
 
@@ -233,7 +233,7 @@ export default function OrganizerDashboard() {
                 className="organizer-card-ui"
               >
                 <div className="card-top-row">
-                  <span className="date-tag">
+                  <span className="date-tag" tabIndex={0}>
                     {ev.date
                       ? typeof ev.date === "string"
                         ? new Date(ev.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }).toUpperCase()
@@ -244,8 +244,8 @@ export default function OrganizerDashboard() {
                 </div>
 
                 <div className="card-body-content">
-                  <h4 className="card-event-name">{ev.name}</h4>
-                  <p className="card-event-desc">{ev.description}</p>
+                  <h4 className="card-event-name" tabIndex={0}>{ev.name}</h4>
+                  <p className="card-event-desc" tabIndex={0}>{ev.description}</p>
                 </div>
 
                 <div className="card-footer-actions">

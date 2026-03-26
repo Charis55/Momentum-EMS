@@ -64,15 +64,15 @@ export default function EventCard({ event, onDeleted = () => { }, isOrganizerVie
           style={{ width: 110, height: 80, objectFit: "cover", borderRadius: 8 }}
         />
         <div style={{ flex: 1 }}>
-          <h4 id={`ev-${event.id}`}>{event.name}</h4>
-          <p style={{ margin: "6px 0" }}>{event.description?.slice(0, 160)}</p>
-          <p style={{ margin: 0, fontSize: 13, color: "#6b7280" }}>
+          <h4 id={`ev-${event.id}`} tabIndex={0}>{event.name}</h4>
+          <p style={{ margin: "6px 0" }} tabIndex={0}>{event.description?.slice(0, 160)}</p>
+          <p style={{ margin: 0, fontSize: 13, color: "#6b7280" }} tabIndex={0}>
             When: {timing ? new Date(timing).toLocaleString() : "TBA"} ({timezone})
           </p>
-          <p style={{ margin: 0, fontSize: 13, color: "#6b7280" }}>
+          <p style={{ margin: 0, fontSize: 13, color: "#6b7280" }} tabIndex={0}>
             Organizer: {event.organizerEmail}
           </p>
-          <p style={{ marginTop: 6, fontSize: 13, color: "#6b7280" }}>
+          <p style={{ marginTop: 6, fontSize: 13, color: "#6b7280" }} tabIndex={0}>
             Attendees: {count ?? "—"}
           </p>
         </div>
@@ -81,10 +81,12 @@ export default function EventCard({ event, onDeleted = () => { }, isOrganizerVie
       <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
         {!isOrganizerView && (
           <>
-            {enrolled ? (
-              <button className="btn" onClick={handleUnenroll} disabled={processing}>Unenroll</button>
-            ) : (
-              <button className="btn btn-primary" onClick={handleEnroll} disabled={processing}>Enroll</button>
+            {user?.uid !== event?.organizerId && (
+              enrolled ? (
+                <button className="btn" onClick={handleUnenroll} disabled={processing}>Unenroll</button>
+              ) : (
+                <button className="btn btn-primary" onClick={handleEnroll} disabled={processing}>Enroll</button>
+              )
             )}
 
             <button className="btn btn-ghost" onClick={speak}>Listen</button>

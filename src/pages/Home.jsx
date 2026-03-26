@@ -38,8 +38,8 @@ export default function Home() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <h1>Take Control of Your <span className="gradient-text">Events</span></h1>
-          <p>Momentum EMS helps you track impactful webinars — built for accessibility & excellence. Built for innovators and smart event managers.</p>
+          <h1 tabIndex={0}>Take Control of Your <span className="gradient-text">Events</span></h1>
+          <p tabIndex={0}>Momentum EMS helps you track impactful webinars — built for accessibility & excellence. Built for innovators and smart event managers.</p>
           <div className="hero-buttons">
             <Link to="/dashboard" className="btn-primary">Go to Dashboard →</Link>
             <Link to="/signup" className="btn-secondary">Create Account</Link>
@@ -70,15 +70,15 @@ export default function Home() {
                 ease: "easeInOut"
               }}
             />
-            <h2>Momentum EMS</h2>
-            <p>Your Premium Event Companion</p>
+            <h2 tabIndex={0}>Momentum EMS</h2>
+            <p tabIndex={0}>Your Premium Event Companion</p>
           </div>
         </motion.div>
       </section>
 
       {/* RECENT EVENTS SECTION */}
       <section className="container" style={{ paddingBottom: "80px" }}>
-        <h2 className="section-title-glow">Recent <span className="gradient-text">Webinars</span></h2>
+        <h2 className="section-title-glow" tabIndex={0}>Recent <span className="gradient-text">Webinars</span></h2>
         <div className="event-grid">
           {recentEvents.map((e) => (
             <div key={e.id} className="event-card-curve">
@@ -104,8 +104,8 @@ export default function Home() {
                     }}
                   />
                 </div>
-                <h3>{e.name}</h3>
-                <p>{e.description?.substring(0, 100)}...</p>
+                <h3 tabIndex={0}>{e.name}</h3>
+                <p tabIndex={0}>{e.description?.substring(0, 100)}...</p>
                 <Link to={`/event/${e.id}`} className="event-btn">Details →</Link>
               </div>
             </div>

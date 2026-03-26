@@ -47,6 +47,7 @@ export default function Dashboard() {
           <div className="hero-content-wrapper">
             <motion.h1
               className="hero-title"
+              tabIndex={0}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
@@ -64,6 +65,7 @@ export default function Dashboard() {
               <div className="mission-accent-line"></div>
               <motion.p
                 className="hero-description-new"
+                tabIndex={0}
               >
                 <span className="hero-accent-new">Experience a seamless bridge between coordination and connection.</span>
                 <span className="hero-body-text">
@@ -118,6 +120,7 @@ export default function Dashboard() {
                   <motion.div
                     key={stat.label}
                     className="stat-card"
+                    tabIndex={0}
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 * index, duration: 0.5 }}
@@ -133,10 +136,10 @@ export default function Dashboard() {
             {/* UPCOMING WEBINARS SECTION */}
             <section className="container" style={{ paddingTop: "20px", paddingBottom: "100px" }}>
               <div className="section-header" style={{ textAlign: "center", marginBottom: "60px" }}>
-                <h2 className="section-title-glow">
+                <h2 className="section-title-glow" tabIndex={0}>
                   <span className="gradient-text">Upcoming Webinars</span>
                 </h2>
-                <p className="section-sub-fancy">
+                <p className="section-sub-fancy" tabIndex={0}>
                   Join inspiring sessions led by world-class innovators.
                 </p>
                 <div className="underline-accent" style={{ margin: "20px auto" }}></div>
@@ -181,19 +184,19 @@ export default function Dashboard() {
                         />
                       </div>
 
-                      <h3 style={{ marginBottom: "12px" }}>{e.name}</h3>
+                      <h3 style={{ marginBottom: "12px" }} tabIndex={0}>{e.name}</h3>
 
-                      <div className="event-meta-row" style={{ marginBottom: "8px" }}>
+                      <div className="event-meta-row" style={{ marginBottom: "8px" }} tabIndex={0}>
                         <span className="event-icon" style={{ marginRight: "8px" }} aria-hidden="true">🎤</span>
                         {e.speaker || "Speaker TBA"}
                       </div>
 
-                      <div className="event-meta-row" style={{ marginBottom: "15px" }}>
+                      <div className="event-meta-row" style={{ marginBottom: "15px" }} tabIndex={0}>
                         <span className="event-icon" style={{ marginRight: "8px" }} aria-hidden="true">🕒</span>
                         {e.date || e.timingISO ? new Date(e.date || e.timingISO).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : "Date coming soon"}
                       </div>
 
-                      <p style={{ flexGrow: 1 }}>
+                      <p style={{ flexGrow: 1 }} tabIndex={0}>
                         {e.description?.substring(0, 120) || "No event description available yet."}...
                       </p>
 

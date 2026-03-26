@@ -172,30 +172,30 @@ export default function EventDetails() {
 
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "20px" }}>
               <div style={{ flex: 1 }}>
-                <span className="badge-ui" style={{ background: "#ffcc33", color: "#000", padding: "6px 14px", borderRadius: "20px", fontSize: "0.75rem", fontWeight: "900", letterSpacing: "1px", textTransform: "uppercase" }}>
+                <span className="badge-ui" style={{ background: "#ffcc33", color: "#000", padding: "6px 14px", borderRadius: "20px", fontSize: "0.75rem", fontWeight: "900", letterSpacing: "1px", textTransform: "uppercase" }} tabIndex={0}>
                   {event?.category || "WEBINAR"}
                 </span>
-                <h1 className="form-title-glow" style={{ marginTop: "20px", marginBottom: "10px" }}>{event?.name}</h1>
-                <p style={{ color: "var(--card-text-muted)", fontSize: "1.1rem" }}>Organized by <span style={{ color: "#ffcc33", fontWeight: "700" }}>{event?.speaker}</span></p>
+                <h1 className="form-title-glow" style={{ marginTop: "20px", marginBottom: "10px" }} tabIndex={0}>{event?.name}</h1>
+                <p style={{ color: "var(--card-text-muted)", fontSize: "1.1rem" }} tabIndex={0}>Organized by <span style={{ color: "#ffcc33", fontWeight: "700" }}>{event?.speaker}</span></p>
               </div>
             </div>
 
             <div className="event-content-layout">
               <div className="event-text-column">
                 <div className="info-block-ui">
-                  <label className="ui-heading-label">EVENT DESCRIPTION</label>
-                  <p className="ui-body-text">{event?.description}</p>
+                  <label className="ui-heading-label" tabIndex={0}>EVENT DESCRIPTION</label>
+                  <p className="ui-body-text" tabIndex={0}>{event?.description}</p>
                 </div>
                 {event?.objectives && (
                   <div className="info-block-ui">
-                    <label className="ui-heading-label">LEARNING OBJECTIVES</label>
-                    <p className="ui-body-text">{event?.objectives}</p>
+                    <label className="ui-heading-label" tabIndex={0}>LEARNING OBJECTIVES</label>
+                    <p className="ui-body-text" tabIndex={0}>{event?.objectives}</p>
                   </div>
                 )}
                 {event?.relevance && (
                   <div className="info-block-ui">
-                    <label className="ui-heading-label">TOPIC RELEVANCE</label>
-                    <p className="ui-body-text">{event?.relevance}</p>
+                    <label className="ui-heading-label" tabIndex={0}>TOPIC RELEVANCE</label>
+                    <p className="ui-body-text" tabIndex={0}>{event?.relevance}</p>
                   </div>
                 )}
               </div>
@@ -203,18 +203,18 @@ export default function EventDetails() {
               <div className="event-sidebar-column">
                 <div className="sidebar-glass-box">
                   <div className="sidebar-field">
-                    <label className="ui-heading-label">SPEAKER</label>
-                    <p className="sidebar-text-white">{event?.speaker}</p>
+                    <label className="ui-heading-label" tabIndex={0}>SPEAKER</label>
+                    <p className="sidebar-text-white" tabIndex={0}>{event?.speaker}</p>
                   </div>
                   <div className="sidebar-field">
-                    <label className="ui-heading-label">SCHEDULE</label>
-                    <h2 className="schedule-date-ui">
+                    <label className="ui-heading-label" tabIndex={0}>SCHEDULE</label>
+                    <h2 className="schedule-date-ui" tabIndex={0}>
                       {event?.date ? new Date(event.date).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric' }) : "Date TBA"}
                     </h2>
-                    <h2 className="schedule-date-ui">
+                    <h2 className="schedule-date-ui" tabIndex={0}>
                       {event?.date ? new Date(event.date).toLocaleDateString('en-GB', { month: 'long' }) : ""} at {event?.date ? new Date(event.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) : "00:00"}
                     </h2>
-                    <p className="timezone-subtext">{event?.timezone}</p>
+                    <p className="timezone-subtext" tabIndex={0}>{event?.timezone}</p>
                   </div>
 
                   {event?.link && (alreadyEnrolled || auth.currentUser?.uid === event?.organizerId) && (
@@ -228,13 +228,15 @@ export default function EventDetails() {
                     </a>
                   )}
 
-                  <button
-                    onClick={handleToggleEnrollment}
-                    disabled={isProcessing}
-                    className={alreadyEnrolled ? "register-btn-ui enrolled" : "register-btn-ui"}
-                  >
-                    {isProcessing ? "..." : alreadyEnrolled ? "Unenroll" : "Register Now"}
-                  </button>
+                  {auth.currentUser?.uid !== event?.organizerId && (
+                    <button
+                      onClick={handleToggleEnrollment}
+                      disabled={isProcessing}
+                      className={alreadyEnrolled ? "register-btn-ui enrolled" : "register-btn-ui"}
+                    >
+                      {isProcessing ? "..." : alreadyEnrolled ? "Unenroll" : "Register Now"}
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

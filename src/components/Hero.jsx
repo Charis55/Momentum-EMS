@@ -21,19 +21,19 @@ export default function Hero() {
 
       <div className="hero-left">
         <motion.div initial={{opacity:0,y:22}} animate={{opacity:1,y:0}} transition={{duration:0.8}}>
-          <h2>Momentum EMS — build accessible, engaging webinars</h2>
-          <p>Design, manage and run webinars optimized for everyone — captions, transcripts, keyboard-first flows, and rich analytics built-in.</p>
+          <h2 tabIndex={0}>Momentum EMS — build accessible, engaging webinars</h2>
+          <p tabIndex={0}>Design, manage and run webinars optimized for everyone — captions, transcripts, keyboard-first flows, and rich analytics built-in.</p>
 
-          <div className="stats-row" aria-hidden>
-            <motion.div className="stat" initial={{opacity:0,y:8}} animate={{opacity:1,y:0}} transition={{delay:0.4}}>
+          <div className="stats-row">
+            <motion.div className="stat" tabIndex={0} initial={{opacity:0,y:8}} animate={{opacity:1,y:0}} transition={{delay:0.4}}>
               <div className="num">3</div>
               <div style={{fontSize:12}}>Active events</div>
             </motion.div>
-            <motion.div className="stat" initial={{opacity:0,y:8}} animate={{opacity:1,y:0}} transition={{delay:0.55}}>
+            <motion.div className="stat" tabIndex={0} initial={{opacity:0,y:8}} animate={{opacity:1,y:0}} transition={{delay:0.55}}>
               <div className="num">245</div>
               <div style={{fontSize:12}}>Total registrations</div>
             </motion.div>
-            <motion.div className="stat" initial={{opacity:0,y:8}} animate={{opacity:1,y:0}} transition={{delay:0.7}}>
+            <motion.div className="stat" tabIndex={0} initial={{opacity:0,y:8}} animate={{opacity:1,y:0}} transition={{delay:0.7}}>
               <div className="num">₦1.25M</div>
               <div style={{fontSize:12}}>Revenue</div>
             </motion.div>

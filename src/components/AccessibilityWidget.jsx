@@ -147,6 +147,47 @@ export default function AccessibilityWidget() {
         };
     }, []);
 
+    // ── Focus Trap and Focus Initializer ────────────────────
+    useEffect(() => {
+        if (open && panelRef.current) {
+            const titleEl = panelRef.current.querySelector(".a11y-panel-title");
+            if (titleEl) titleEl.focus();
+        }
+    }, [open]);
+
+    useEffect(() => {
+        if (!open) return;
+
+        const handleKeyDown = (e) => {
+            if (e.key === "Escape") setOpen(false);
+            if (e.key === "Tab") {
+                if (!panelRef.current) return;
+                const focusables = panelRef.current.querySelectorAll(
+                    'a[href], button, textarea, input, select, [tabIndex]:not([tabIndex="-1"])'
+                );
+                if (focusables.length === 0) return;
+                
+                const firstElement = focusables[0];
+                const lastElement = focusables[focusables.length - 1];
+
+                if (e.shiftKey) {
+                    if (document.activeElement === firstElement || document.activeElement === document.body) {
+                        lastElement.focus();
+                        e.preventDefault();
+                    }
+                } else {
+                    if (document.activeElement === lastElement) {
+                        firstElement.focus();
+                        e.preventDefault();
+                    }
+                }
+            }
+        };
+
+        document.addEventListener("keydown", handleKeyDown);
+        return () => document.removeEventListener("keydown", handleKeyDown);
+    }, [open]);
+
     // ── Close panel on click outside ────────────────────────
     useEffect(() => {
         function handleClickOutside(e) {
@@ -177,7 +218,7 @@ export default function AccessibilityWidget() {
             {open && (
                 <div className="a11y-panel" role="dialog" aria-label="Accessibility Options">
                     <div className="a11y-panel-header">
-                        <span className="a11y-panel-title">Accessibility Options</span>
+                        <span className="a11y-panel-title" tabIndex={0}>Accessibility Options</span>
                         <button className="a11y-close-btn" onClick={() => setOpen(false)} aria-label="Close accessibility panel">✕</button>
                     </div>
 
@@ -185,7 +226,7 @@ export default function AccessibilityWidget() {
 
                         {/* Dynamic Text Sizing */}
                         <div className="a11y-option-group">
-                            <span className="a11y-group-title">Text Size ({textScale}%)</span>
+                            <span className="a11y-group-title" tabIndex={0}>Text Size ({textScale}%)</span>
                             <div className="a11y-text-controls">
                                 <button onClick={handleTextDecrease} disabled={textScale <= 90} aria-label="Decrease text size">A-</button>
                                 <button onClick={handleTextReset} disabled={textScale === 100} aria-label="Reset text size">Reset</button>
@@ -196,8 +237,8 @@ export default function AccessibilityWidget() {
                         {/* White Mode */}
                         <button className={`a11y-option-btn ${lightMode ? "a11y-active" : ""}`} onClick={() => setLightMode(v => !v)} aria-pressed={lightMode}>
                             <div className="a11y-option-text">
-                                <span className="a11y-option-label">{lightMode ? "Dark Mode" : "Light Mode"}</span>
-                                <span className="a11y-option-desc">{lightMode ? "Switch back to dark theme" : "High contrast white theme for readability"}</span>
+                                <span className="a11y-option-label">Light Mode</span>
+                                <span className="a11y-option-desc">High contrast white theme for readability</span>
                             </div>
                             <div className={`a11y-toggle ${lightMode ? "on" : ""}`} />
                         </button>
@@ -250,7 +291,7 @@ export default function AccessibilityWidget() {
                         {/* Keyboard Navigation */}
                         <button className={`a11y-option-btn ${keyboardNav ? "a11y-active" : ""}`} onClick={() => setKeyboardNav(v => !v)} aria-pressed={keyboardNav}>
                             <div className="a11y-option-text">
-                                <span className="a11y-option-label">Keyboard Navigation</span>
+                                <span className="a11y-option-label">Navigation Outline</span>
                                 <span className="a11y-option-desc">Highlights focused elements with a gold ring</span>
                             </div>
                             <div className={`a11y-toggle ${keyboardNav ? "on" : ""}`} />
@@ -276,6 +317,7 @@ export default function AccessibilityWidget() {
                 onClick={() => setOpen(v => !v)}
                 aria-label="Open accessibility options"
                 aria-expanded={open}
+                tabIndex={2}
                 title="Accessibility"
             >
                 <WheelchairIcon size={28} />

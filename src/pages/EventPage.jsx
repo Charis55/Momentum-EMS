@@ -58,10 +58,10 @@ export default function EventPage() {
     }}>
       <Toolbar />
       <main className="container" style={{ paddingTop: "120px", paddingBottom: "100px" }}>
-        <h2 className="section-title-glow" style={{ textAlign: "center", marginBottom: "10px" }}>
+        <h2 className="section-title-glow" style={{ textAlign: "center", marginBottom: "10px" }} tabIndex={0}>
           Explore All <span className="gradient-text">Webinars</span>
         </h2>
-        <p style={{ textAlign: "center", color: "var(--text-muted)", marginBottom: "40px", fontSize: "1.1rem" }}>
+        <p style={{ textAlign: "center", color: "var(--text-muted)", marginBottom: "40px", fontSize: "1.1rem" }} tabIndex={0}>
           Discover upcoming sessions, expert speakers, and niche categories.
         </p>
 
@@ -129,12 +129,12 @@ export default function EventPage() {
         </div>
 
         <div className="event-grid">
-          {loading && <p style={{ color: "var(--text-main)", textAlign: "center", gridColumn: "1 / -1" }}>Loading events...</p>}
+          {loading && <p style={{ color: "var(--text-main)", textAlign: "center", gridColumn: "1 / -1" }} tabIndex={0}>Loading events...</p>}
 
           {!loading && filteredAndSortedEvents.length === 0 && (
             <div style={{ textAlign: "center", gridColumn: "1 / -1", padding: "60px 40px", background: "var(--card-bg)", borderRadius: "20px", border: "1px dashed var(--card-border)" }}>
-              <p style={{ color: "var(--card-text)", fontSize: "1.2rem", fontWeight: "bold" }}>No matching events found.</p>
-              <p style={{ color: "var(--card-text-muted)", marginTop: "10px" }}>Try adjusting your search terms.</p>
+              <p style={{ color: "var(--card-text)", fontSize: "1.2rem", fontWeight: "bold" }} tabIndex={0}>No matching events found.</p>
+              <p style={{ color: "var(--card-text-muted)", marginTop: "10px" }} tabIndex={0}>Try adjusting your search terms.</p>
             </div>
           )}
 
@@ -175,19 +175,19 @@ export default function EventPage() {
                   </span>
                 )}
 
-                <h3 style={{ marginBottom: "8px" }}>{e.name}</h3>
+                <h3 style={{ marginBottom: "8px" }} tabIndex={0}>{e.name}</h3>
 
                 {e.speaker && (
-                  <p className="event-meta-row" style={{ marginBottom: "5px", display: "flex", alignItems: "center", gap: "6px" }}>
+                  <p className="event-meta-row" style={{ marginBottom: "5px", display: "flex", alignItems: "center", gap: "6px" }} tabIndex={0}>
                     <span>🎤</span> {e.speaker}
                   </p>
                 )}
 
-                <p className="event-meta-row" style={{ marginBottom: "12px", display: "flex", alignItems: "center", gap: "6px" }}>
+                <p className="event-meta-row" style={{ marginBottom: "12px", display: "flex", alignItems: "center", gap: "6px" }} tabIndex={0}>
                   <span>🕒</span> {e.date ? new Date(e.date).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : "TBA"}
                 </p>
 
-                <p style={{ flexGrow: 1, marginBottom: "20px" }}>
+                <p style={{ flexGrow: 1, marginBottom: "20px" }} tabIndex={0}>
                   {e.description?.substring(0, 120) || "No description available."}...
                 </p>
 

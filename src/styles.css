@@ -100,15 +100,14 @@ body {
 }
 
 /* === GLOBAL KEYBOARD FOCUS (WCAG 2.4.7) === */
-a:focus-visible,
-button:focus-visible,
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible {
-  outline: 2px solid var(--gold);
-  outline-offset: 2px;
+body.momentum-keyboard-nav *:focus-visible {
+  outline: 2px solid var(--gold) !important;
+  outline-offset: 2px !important;
   border-radius: 4px;
-  /* Ensure outline respects minor radiuses by default */
+}
+
+body:not(.momentum-keyboard-nav) *:focus-visible {
+  outline: none !important;
 }
 
 /* === INPUT TEXT (black & visible) === */

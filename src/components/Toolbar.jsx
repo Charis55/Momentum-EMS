@@ -66,7 +66,7 @@ export default function Toolbar() {
       boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)'
     }}>
 
-      <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', flex: 1 }}>
+      <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', flex: 1 }} tabIndex={1}>
         <img
           src={logo}
           alt="Momentum EMS"
@@ -141,14 +141,16 @@ export default function Toolbar() {
         borderLeft: '1px solid var(--card-border)',
         willChange: 'transform',
         display: user ? 'flex' : 'none' // Safeguard: Hide for guests
-      }}>
+      }}
+      aria-hidden={!menuOpen}
+      >
         {/* Navigation Links with Active State Gradient and Hover Styling */}
-        <NavLink to="/dashboard" onClick={toggleMenu} style={getNavLinkStyle} className="nav-drawer-link">Home</NavLink>
-        <NavLink to="/my-schedule" onClick={toggleMenu} style={getNavLinkStyle} className="nav-drawer-link">My Schedule</NavLink>
-        <NavLink to="/events" onClick={toggleMenu} style={getNavLinkStyle} className="nav-drawer-link">Explore Events</NavLink>
-        <NavLink to="/create" onClick={toggleMenu} style={getNavLinkStyle} className="nav-drawer-link">Host Event</NavLink>
-        <NavLink to="/organizer-dashboard" onClick={toggleMenu} style={getNavLinkStyle} className="nav-drawer-link">Organizer Hub</NavLink>
-        <NavLink to="/profile" onClick={toggleMenu} style={getNavLinkStyle} className="nav-drawer-link">My Profile</NavLink>
+        <NavLink to="/dashboard" onClick={toggleMenu} style={getNavLinkStyle} className="nav-drawer-link" tabIndex={menuOpen ? 0 : -1}>Home</NavLink>
+        <NavLink to="/my-schedule" onClick={toggleMenu} style={getNavLinkStyle} className="nav-drawer-link" tabIndex={menuOpen ? 0 : -1}>My Schedule</NavLink>
+        <NavLink to="/events" onClick={toggleMenu} style={getNavLinkStyle} className="nav-drawer-link" tabIndex={menuOpen ? 0 : -1}>Explore Events</NavLink>
+        <NavLink to="/create" onClick={toggleMenu} style={getNavLinkStyle} className="nav-drawer-link" tabIndex={menuOpen ? 0 : -1}>Host Event</NavLink>
+        <NavLink to="/organizer-dashboard" onClick={toggleMenu} style={getNavLinkStyle} className="nav-drawer-link" tabIndex={menuOpen ? 0 : -1}>Organizer Hub</NavLink>
+        <NavLink to="/profile" onClick={toggleMenu} style={getNavLinkStyle} className="nav-drawer-link" tabIndex={menuOpen ? 0 : -1}>My Profile</NavLink>
 
 
 
@@ -156,6 +158,7 @@ export default function Toolbar() {
           <button
             onClick={() => { setAiOpen(true); toggleMenu(); }}
             className="nav-drawer-link"
+            tabIndex={menuOpen ? 0 : -1}
             style={{
               ...getNavLinkStyle({ isActive: false }),
               background: 'none',
@@ -171,7 +174,7 @@ export default function Toolbar() {
             ✨ Momentum Guide
           </button>
 
-          <button onClick={handleLogout} style={{
+          <button onClick={handleLogout} tabIndex={menuOpen ? 0 : -1} style={{
             width: '100%',
             background: 'rgba(255, 68, 68, 0.1)',
             color: '#ff4444',
