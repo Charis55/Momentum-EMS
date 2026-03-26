@@ -25,9 +25,9 @@ function AttendeeStats({ eventId, onUpdate }) {
   }, [eventId, onUpdate]);
 
   return (
-    <div className="stat-badge-ui">
-      <span className="stat-count-ui" tabIndex={0}>{attendees.length}</span>
-      <span className="stat-label-ui" tabIndex={0}>ENROLLED</span>
+    <div className="stat-badge-ui" tabIndex={0} aria-label={`Enrolled: ${attendees.length}`}>
+      <span className="stat-count-ui" aria-hidden="true">{attendees.length}</span>
+      <span className="stat-label-ui" aria-hidden="true">ENROLLED</span>
     </div>
   );
 }
@@ -122,17 +122,17 @@ export default function OrganizerDashboard() {
       <main className="org-content">
         {/* ✅ ANALYTICS BAR - Retaining the Orange/Red Mood */}
         <section className="analytics-bar">
-          <div className="analytics-pill">
-            <label className="ui-heading-label" tabIndex={0}>TOTAL REACH</label>
-            <h3 className="analytics-val" tabIndex={0}>{totalEnrollments}</h3>
+          <div className="analytics-pill" tabIndex={0} aria-label={`Total Reach: ${totalEnrollments}`}>
+            <label className="ui-heading-label" aria-hidden="true">TOTAL REACH</label>
+            <h3 className="analytics-val" aria-hidden="true">{totalEnrollments}</h3>
           </div>
-          <div className="analytics-pill">
-            <label className="ui-heading-label" tabIndex={0}>ACTIVE EVENTS</label>
-            <h3 className="analytics-val" tabIndex={0}>{events.length}</h3>
+          <div className="analytics-pill" tabIndex={0} aria-label={`Active Events: ${events.length}`}>
+            <label className="ui-heading-label" aria-hidden="true">ACTIVE EVENTS</label>
+            <h3 className="analytics-val" aria-hidden="true">{events.length}</h3>
           </div>
-          <div className="analytics-pill top-performer">
-            <label className="ui-heading-label" tabIndex={0}>TOP PERFORMER</label>
-            <h3 className="analytics-text-gold" tabIndex={0}>{topEventName}</h3>
+          <div className="analytics-pill top-performer" tabIndex={0} aria-label={`Top Performer: ${topEventName}`}>
+            <label className="ui-heading-label" aria-hidden="true">TOP PERFORMER</label>
+            <h3 className="analytics-text-gold" aria-hidden="true">{topEventName}</h3>
           </div>
         </section>
 
@@ -252,9 +252,9 @@ export default function OrganizerDashboard() {
                   <button className="view-live-btn" onClick={() => nav(`/event/${ev.id}`)}>
                     VIEW LIVE PAGE →
                   </button>
-                  <div className="tool-icons">
-                    <button className="icon-action edit" onClick={() => nav(`/edit-event/${ev.id}`)}>✏️</button>
-                    <button className="icon-action delete" onClick={() => handleDelete(ev.id)}>🗑️</button>
+                  <div className="tool-icons" style={{ display: "flex", gap: "8px" }}>
+                    <button className="icon-action edit" style={{ padding: "8px 16px", fontWeight: "bold", color: "var(--text-main)" }} onClick={() => nav(`/edit-event/${ev.id}`)}>Edit Event</button>
+                    <button className="icon-action delete" style={{ padding: "8px 16px", fontWeight: "bold", color: "#ff4444" }} onClick={() => handleDelete(ev.id)}>Delete Event</button>
                   </div>
                 </div>
               </motion.div>

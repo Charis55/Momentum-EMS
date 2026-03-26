@@ -187,7 +187,7 @@ export default function Dashboard() {
                       <h3 style={{ marginBottom: "12px" }} tabIndex={0}>{e.name}</h3>
 
                       <div className="event-meta-row" style={{ marginBottom: "8px" }} tabIndex={0}>
-                        <span className="event-icon" style={{ marginRight: "8px" }} aria-hidden="true">🎤</span>
+                        <span className="sr-only">Speaker: </span>
                         {e.speaker || "Speaker TBA"}
                       </div>
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { registerUser } from "../firebase/auth";
 import { sendEmailVerification } from "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
@@ -25,6 +25,83 @@ export default function Signup() {
   const reqSpecial = /[^A-Za-z0-9]/.test(password);
 
   const isValidPassword = reqLength && reqUpper && reqLower && reqNumber && reqSpecial;
+
+  // Refs and Focus Trap logic
+  const passwordWrapperRef = useRef(null);
+  const [liveAnnouncement, setLiveAnnouncement] = useState("");
+  const prevReqs = useRef({ reqLength: false, reqUpper: false, reqLower: false, reqSpecial: false, reqNumber: false });
+
+  // Screen Reader Live Announcements for password requirements
+  useEffect(() => {
+    const changes = [];
+    if (reqLength !== prevReqs.current.reqLength) {
+      changes.push(`Minimum 8 characters ${reqLength ? "fulfilled" : "not fulfilled"}`);
+    }
+    if (reqUpper !== prevReqs.current.reqUpper) {
+      changes.push(`Uppercase character ${reqUpper ? "fulfilled" : "not fulfilled"}`);
+    }
+    if (reqLower !== prevReqs.current.reqLower) {
+      changes.push(`Lowercase character ${reqLower ? "fulfilled" : "not fulfilled"}`);
+    }
+    if (reqSpecial !== prevReqs.current.reqSpecial) {
+      changes.push(`Special character ${reqSpecial ? "fulfilled" : "not fulfilled"}`);
+    }
+    if (reqNumber !== prevReqs.current.reqNumber) {
+      changes.push(`Numeric character ${reqNumber ? "fulfilled" : "not fulfilled"}`);
+    }
+
+    if (changes.length > 0) {
+      const announcement = changes.join(". ");
+      setLiveAnnouncement(announcement);
+      prevReqs.current = { reqLength, reqUpper, reqLower, reqSpecial, reqNumber };
+      
+      // Manual trigger for the custom AccessibilityWidget screen reader
+      if (localStorage.getItem("a11y_reader") === "true" && "speechSynthesis" in window) {
+         window.speechSynthesis.cancel();
+         const utterance = new SpeechSynthesisUtterance(announcement);
+         utterance.rate = 0.95;
+         utterance.pitch = 1;
+         window.speechSynthesis.speak(utterance);
+      }
+    }
+  }, [reqLength, reqUpper, reqLower, reqSpecial, reqNumber]);
+
+  // Focus trap for password requirements popover
+  useEffect(() => {
+    if (!showRequirements) return;
+
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setShowRequirements(false);
+        return;
+      }
+      if (e.key === "Tab") {
+        if (!passwordWrapperRef.current) return;
+        const focusables = passwordWrapperRef.current.querySelectorAll(
+            'a[href], button, textarea, input, select, [tabIndex]:not([tabIndex="-1"])'
+        );
+        if (focusables.length === 0) return;
+        
+        const firstElement = focusables[0];
+        const lastElement = focusables[focusables.length - 1];
+
+        if (e.shiftKey) {
+            if (document.activeElement === firstElement || document.activeElement === document.body) {
+                lastElement.focus();
+                e.preventDefault();
+            }
+        } else {
+            if (document.activeElement === lastElement) {
+                firstElement.focus();
+                e.preventDefault();
+            }
+        }
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [showRequirements]);
 
   const submit = async (e) => {
     e.preventDefault();
@@ -65,7 +142,12 @@ export default function Signup() {
       <section className="auth-box animate-fade">
         <img src="/assets/momentum-logo.svg" alt="Momentum Logo" className="auth-logo" />
 
-        <h1 className="auth-title">
+        {/* Visually hidden region for screen reader real-time constraint announcements */}
+        <div className="sr-only" aria-live="polite" aria-atomic="true" style={{ position: "absolute", left: "-9999px" }}>
+          {liveAnnouncement}
+        </div>
+
+        <h1 className="auth-title" tabIndex={0}>
           {isEmailSent ? "Verify Email" : "Create Account"}
         </h1>
 
@@ -87,7 +169,7 @@ export default function Signup() {
               />
             </div>
 
-            <div className="password-wrapper" style={{ textAlign: "left" }}>
+            <div className="password-wrapper" style={{ textAlign: "left" }} ref={passwordWrapperRef}>
               <label htmlFor="signup-password" className="sr-only" style={{ display: "none" }}>Password</label>
               <input
                 id="signup-password"
@@ -124,27 +206,27 @@ export default function Signup() {
               {showRequirements && (
                 <div id="password-requirements-popover" className="password-popover shadow-lg" role="tooltip">
                   <div className="popover-header">
-                    <h4>Password Requirements</h4>
+                    <h4 tabIndex={0}>Password Requirements</h4>
                     <button type="button" onClick={() => setShowRequirements(false)} className="close-btn" aria-label="Close requirements">
                       &times;
                     </button>
                   </div>
-                  <p className="popover-desc">To improve account security, your password must meet the following complexity requirements:</p>
+                  <p className="popover-desc" tabIndex={0}>To improve account security, your password must meet the following complexity requirements:</p>
 
                   <ul className="requirements-list">
-                    <li className={reqLength ? "met" : "unmet"}>
+                    <li className={reqLength ? "met" : "unmet"} tabIndex={0} aria-label={`Minimum 8 characters, ${reqLength ? "fulfilled" : "not fulfilled"}`}>
                       <span className="icon" aria-hidden="true">{reqLength ? "✓" : "○"}</span> Minimum 8 characters
                     </li>
-                    <li className={reqUpper ? "met" : "unmet"}>
+                    <li className={reqUpper ? "met" : "unmet"} tabIndex={0} aria-label={`Require uppercase character, ${reqUpper ? "fulfilled" : "not fulfilled"}`}>
                       <span className="icon" aria-hidden="true">{reqUpper ? "✓" : "○"}</span> Require uppercase character
                     </li>
-                    <li className={reqLower ? "met" : "unmet"}>
+                    <li className={reqLower ? "met" : "unmet"} tabIndex={0} aria-label={`Require lowercase character, ${reqLower ? "fulfilled" : "not fulfilled"}`}>
                       <span className="icon" aria-hidden="true">{reqLower ? "✓" : "○"}</span> Require lowercase character
                     </li>
-                    <li className={reqSpecial ? "met" : "unmet"}>
+                    <li className={reqSpecial ? "met" : "unmet"} tabIndex={0} aria-label={`Require special character, ${reqSpecial ? "fulfilled" : "not fulfilled"}`}>
                       <span className="icon" aria-hidden="true">{reqSpecial ? "✓" : "○"}</span> Require special character
                     </li>
-                    <li className={reqNumber ? "met" : "unmet"}>
+                    <li className={reqNumber ? "met" : "unmet"} tabIndex={0} aria-label={`Require numeric character, ${reqNumber ? "fulfilled" : "not fulfilled"}`}>
                       <span className="icon" aria-hidden="true">{reqNumber ? "✓" : "○"}</span> Require numeric character
                     </li>
                   </ul>

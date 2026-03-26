@@ -27,7 +27,7 @@ export default function ForgotPassword() {
     };
 
     return (
-        <div className="auth-bg auth-center">
+        <main className="auth-bg auth-center">
             <div className="auth-box animate-fade">
                 <img src={logo} alt="Momentum Logo" className="auth-logo" />
 
@@ -59,6 +59,6 @@ export default function ForgotPassword() {
                     </p>
                 )}
             </div>
-        </div>
+        </main>
     );
 }

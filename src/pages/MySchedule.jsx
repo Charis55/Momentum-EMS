@@ -203,7 +203,7 @@ export default function MySchedule() {
 
                     {(item.speaker || item.organizerName) && (
                       <p className="event-meta-row" style={{ marginBottom: "5px", display: "flex", alignItems: "center", gap: "6px" }} tabIndex={0}>
-                        <span>🎤</span> {item.speaker || item.organizerName}
+                        <span className="sr-only">Speaker: </span> {item.speaker || item.organizerName}
                       </p>
                     )}
 

@@ -31,7 +31,7 @@ export default function Login() {
       <div className="auth-box animate-fade">
         <img src={logo} alt="Momentum Logo" className="auth-logo" />
 
-        <h1 className="auth-title">Sign In</h1>
+        <h1 className="auth-title" tabIndex={0}>Sign In</h1>
 
         <form onSubmit={submit} className="auth-form">
 

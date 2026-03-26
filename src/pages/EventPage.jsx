@@ -170,7 +170,7 @@ export default function EventPage() {
                     fontWeight: "bold",
                     marginBottom: "15px",
                     alignSelf: "flex-start"
-                  }}>
+                  }} tabIndex={0}>
                     {e.category}
                   </span>
                 )}
@@ -179,7 +179,7 @@ export default function EventPage() {
 
                 {e.speaker && (
                   <p className="event-meta-row" style={{ marginBottom: "5px", display: "flex", alignItems: "center", gap: "6px" }} tabIndex={0}>
-                    <span>🎤</span> {e.speaker}
+                    <span className="sr-only">Speaker: </span> {e.speaker}
                   </p>
                 )}
 

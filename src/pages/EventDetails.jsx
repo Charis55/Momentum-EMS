@@ -135,7 +135,19 @@ export default function EventDetails() {
     }
   };
 
-  if (loading) return <div className="event-details-wrapper full-page"><Toolbar /></div>;
+  if (loading) return <main className="event-details-wrapper full-page"><Toolbar /></main>;
+
+  if (!event) {
+    return (
+      <>
+        <Toolbar />
+        <main className="event-details-wrapper full-page" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+          <h1 className="form-title-glow" style={{ marginBottom: "20px" }}>Event Not Found</h1>
+          <button onClick={() => nav("/")} style={{ padding: "12px 24px", background: "#ffcc33", color: "#000", border: "none", borderRadius: "12px", fontWeight: "900", cursor: "pointer", letterSpacing: "1px" }}>GO EXPLORE</button>
+        </main>
+      </>
+    );
+  }
 
   return (
     <>
