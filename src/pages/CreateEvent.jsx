@@ -176,6 +176,7 @@ const SearchableDropdown = ({ options, value, name, onSelect, placeholder }) => 
         aria-autocomplete="list"
         aria-controls={`${name}-listbox`}
         aria-activedescendant={focusedIndex >= 0 ? `${name}-option-${focusedIndex}` : undefined}
+        aria-label={`Search or select ${name}`}
       />
       {isOpen && (
         <ul
@@ -215,11 +216,20 @@ const SearchableDropdown = ({ options, value, name, onSelect, placeholder }) => 
                   transition: "background 0.2s",
                   background: focusedIndex === index ? "var(--input-border)" : "var(--card-bg, #181615)"
                 }}
+                tabIndex={0}
+                onFocus={() => setFocusedIndex(index)}
                 onMouseDown={() => {
                   onSelect(name, opt);
                   setIsOpen(false);
                 }}
                 onMouseEnter={() => setFocusedIndex(index)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    onSelect(name, opt);
+                    setIsOpen(false);
+                  }
+                }}
               >
                 {opt}
               </li>
@@ -382,7 +392,16 @@ export default function CreateEvent() {
             <div className="form-grid-3col">
               <div className="form-group">
                 <label htmlFor="date">Date & Time</label>
-                <input id="date" type="datetime-local" name="date" value={form.date} onChange={handleChange} className="form-input stencil-input" required />
+                <input 
+                  id="date" 
+                  type="datetime-local" 
+                  name="date" 
+                  value={form.date} 
+                  onChange={handleChange} 
+                  className="form-input stencil-input" 
+                  required 
+                  aria-label="Event Date and Time (Select Month, Day, Year, Hour, Minute)"
+                />
               </div>
               <div className="form-group">
                 <label htmlFor="timezone">Time Zone</label>

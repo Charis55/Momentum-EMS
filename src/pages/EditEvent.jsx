@@ -175,12 +175,13 @@ const SearchableDropdownEdit = ({ options, value, name, onSelect, placeholder })
         role="combobox"
         aria-expanded={isOpen}
         aria-autocomplete="list"
-        aria-controls={`${name}-listbox-edit`}
-        aria-activedescendant={focusedIndex >= 0 ? `${name}-option-edit-${focusedIndex}` : undefined}
+        aria-controls={`${name}-listbox`}
+        aria-activedescendant={focusedIndex >= 0 ? `${name}-option-${focusedIndex}` : undefined}
+        aria-label={`Search or select ${name}`}
       />
       {isOpen && (
         <ul
-          id={`${name}-listbox-edit`}
+          id={`${name}-listbox`}
           ref={listboxRef}
           role="listbox"
           style={{
@@ -204,7 +205,7 @@ const SearchableDropdownEdit = ({ options, value, name, onSelect, placeholder })
             filteredOptions.map((opt, index) => (
               <li
                 key={opt}
-                id={`${name}-option-edit-${index}`}
+                id={`${name}-option-${index}`}
                 role="option"
                 aria-selected={focusedIndex === index || opt === value}
                 style={{
@@ -214,13 +215,21 @@ const SearchableDropdownEdit = ({ options, value, name, onSelect, placeholder })
                   borderBottom: "1px solid #2a2a2a",
                   fontSize: "0.95rem",
                   transition: "background 0.2s",
-                  background: focusedIndex === index ? "var(--input-border, #444)" : "var(--card-bg, #181615)"
+                  background: focusedIndex === index ? "var(--input-border)" : "var(--card-bg, #181615)"
                 }}
+                tabIndex={0}
+                onFocus={() => setFocusedIndex(index)}
                 onMouseDown={() => {
                   onSelect(name, opt);
                   setIsOpen(false);
                 }}
-                onMouseEnter={() => setFocusedIndex(index)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    onSelect(name, opt);
+                    setIsOpen(false);
+                  }
+                }}
               >
                 {opt}
               </li>
@@ -376,7 +385,16 @@ export default function EditEvent() {
             <div className="form-grid-3col">
               <div className="form-group">
                 <label htmlFor="date">Date & Time</label>
-                <input id="date" type="datetime-local" name="date" value={formData.date} onChange={(e) => setFormData({ ...formData, date: e.target.value })} className="form-input stencil-input" required />
+                <input 
+                  id="date" 
+                  type="datetime-local" 
+                  name="date" 
+                  value={formData.date} 
+                  onChange={(e) => setFormData({ ...formData, date: e.target.value })} 
+                  className="form-input stencil-input" 
+                  required 
+                  aria-label="Event Date and Time (Select Month, Day, Year, Hour, Minute)"
+                />
               </div>
               <div className="form-group">
                 <label htmlFor="timezone">Time Zone</label>
