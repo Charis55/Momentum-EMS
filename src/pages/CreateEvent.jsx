@@ -389,12 +389,31 @@ export default function CreateEvent() {
             <div className="form-grid-2col">
               <div className="form-group">
                 <label htmlFor="name">Event Name</label>
-                <input id="name" type="text" name="name" value={form.name} onChange={handleChange} className="form-input stencil-input" required />
+                <input 
+                  id="name" 
+                  type="text" 
+                  name="name" 
+                  value={form.name} 
+                  onChange={handleChange} 
+                  className="form-input stencil-input" 
+                  required 
+                  aria-label={`Event Name: ${form.name}`}
+                />
               </div>
 
               <div className="form-group">
                 <label htmlFor="speaker">Speaker Name</label>
-                <input id="speaker" type="text" name="speaker" value={form.speaker} onChange={handleChange} className="form-input stencil-input" placeholder="Presenter name" required />
+                <input 
+                  id="speaker" 
+                  type="text" 
+                  name="speaker" 
+                  value={form.speaker} 
+                  onChange={handleChange} 
+                  className="form-input stencil-input" 
+                  placeholder="Presenter name" 
+                  required 
+                  aria-label={`Speaker Name: ${form.speaker}`}
+                />
               </div>
             </div>
 
@@ -463,17 +482,41 @@ export default function CreateEvent() {
             <div className="form-grid-3col-textareas">
               <div className="form-group">
                 <label htmlFor="description">Description</label>
-                <textarea id="description" name="description" value={form.description} onChange={handleChange} className="form-textarea stencil-input" required></textarea>
+                <textarea 
+                  id="description" 
+                  name="description" 
+                  value={form.description} 
+                  onChange={handleChange} 
+                  className="form-textarea stencil-input" 
+                  required
+                  aria-label={`Description: ${form.description}`}
+                ></textarea>
               </div>
 
               <div className="form-group">
                 <label htmlFor="objectives">Learning Objectives</label>
-                <textarea id="objectives" name="objectives" value={form.objectives} onChange={handleChange} className="form-textarea stencil-input" required></textarea>
+                <textarea 
+                  id="objectives" 
+                  name="objectives" 
+                  value={form.objectives} 
+                  onChange={handleChange} 
+                  className="form-textarea stencil-input" 
+                  required
+                  aria-label={`Learning Objectives: ${form.objectives}`}
+                ></textarea>
               </div>
 
               <div className="form-group">
                 <label htmlFor="relevance">Topic Relevance</label>
-                <textarea id="relevance" name="relevance" value={form.relevance} onChange={handleChange} className="form-textarea stencil-input" required></textarea>
+                <textarea 
+                  id="relevance" 
+                  name="relevance" 
+                  value={form.relevance} 
+                  onChange={handleChange} 
+                  className="form-textarea stencil-input" 
+                  required
+                  aria-label={`Topic Relevance: ${form.relevance}`}
+                ></textarea>
               </div>
             </div>
 

@@ -120,7 +120,7 @@ export default function MomentumAI({ isOpen, onClose }) {
                         style={styles.modal}
                         onClick={e => e.stopPropagation()}
                     >
-                        <button style={styles.closeBtn} onClick={reset}>✕</button>
+                        <button style={styles.closeBtn} onClick={reset} aria-label="Close Momentum Guide">✕</button>
 
                         {step === 0 && (
                             <div style={styles.content}>

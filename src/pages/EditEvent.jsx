@@ -383,12 +383,31 @@ export default function EditEvent() {
             <div className="form-grid-2col">
               <div className="form-group">
                 <label htmlFor="name">Event Name</label>
-                <input id="name" type="text" name="name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="form-input stencil-input" required />
+                <input 
+                  id="name" 
+                  type="text" 
+                  name="name" 
+                  value={formData.name} 
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })} 
+                  className="form-input stencil-input" 
+                  required 
+                  aria-label={`Event Name: ${formData.name}`}
+                />
               </div>
 
               <div className="form-group">
                 <label htmlFor="speaker">Speaker Name</label>
-                <input id="speaker" type="text" name="speaker" value={formData.speaker} onChange={(e) => setFormData({ ...formData, speaker: e.target.value })} className="form-input stencil-input" placeholder="Presenter name" required />
+                <input 
+                  id="speaker" 
+                  type="text" 
+                  name="speaker" 
+                  value={formData.speaker} 
+                  onChange={(e) => setFormData({ ...formData, speaker: e.target.value })} 
+                  className="form-input stencil-input" 
+                  placeholder="Presenter name" 
+                  required 
+                  aria-label={`Speaker Name: ${formData.speaker}`}
+                />
               </div>
             </div>
 
@@ -457,17 +476,41 @@ export default function EditEvent() {
             <div className="form-grid-3col-textareas">
               <div className="form-group">
                 <label htmlFor="description">Description</label>
-                <textarea id="description" name="description" value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} className="form-textarea stencil-input" required></textarea>
+                <textarea 
+                  id="description" 
+                  name="description" 
+                  value={formData.description} 
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })} 
+                  className="form-textarea stencil-input" 
+                  required
+                  aria-label={`Description: ${formData.description}`}
+                ></textarea>
               </div>
 
               <div className="form-group">
                 <label htmlFor="objectives">Learning Objectives</label>
-                <textarea id="objectives" name="objectives" value={formData.objectives} onChange={(e) => setFormData({ ...formData, objectives: e.target.value })} className="form-textarea stencil-input" required></textarea>
+                <textarea 
+                  id="objectives" 
+                  name="objectives" 
+                  value={formData.objectives} 
+                  onChange={(e) => setFormData({ ...formData, objectives: e.target.value })} 
+                  className="form-textarea stencil-input" 
+                  required
+                  aria-label={`Learning Objectives: ${formData.objectives}`}
+                ></textarea>
               </div>
 
               <div className="form-group">
                 <label htmlFor="relevance">Topic Relevance</label>
-                <textarea id="relevance" name="relevance" value={formData.relevance} onChange={(e) => setFormData({ ...formData, relevance: e.target.value })} className="form-textarea stencil-input" required></textarea>
+                <textarea 
+                  id="relevance" 
+                  name="relevance" 
+                  value={formData.relevance} 
+                  onChange={(e) => setFormData({ ...formData, relevance: e.target.value })} 
+                  className="form-textarea stencil-input" 
+                  required
+                  aria-label={`Topic Relevance: ${formData.relevance}`}
+                ></textarea>
               </div>
             </div>
 
