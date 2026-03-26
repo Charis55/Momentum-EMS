@@ -441,7 +441,7 @@ export default function CreateEvent() {
             </div>
 
             <button className="btn-primary form-submit-btn stencil-btn" disabled={loading}>
-              {loading ? (typeof loading === 'string' ? loading : "Processing...") : id ? "Update Event" : "Publish Event →"}
+              {loading ? (typeof loading === 'string' ? loading : "Processing...") : id ? "Update Event" : "Publish Event "} <span aria-hidden="true">→</span>
             </button>
           </form>
         </div>

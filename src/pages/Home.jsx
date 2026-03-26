@@ -41,7 +41,7 @@ export default function Home() {
           <h1 tabIndex={0}>Take Control of Your <span className="gradient-text">Events</span></h1>
           <p tabIndex={0}>Momentum EMS helps you track impactful webinars — built for accessibility & excellence. Built for innovators and smart event managers.</p>
           <div className="hero-buttons">
-            <Link to="/dashboard" className="btn-primary">Go to Dashboard →</Link>
+            <Link to="/dashboard" className="btn-primary" aria-label="Go to Dashboard">Go to Dashboard <span aria-hidden="true">→</span></Link>
             <Link to="/signup" className="btn-secondary">Create Account</Link>
           </div>
         </motion.div>
@@ -106,7 +106,7 @@ export default function Home() {
                 </div>
                 <h3 tabIndex={0}>{e.name}</h3>
                 <p tabIndex={0}>{e.description?.substring(0, 100)}...</p>
-                <Link to={`/event/${e.id}`} className="event-btn">Details →</Link>
+                <Link to={`/event/${e.id}`} className="event-btn" aria-label="View Details">Details <span aria-hidden="true">→</span></Link>
               </div>
             </div>
           ))}

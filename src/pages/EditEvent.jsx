@@ -436,7 +436,7 @@ export default function EditEvent() {
 
             <div style={{ display: "flex", gap: "20px", marginTop: "20px" }}>
               <button className="btn-primary form-submit-btn stencil-btn" style={{ flex: 2 }} disabled={!!loading}>
-                {loading && typeof loading === 'string' ? loading : loading ? "Updating..." : "Update Webinar →"}
+                {loading && typeof loading === 'string' ? loading : loading ? "Updating..." : "Update Webinar "}<span aria-hidden="true">→</span>
               </button>
               <button
                 type="button"

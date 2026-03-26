@@ -255,7 +255,7 @@ export default function MomentumAI({ isOpen, onClose }) {
                                             <div style={styles.recInfo}>
                                                 <h4 style={styles.recName} tabIndex={0}>{e.name}</h4>
                                                 <p style={styles.recMeta} tabIndex={0}>{e.speaker} • {e.category}</p>
-                                                <a href={`/event/${e.id}`} style={styles.viewLink}>View Details →</a>
+                                                <a href={`/event/${e.id}`} style={styles.viewLink} aria-label="View Details">View Details <span aria-hidden="true">→</span></a>
                                             </div>
                                         </div>
                                     )) : (

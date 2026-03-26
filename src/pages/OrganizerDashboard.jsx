@@ -249,8 +249,8 @@ export default function OrganizerDashboard() {
                 </div>
 
                 <div className="card-footer-actions">
-                  <button className="view-live-btn" onClick={() => nav(`/event/${ev.id}`)}>
-                    VIEW LIVE PAGE →
+                  <button className="view-live-btn" onClick={() => nav(`/event/${ev.id}`)} aria-label="View Live Page">
+                    VIEW LIVE PAGE <span aria-hidden="true">→</span>
                   </button>
                   <div className="tool-icons" style={{ display: "flex", gap: "8px" }}>
                     <button className="icon-action edit" style={{ padding: "8px 16px", fontWeight: "bold", color: "var(--text-main)" }} onClick={() => nav(`/edit-event/${ev.id}`)}>Edit Event</button>

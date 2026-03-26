@@ -201,7 +201,7 @@ export default function Dashboard() {
                         {e.description?.substring(0, 120) || "No event description available yet."}...
                       </p>
 
-                      <Link to={`/event/${e.id}`} className="event-btn">
+                      <Link to={`/event/${e.id}`} className="event-btn" aria-label="View Details">
                         View Details <span aria-hidden="true">→</span>
                       </Link>
                     </div>

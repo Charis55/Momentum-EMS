@@ -156,7 +156,7 @@ export default function EventDetails() {
         <main className="container details-container">
 
           <div className="details-header-nav">
-            <button onClick={() => nav(-1)} className="back-explore-btn">← BACK TO EXPLORE</button>
+            <button onClick={() => nav(-1)} className="back-explore-btn" aria-label="Back to Explore"><span aria-hidden="true">←</span> BACK TO EXPLORE</button>
             <div className="social-share-group">
               <button onClick={shareWhatsApp} className="social-pill whatsapp-pill">WHATSAPP</button>
               <button onClick={shareTwitter} className="social-pill twitter-pill">X</button>
