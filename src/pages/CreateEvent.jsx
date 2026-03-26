@@ -100,6 +100,7 @@ const SearchableDropdown = ({ options, value, name, onSelect, placeholder }) => 
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const listboxRef = useRef(null);
   const inputRef = useRef(null);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     setSearchTerm(value);
@@ -154,8 +155,19 @@ const SearchableDropdown = ({ options, value, name, onSelect, placeholder }) => 
     }
   };
 
+  const handleBlur = (e) => {
+    if (dropdownRef.current && dropdownRef.current.contains(e.relatedTarget)) {
+      return;
+    }
+    setIsOpen(false);
+  };
+
   return (
-    <div style={{ position: "relative", width: "100%" }}>
+    <div 
+      ref={dropdownRef}
+      style={{ position: "relative", width: "100%" }}
+      onBlur={handleBlur}
+    >
       <input
         id={name}
         type="text"
@@ -169,7 +181,6 @@ const SearchableDropdown = ({ options, value, name, onSelect, placeholder }) => 
           setFocusedIndex(-1);
         }}
         onFocus={() => setIsOpen(true)}
-        onBlur={() => setTimeout(() => setIsOpen(false), 200)} // Delay to allow click register
         onKeyDown={handleKeyDown}
         role="combobox"
         aria-expanded={isOpen}
@@ -291,6 +302,40 @@ export default function CreateEvent() {
     }
   }, [id]);
 
+  // Segmented Date State
+  const [dateSegments, setDateSegments] = useState({
+    day: "",
+    month: "01",
+    year: new Date().getFullYear().toString(),
+    time: "12:00"
+  });
+
+  useEffect(() => {
+    if (form.date) {
+      const d = new Date(form.date);
+      if (!isNaN(d.getTime())) {
+        setDateSegments({
+          day: d.getDate().toString().padStart(2, '0'),
+          month: (d.getMonth() + 1).toString().padStart(2, '0'),
+          year: d.getFullYear().toString(),
+          time: `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`
+        });
+      }
+    }
+  }, [form.date]);
+
+  const handleDateSegmentChange = (e) => {
+    const { name, value } = e.target;
+    const newSegments = { ...dateSegments, [name]: value };
+    setDateSegments(newSegments);
+
+    // Sync back to master form context
+    if (newSegments.day && newSegments.month && newSegments.year && newSegments.time) {
+      const isoString = `${newSegments.year}-${newSegments.month}-${newSegments.day.padStart(2, '0')}T${newSegments.time}`;
+      setForm(prev => ({ ...prev, date: isoString }));
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setForm({
@@ -390,18 +435,80 @@ export default function CreateEvent() {
             </div>
 
             <div className="form-grid-3col">
-              <div className="form-group">
-                <label htmlFor="date">Date & Time</label>
-                <input 
-                  id="date" 
-                  type="datetime-local" 
-                  name="date" 
-                  value={form.date} 
-                  onChange={handleChange} 
-                  className="form-input stencil-input" 
-                  required 
-                  aria-label="Event Date and Time (Select Month, Day, Year, Hour, Minute)"
-                />
+              <div className="form-group" style={{ gridColumn: "span 3" }}>
+                <label>Event Date & Time (Select segments individually)</label>
+                <div className="date-segments-row" style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+                  <div className="segment-box" style={{ flex: 1, minWidth: "80px" }}>
+                    <label htmlFor="day-input" className="sr-only">Day</label>
+                    <input
+                      id="day-input"
+                      type="number"
+                      name="day"
+                      min="1"
+                      max="31"
+                      placeholder="DD"
+                      value={dateSegments.day}
+                      onChange={handleDateSegmentChange}
+                      className="form-input stencil-input"
+                      required
+                      aria-label="Event Day (1 to 31)"
+                    />
+                  </div>
+                  <div className="segment-box" style={{ flex: 1, minWidth: "120px" }}>
+                    <label htmlFor="month-select" className="sr-only">Month</label>
+                    <select
+                      id="month-select"
+                      name="month"
+                      value={dateSegments.month}
+                      onChange={handleDateSegmentChange}
+                      className="form-input stencil-input"
+                      required
+                      aria-label="Event Month"
+                    >
+                      <option value="01">January</option>
+                      <option value="02">February</option>
+                      <option value="03">March</option>
+                      <option value="04">April</option>
+                      <option value="05">May</option>
+                      <option value="06">June</option>
+                      <option value="07">July</option>
+                      <option value="08">August</option>
+                      <option value="09">September</option>
+                      <option value="10">October</option>
+                      <option value="11">November</option>
+                      <option value="12">December</option>
+                    </select>
+                  </div>
+                  <div className="segment-box" style={{ flex: 1, minWidth: "100px" }}>
+                    <label htmlFor="year-input" className="sr-only">Year</label>
+                    <input
+                      id="year-input"
+                      type="number"
+                      name="year"
+                      min="2024"
+                      max="2100"
+                      placeholder="YYYY"
+                      value={dateSegments.year}
+                      onChange={handleDateSegmentChange}
+                      className="form-input stencil-input"
+                      required
+                      aria-label="Event Year"
+                    />
+                  </div>
+                  <div className="segment-box" style={{ flex: 1, minWidth: "120px" }}>
+                    <label htmlFor="time-input" className="sr-only">Time</label>
+                    <input
+                      id="time-input"
+                      type="time"
+                      name="time"
+                      value={dateSegments.time}
+                      onChange={handleDateSegmentChange}
+                      className="form-input stencil-input"
+                      required
+                      aria-label="Event Time (24 hour format)"
+                    />
+                  </div>
+                </div>
               </div>
               <div className="form-group">
                 <label htmlFor="timezone">Time Zone</label>
