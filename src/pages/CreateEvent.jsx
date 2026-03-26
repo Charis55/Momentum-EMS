@@ -359,7 +359,7 @@ export default function CreateEvent() {
         <div className="create-header-wide">
           <img src={logo} alt="Momentum Logo" className="form-hero-logo" />
           <div className="create-title-group">
-            <h2 className="create-title-main">{id ? "Edit Event" : "Host a Premium Webinar"}</h2>
+            <h2 className="create-title-main" tabIndex={0}>{id ? "Edit Event" : "Host a Premium Webinar"}</h2>
             <p className="create-sub-main">Share knowledge, inspire audiences & create lasting impact.</p>
           </div>
         </div>

@@ -353,7 +353,7 @@ export default function EditEvent() {
         <div className="create-header-wide">
           <img src={logo} alt="Momentum Logo" className="form-hero-logo" />
           <div className="create-title-group">
-            <h2 className="create-title-main">Edit Webinar</h2>
+            <h2 className="create-title-main" tabIndex={0}>Edit Webinar</h2>
             <p className="create-sub-main">Update event details, switch visibility, and more.</p>
           </div>
         </div>

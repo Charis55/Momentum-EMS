@@ -269,6 +269,12 @@ input:checked+.slider:before {
   transform: translateX(24px);
 }
 
+/* Keyboard Focus Fix for Toggle */
+.switch input:focus-visible + .slider {
+  outline: 2px solid #ffcc33;
+  outline-offset: 4px;
+}
+
 /* Submit Button - Stencil Style layered with modern glow */
 .stencil-btn {
   width: 100%;
