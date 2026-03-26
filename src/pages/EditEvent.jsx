@@ -226,19 +226,11 @@ const SearchableDropdownEdit = ({ options, value, name, onSelect, placeholder })
                   transition: "background 0.2s",
                   background: focusedIndex === index ? "var(--input-border)" : "var(--card-bg, #181615)"
                 }}
-                tabIndex={0}
-                onFocus={() => setFocusedIndex(index)}
                 onMouseDown={() => {
                   onSelect(name, opt);
                   setIsOpen(false);
                 }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    onSelect(name, opt);
-                    setIsOpen(false);
-                  }
-                }}
+                onMouseEnter={() => setFocusedIndex(index)}
               >
                 {opt}
               </li>
@@ -402,6 +394,7 @@ export default function EditEvent() {
                   onChange={(e) => setFormData({ ...formData, date: e.target.value })} 
                   className="form-input stencil-input" 
                   required 
+                  aria-label="Date and Time"
                 />
               </div>
               <div className="form-group">

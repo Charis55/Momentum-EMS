@@ -225,20 +225,11 @@ const SearchableDropdown = ({ options, value, name, onSelect, placeholder }) => 
                   transition: "background 0.2s",
                   background: focusedIndex === index ? "var(--input-border)" : "var(--card-bg, #181615)"
                 }}
-                tabIndex={0}
-                onFocus={() => setFocusedIndex(index)}
                 onMouseDown={() => {
                   onSelect(name, opt);
                   setIsOpen(false);
                 }}
                 onMouseEnter={() => setFocusedIndex(index)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    onSelect(name, opt);
-                    setIsOpen(false);
-                  }
-                }}
               >
                 {opt}
               </li>
@@ -409,6 +400,7 @@ export default function CreateEvent() {
                   onChange={handleChange} 
                   className="form-input stencil-input" 
                   required 
+                  aria-label="Date and Time"
                 />
               </div>
               <div className="form-group">
