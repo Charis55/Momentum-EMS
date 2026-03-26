@@ -184,7 +184,7 @@ export default function MomentumAI({ isOpen, onClose }) {
                                     onClick={!goal ? undefined : handleNext}
                                     aria-disabled={!goal}
                                 >
-                                    GENERATE RECOMMENDATIONS
+                                    NEXT STEP
                                 </button>
                             </div>
                         )}

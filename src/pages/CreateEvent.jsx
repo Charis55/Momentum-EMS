@@ -360,7 +360,7 @@ export default function CreateEvent() {
           <img src={logo} alt="Momentum Logo" className="form-hero-logo" />
           <div className="create-title-group">
             <h2 className="create-title-main" tabIndex={0}>{id ? "Edit Event" : "Host a Premium Webinar"}</h2>
-            <p className="create-sub-main">Share knowledge, inspire audiences & create lasting impact.</p>
+            <p className="create-sub-main" tabIndex={0}>Share knowledge, inspire audiences & create lasting impact.</p>
           </div>
         </div>
 
@@ -413,7 +413,15 @@ export default function CreateEvent() {
               </div>
 
               <div className="form-group toggle-container stencil-input">
-                <label className="switch">
+                <label
+                  className="switch"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      handleChange({ target: { name: "isPrivate", type: "checkbox", checked: !form.isPrivate } });
+                    }
+                  }}
+                >
                   <input type="checkbox" name="isPrivate" checked={form.isPrivate} onChange={handleChange} />
                   <span className="slider round"></span>
                 </label>

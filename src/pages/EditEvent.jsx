@@ -354,7 +354,7 @@ export default function EditEvent() {
           <img src={logo} alt="Momentum Logo" className="form-hero-logo" />
           <div className="create-title-group">
             <h2 className="create-title-main" tabIndex={0}>Edit Webinar</h2>
-            <p className="create-sub-main">Update event details, switch visibility, and more.</p>
+            <p className="create-sub-main" tabIndex={0}>Update event details, switch visibility, and more.</p>
           </div>
         </div>
 
@@ -407,7 +407,15 @@ export default function EditEvent() {
               </div>
 
               <div className="form-group toggle-container stencil-input">
-                <label className="switch">
+                <label
+                  className="switch"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      setFormData({ ...formData, isPrivate: !formData.isPrivate });
+                    }
+                  }}
+                >
                   <input type="checkbox" name="isPrivate" checked={formData.isPrivate} onChange={(e) => setFormData({ ...formData, isPrivate: e.target.checked })} />
                   <span className="slider round"></span>
                 </label>

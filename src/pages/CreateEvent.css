@@ -269,9 +269,8 @@ input:checked+.slider:before {
   transform: translateX(24px);
 }
 
-/* Keyboard Focus Fix for Toggle */
-.switch input:focus-visible + .slider {
-  outline: 2px solid #ffcc33;
+.switch input:focus-visible+.slider {
+  outline: 2px solid var(--gold);
   outline-offset: 4px;
 }
 
