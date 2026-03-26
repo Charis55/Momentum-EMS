@@ -95,7 +95,7 @@ const TIMEZONES = [
 ];
 
 // Custom Searchable Dropdown Component
-const SearchableDropdownEdit = ({ options, value, name, onSelect, placeholder }) => {
+const SearchableDropdownEdit = ({ options, value, name, onSelect, placeholder, tabIndexOptions }) => {
   const [searchTerm, setSearchTerm] = useState(value || "");
   const [isOpen, setIsOpen] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState(-1);
@@ -226,11 +226,20 @@ const SearchableDropdownEdit = ({ options, value, name, onSelect, placeholder })
                   transition: "background 0.2s",
                   background: focusedIndex === index ? "var(--input-border)" : "var(--card-bg, #181615)"
                 }}
+                tabIndex={tabIndexOptions}
+                onFocus={() => tabIndexOptions !== undefined && setFocusedIndex(index)}
                 onMouseDown={() => {
                   onSelect(name, opt);
                   setIsOpen(false);
                 }}
                 onMouseEnter={() => setFocusedIndex(index)}
+                onKeyDown={(e) => {
+                  if (tabIndexOptions !== undefined && (e.key === "Enter" || e.key === " ")) {
+                    e.preventDefault();
+                    onSelect(name, opt);
+                    setIsOpen(false);
+                  }
+                }}
               >
                 {opt}
               </li>
@@ -385,7 +394,7 @@ export default function EditEvent() {
 
             <div className="form-grid-3col">
               <div className="form-group">
-                <label htmlFor="date">Date & Time</label>
+                <label id="date-label-edit" htmlFor="date">Date & Time</label>
                 <input 
                   id="date" 
                   type="datetime-local" 
@@ -394,7 +403,7 @@ export default function EditEvent() {
                   onChange={(e) => setFormData({ ...formData, date: e.target.value })} 
                   className="form-input stencil-input" 
                   required 
-                  aria-label="Date and Time"
+                  aria-labelledby="date-label-edit"
                 />
               </div>
               <div className="form-group">
@@ -415,6 +424,7 @@ export default function EditEvent() {
                   name="category"
                   onSelect={handleCategorySelect}
                   placeholder="Select Category"
+                  tabIndexOptions={0}
                 />
               </div>
             </div>

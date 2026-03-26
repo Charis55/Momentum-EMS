@@ -94,7 +94,7 @@ const TIMEZONES = [
 ];
 
 // Custom Searchable Dropdown Component
-const SearchableDropdown = ({ options, value, name, onSelect, placeholder }) => {
+const SearchableDropdown = ({ options, value, name, onSelect, placeholder, tabIndexOptions }) => {
   const [searchTerm, setSearchTerm] = useState(value || "");
   const [isOpen, setIsOpen] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState(-1);
@@ -225,11 +225,20 @@ const SearchableDropdown = ({ options, value, name, onSelect, placeholder }) => 
                   transition: "background 0.2s",
                   background: focusedIndex === index ? "var(--input-border)" : "var(--card-bg, #181615)"
                 }}
+                tabIndex={tabIndexOptions}
+                onFocus={() => tabIndexOptions !== undefined && setFocusedIndex(index)}
                 onMouseDown={() => {
                   onSelect(name, opt);
                   setIsOpen(false);
                 }}
                 onMouseEnter={() => setFocusedIndex(index)}
+                onKeyDown={(e) => {
+                  if (tabIndexOptions !== undefined && (e.key === "Enter" || e.key === " ")) {
+                    e.preventDefault();
+                    onSelect(name, opt);
+                    setIsOpen(false);
+                  }
+                }}
               >
                 {opt}
               </li>
@@ -391,7 +400,7 @@ export default function CreateEvent() {
 
             <div className="form-grid-3col">
               <div className="form-group">
-                <label htmlFor="date">Date & Time</label>
+                <label id="date-label" htmlFor="date">Date & Time</label>
                 <input 
                   id="date" 
                   type="datetime-local" 
@@ -400,7 +409,7 @@ export default function CreateEvent() {
                   onChange={handleChange} 
                   className="form-input stencil-input" 
                   required 
-                  aria-label="Date and Time"
+                  aria-labelledby="date-label"
                 />
               </div>
               <div className="form-group">
@@ -421,6 +430,7 @@ export default function CreateEvent() {
                   name="category"
                   onSelect={handleCategorySelect}
                   placeholder="Select Category"
+                  tabIndexOptions={0}
                 />
               </div>
             </div>
