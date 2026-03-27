@@ -468,7 +468,17 @@ export default function EditEvent() {
                     type="checkbox" 
                     name="isPrivate" 
                     checked={formData.isPrivate} 
-                    onChange={(e) => setFormData({ ...formData, isPrivate: e.target.checked })}
+                    onChange={(e) => {
+                      const newPrivate = e.target.checked;
+                      setFormData({ ...formData, isPrivate: newPrivate });
+                      // Accessibility: Announce state change for custom screen reader
+                      if (localStorage.getItem("a11y_reader") === "true" && "speechSynthesis" in window) {
+                        window.speechSynthesis.cancel();
+                        const utterance = new SpeechSynthesisUtterance(`Event Visibility: ${newPrivate ? "Private" : "Public"}`);
+                        utterance.rate = 0.95;
+                        window.speechSynthesis.speak(utterance);
+                      }
+                    }}
                     role="switch"
                     aria-checked={formData.isPrivate}
                     aria-label={`Event Visibility: ${formData.isPrivate ? "Private" : "Public"}`}

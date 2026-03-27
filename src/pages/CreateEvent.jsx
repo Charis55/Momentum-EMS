@@ -474,7 +474,17 @@ export default function CreateEvent() {
                     type="checkbox" 
                     name="isPrivate" 
                     checked={form.isPrivate} 
-                    onChange={handleChange}
+                    onChange={(e) => {
+                      const newPrivate = e.target.checked;
+                      handleChange({ target: { name: "isPrivate", type: "checkbox", checked: newPrivate } });
+                      // Accessibility: Announce state change for custom screen reader
+                      if (localStorage.getItem("a11y_reader") === "true" && "speechSynthesis" in window) {
+                        window.speechSynthesis.cancel();
+                        const utterance = new SpeechSynthesisUtterance(`Event Visibility: ${newPrivate ? "Private" : "Public"}`);
+                        utterance.rate = 0.95;
+                        window.speechSynthesis.speak(utterance);
+                      }
+                    }}
                     role="switch"
                     aria-checked={form.isPrivate}
                     aria-label={`Event Visibility: ${form.isPrivate ? "Private" : "Public"}`}
