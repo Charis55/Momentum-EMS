@@ -335,6 +335,15 @@ export default function CreateEvent() {
       if (id) {
         setLoading("Updating Event...");
         await updateEvent(id, form);
+
+        // Accessibility: Explicit announcement
+        if (localStorage.getItem("a11y_reader") === "true" && "speechSynthesis" in window) {
+           window.speechSynthesis.cancel();
+           const utterance = new SpeechSynthesisUtterance("Event Updated Successfully");
+           utterance.rate = 0.95;
+           window.speechSynthesis.speak(utterance);
+        }
+
         setModal({
           isOpen: true,
           title: "Success",
@@ -348,6 +357,15 @@ export default function CreateEvent() {
       } else {
         setLoading("Creating Event...");
         await createEvent(form, user);
+        
+        // Accessibility: Explicit announcement to avoid "rubbish" from modal focus jumps
+        if (localStorage.getItem("a11y_reader") === "true" && "speechSynthesis" in window) {
+           window.speechSynthesis.cancel();
+           const utterance = new SpeechSynthesisUtterance("Event Published Successfully");
+           utterance.rate = 0.95;
+           window.speechSynthesis.speak(utterance);
+        }
+
         setModal({
           isOpen: true,
           title: "Success",
@@ -454,7 +472,7 @@ export default function CreateEvent() {
             <div className="form-grid-2col">
               <div className="form-group">
                 <label htmlFor="link">Conferencing Link (Optional)</label>
-                <input id="link" type="url" name="link" value={form.link} onChange={handleChange} className="form-input stencil-input" aria-label="Conferencing Link" />
+                <input id="link" type="url" name="link" value={form.link} onChange={handleChange} className="form-input stencil-input" aria-label="Conferencing Link, Optional" />
               </div>
 
               <div className="form-group toggle-container stencil-input">

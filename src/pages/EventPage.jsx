@@ -183,8 +183,8 @@ export default function EventPage() {
                   </p>
                 )}
 
-                <p className="event-meta-row" style={{ marginBottom: "12px", display: "flex", alignItems: "center", gap: "6px" }} tabIndex={0} aria-label={`Starts at: ${e.date ? new Date(e.date).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : "TBA"}`}>
-                  <span aria-hidden="true">🕒</span> <span aria-hidden="true">{e.date ? new Date(e.date).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : "TBA"}</span>
+                <p className="event-meta-row" style={{ marginBottom: "12px", display: "flex", alignItems: "center", gap: "6px" }} tabIndex={0} aria-label={`Starts at: ${e.date ? new Date(e.date).toLocaleString('en-US', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }) : "TBA"}`}>
+                  <span aria-hidden="true">🕒</span> <span aria-hidden="true">{e.date ? new Date(e.date).toLocaleString('en-US', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }) : "TBA"}</span>
                 </p>
 
                 <p style={{ flexGrow: 1, marginBottom: "20px" }} tabIndex={0}>

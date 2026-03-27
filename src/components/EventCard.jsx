@@ -51,7 +51,7 @@ export default function EventCard({ event, onDeleted = () => { }, isOrganizerVie
   }
 
   function speak() {
-    const msg = `${event.name}. Scheduled ${new Date(timing).toLocaleString()} (${timezone}). ${event.description || ""}`;
+    const msg = `${event.name}. Scheduled ${new Date(timing).toLocaleString(undefined, { month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true })} (${timezone}). ${event.description || ""}`;
     speechSynthesis.speak(new SpeechSynthesisUtterance(msg));
   }
 
@@ -67,7 +67,7 @@ export default function EventCard({ event, onDeleted = () => { }, isOrganizerVie
           <h4 id={`ev-${event.id}`} tabIndex={0}>{event.name}</h4>
           <p style={{ margin: "6px 0" }} tabIndex={0}>{event.description?.slice(0, 160)}</p>
           <p style={{ margin: 0, fontSize: 13, color: "#6b7280" }} tabIndex={0}>
-            When: {timing ? new Date(timing).toLocaleString() : "TBA"} ({timezone})
+            When: {timing ? new Date(timing).toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true }) : "TBA"} ({timezone})
           </p>
           <p style={{ margin: 0, fontSize: 13, color: "#6b7280" }} tabIndex={0}>
             Organizer: {event.organizerEmail}

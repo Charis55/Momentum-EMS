@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { doc, getDoc, updateDoc, deleteField } from "firebase/firestore";
 import { db } from "../firebase/config";
+import { updateEvent } from "../firebase/events";
 import Toolbar from "../components/Toolbar";
 import { motion } from "framer-motion";
 import ConfirmationModal from "../components/ConfirmationModal";
@@ -329,13 +330,17 @@ export default function EditEvent() {
       const docRef = doc(db, "events", eventId);
 
       setLoading("Saving Changes...");
-      const cleanData = {
-        ...formData,
-        isPublic: deleteField(),
-        updatedAt: new Date().toISOString()
-      };
 
-      await updateDoc(docRef, cleanData);
+      await updateEvent(eventId, formData);
+
+      // Accessibility: Explicit announcement
+      if (localStorage.getItem("a11y_reader") === "true" && "speechSynthesis" in window) {
+         window.speechSynthesis.cancel();
+         const utterance = new SpeechSynthesisUtterance("Event Updated Successfully");
+         utterance.rate = 0.95;
+         window.speechSynthesis.speak(utterance);
+      }
+
       setModal({
         isOpen: true,
         title: "Success",
@@ -448,7 +453,7 @@ export default function EditEvent() {
             <div className="form-grid-2col">
               <div className="form-group">
                 <label htmlFor="link">Conferencing Link (Optional)</label>
-                <input id="link" type="url" name="link" value={formData.link} onChange={(e) => setFormData({ ...formData, link: e.target.value })} className="form-input stencil-input" aria-label="Conferencing Link" />
+                <input id="link" type="url" name="link" value={formData.link} onChange={(e) => setFormData({ ...formData, link: e.target.value })} className="form-input stencil-input" aria-label="Conferencing Link, Optional" />
               </div>
 
               <div className="form-group toggle-container stencil-input">
