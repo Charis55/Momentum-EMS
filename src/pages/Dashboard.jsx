@@ -192,9 +192,9 @@ export default function Dashboard() {
                         {e.speaker || "Speaker TBA"}
                       </div>
 
-                      <div className="event-meta-row" style={{ marginBottom: "15px" }} tabIndex={0} aria-label={`Starts at: ${e.date || e.timingISO ? new Date(e.date || e.timingISO).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : "Date coming soon"}`}>
+                      <div className="event-meta-row" style={{ marginBottom: "15px" }} tabIndex={0} aria-label={`Starts at: ${e.date || e.timingISO ? new Date(e.date || e.timingISO).toLocaleString('en-US', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }) : "Date coming soon"}`}>
                         <span className="event-icon" style={{ marginRight: "8px" }} aria-hidden="true">🕒</span>
-                        <span aria-hidden="true">{e.date || e.timingISO ? new Date(e.date || e.timingISO).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : "Date coming soon"}</span>
+                        <span aria-hidden="true">{e.date || e.timingISO ? new Date(e.date || e.timingISO).toLocaleString('en-US', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }) : "Date coming soon"}</span>
                       </div>
 
                       <p style={{ flexGrow: 1 }} tabIndex={0}>
