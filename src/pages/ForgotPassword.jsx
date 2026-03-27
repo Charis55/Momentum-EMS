@@ -17,7 +17,14 @@ export default function ForgotPassword() {
         try {
             await resetPassword(email);
             setMsgType("success");
-            setMsg("Password reset email sent! Please check your inbox.");
+            const successMsg = "Password reset email sent! Please check your inbox.";
+            setMsg(successMsg);
+            if (localStorage.getItem("a11y_reader") === "true" && "speechSynthesis" in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(successMsg);
+                utterance.rate = 0.95;
+                window.speechSynthesis.speak(utterance);
+            }
         } catch (err) {
             setMsgType("error");
             setMsg(err.message);

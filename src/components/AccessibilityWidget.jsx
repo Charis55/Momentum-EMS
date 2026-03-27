@@ -31,13 +31,38 @@ function speak(text) {
 }
 
 function getReadableText(el) {
-    return (
-        el.getAttribute("aria-label") ||
-        el.getAttribute("title") ||
-        el.getAttribute("placeholder") ||
-        el.textContent?.trim() ||
-        ""
-    ).slice(0, 200);
+    let text = el.getAttribute("aria-label") ||
+               el.getAttribute("title") ||
+               el.getAttribute("placeholder") ||
+               "";
+
+    if (!text && el.hasAttribute("aria-labelledby")) {
+        const labelId = el.getAttribute("aria-labelledby");
+        const labelEl = document.getElementById(labelId);
+        if (labelEl) text = labelEl.textContent;
+    }
+
+    if (!text) {
+        text = el.textContent?.trim() || "";
+    }
+
+    if (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.tagName === "SELECT") {
+        let valStr = "";
+        if (el.type === "datetime-local") {
+            const rawVal = el.value;
+            if (rawVal) {
+                const d = new Date(rawVal);
+                valStr = !isNaN(d) ? `Current date and time: ${d.toLocaleString([], { dateStyle: 'long', timeStyle: 'short' })}` : "";
+            } else {
+                valStr = "Blank date and time. Use arrow keys to select.";
+            }
+        }
+        if (valStr) {
+            text = text ? `${text}. ${valStr}` : valStr;
+        }
+    }
+
+    return text.slice(0, 200);
 }
 
 // ──────────────────────────────────────────────────────────

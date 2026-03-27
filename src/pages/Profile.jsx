@@ -55,7 +55,14 @@ export default function Profile() {
     try {
       await updateProfile(user, { displayName: username });
       await setDoc(doc(db, "users", user.uid), { username, email: user.email }, { merge: true });
-      setStatusMsg({ type: "success", text: "✅ Profile updated successfully!" });
+      const msg = "✅ Profile updated successfully!";
+      setStatusMsg({ type: "success", text: msg });
+      if (localStorage.getItem("a11y_reader") === "true" && "speechSynthesis" in window) {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance("Profile updated successfully!");
+          utterance.rate = 0.95;
+          window.speechSynthesis.speak(utterance);
+      }
     } catch (err) {
       setStatusMsg({ type: "error", text: "❌ Error: " + err.message });
     }
@@ -66,7 +73,14 @@ export default function Profile() {
     if (email === user.email) return;
     try {
       await verifyBeforeUpdateEmail(user, email);
-      setStatusMsg({ type: "success", text: "📧 Verification link sent to new email!" });
+      const msg = "📧 Verification link sent to new email!";
+      setStatusMsg({ type: "success", text: msg });
+      if (localStorage.getItem("a11y_reader") === "true" && "speechSynthesis" in window) {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance("Verification link sent to new email!");
+          utterance.rate = 0.95;
+          window.speechSynthesis.speak(utterance);
+      }
     } catch (err) {
       setStatusMsg({ type: "error", text: "❌ Re-authenticate to change email." });
     }
@@ -75,7 +89,14 @@ export default function Profile() {
   async function handlePasswordReset() {
     try {
       await sendPasswordResetEmail(auth, user.email);
-      setStatusMsg({ type: "success", text: "🔑 Password reset link sent!" });
+      const msg = "🔑 Password reset link sent!";
+      setStatusMsg({ type: "success", text: msg });
+      if (localStorage.getItem("a11y_reader") === "true" && "speechSynthesis" in window) {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance("Password reset link sent!");
+          utterance.rate = 0.95;
+          window.speechSynthesis.speak(utterance);
+      }
     } catch (err) {
       setStatusMsg({ type: "error", text: "❌ Error: " + err.message });
     }
