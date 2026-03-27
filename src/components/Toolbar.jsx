@@ -133,7 +133,6 @@ export default function Toolbar() {
         boxShadow: '-10px 0 40px rgba(0,0,0,0.6)',
         transform: menuOpen ? 'translateX(0)' : 'translateX(100%)',
         transition: '0.5s cubic-bezier(0.4, 0, 0.2, 1)',
-        display: 'flex',
         flexDirection: 'column',
         padding: '120px 40px',
         gap: '20px',
