@@ -82,7 +82,7 @@ export default function Profile() {
           window.speechSynthesis.speak(utterance);
       }
     } catch (err) {
-      setStatusMsg({ type: "error", text: "❌ Re-authenticate to change email." });
+      setStatusMsg({ type: "error", text: "❌ Security verification needed: Please log out and log back in to change your email." });
     }
   }
 
@@ -110,7 +110,7 @@ export default function Profile() {
       setModal({
         isOpen: true,
         title: "Error",
-        message: "❌ Re-authenticate to delete account.",
+        message: "❌ Security verification needed: Please log out and log back in to delete your account.",
         type: "danger",
         onConfirm: () => setModal({ ...modal, isOpen: false }),
         onCancel: null
