@@ -8,12 +8,17 @@ import React, { useState, useEffect } from "react";
  */
 export default function CompositeDateTime({ value, onChange, name, id }) {
   const nativePickerRef = React.useRef(null);
+  const lastInternalValue = React.useRef(value);
+
   // Parse ISO string (YYYY-MM-DDTHH:mm) into parts
   const parseValue = (val) => {
     if (!val) return { year: "", month: "", day: "", hour: "", minute: "", period: "AM" };
     try {
       const date = new Date(val);
-      if (isNaN(date)) return { year: "", month: "", day: "", hour: "", minute: "", period: "AM" };
+      if (isNaN(date)) {
+          // If invalid, try to preserve what we can or return defaults
+          return { year: "", month: "", day: "", hour: "", minute: "", period: "AM" };
+      }
       
       let h = date.getHours();
       const p = h >= 12 ? "PM" : "AM";
@@ -34,19 +39,32 @@ export default function CompositeDateTime({ value, onChange, name, id }) {
 
   const [parts, setParts] = useState(parseValue(value));
 
+  // Sync from prop ONLY if it changed externally (e.g. from picker)
   useEffect(() => {
-    setParts(parseValue(value));
+    if (value !== lastInternalValue.current) {
+      setParts(parseValue(value));
+      lastInternalValue.current = value;
+    }
   }, [value]);
 
   const updateParts = (newParts) => {
     setParts(newParts);
-    // Construct ISO string
+    
+    // Build ISO string with STRICT padding for native picker compatibility
+    const pYear = (newParts.year || "2026").padStart(4, "0");
+    const pMonth = (newParts.month || "01").padStart(2, "0");
+    const pDay = (newParts.day || "01").padStart(2, "0");
+    const pMin = (newParts.minute || "00").padStart(2, "0");
+    
     let h = parseInt(newParts.hour) || 0;
     if (newParts.period === "PM" && h < 12) h += 12;
     if (newParts.period === "AM" && h === 12) h = 0;
+    const pHour = h.toString().padStart(2, "0");
     
     // YYYY-MM-DDTHH:mm
-    const isoString = `${newParts.year || "2026"}-${newParts.month || "01"}-${newParts.day || "01"}T${h.toString().padStart(2, "0")}:${newParts.minute || "00"}`;
+    const isoString = `${pYear}-${pMonth}-${pDay}T${pHour}:${pMin}`;
+    
+    lastInternalValue.current = isoString;
     onChange({ target: { name, value: isoString } });
   };
 
