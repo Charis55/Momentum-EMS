@@ -4,8 +4,10 @@ import React, { useState, useEffect } from "react";
  * CompositeDateTime Component
  * Visually appears as a single input but consists of multiple focusable segments
  * to allow accurate screen reader focus notifications for each part.
+ * Now includes a hidden native picker for the browser calendar experience.
  */
 export default function CompositeDateTime({ value, onChange, name, id }) {
+  const nativePickerRef = React.useRef(null);
   // Parse ISO string (YYYY-MM-DDTHH:mm) into parts
   const parseValue = (val) => {
     if (!val) return { year: "", month: "", day: "", hour: "", minute: "", period: "AM" };
@@ -141,6 +143,50 @@ export default function CompositeDateTime({ value, onChange, name, id }) {
         <option value="AM">AM</option>
         <option value="PM">PM</option>
       </select>
+
+      <div style={{ marginLeft: "auto", position: "relative", display: "flex", alignItems: "center" }}>
+        <button
+          type="button"
+          onClick={() => {
+            if (nativePickerRef.current) {
+               // Modern way to open browser picker
+               if (nativePickerRef.current.showPicker) {
+                 nativePickerRef.current.showPicker();
+               } else {
+                 nativePickerRef.current.focus();
+               }
+            }
+          }}
+          style={{
+            background: "transparent",
+            border: "none",
+            color: "#ffcc33",
+            cursor: "pointer",
+            fontSize: "1.2rem",
+            padding: "4px",
+            display: "flex",
+            alignItems: "center"
+          }}
+          aria-label="Open Calendar Picker"
+        >
+          📅
+        </button>
+
+        <input
+          ref={nativePickerRef}
+          type="datetime-local"
+          value={value || ""}
+          onChange={(e) => onChange(e)}
+          style={{
+            position: "absolute",
+            opacity: 0,
+            width: 0,
+            height: 0,
+            pointerEvents: "none"
+          }}
+          tabIndex={-1}
+        />
+      </div>
     </div>
   );
 }
