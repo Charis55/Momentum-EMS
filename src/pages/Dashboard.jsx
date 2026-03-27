@@ -81,7 +81,7 @@ export default function Dashboard() {
               {user ? (
                 <>
                   <Link to="/create" className="btn-primary">
-                    + Create Event
+                     Create Event
                   </Link>
                   <Link to="/events" className="btn-primary" style={{ opacity: 0.85 }}>
                     Browse Events
