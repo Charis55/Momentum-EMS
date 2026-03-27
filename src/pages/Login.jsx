@@ -84,7 +84,7 @@ export default function Login() {
           </div>
 
           <div className="forgot-password-container">
-            <Link to="/forgot-password" className="forgot-password-link">Forgot Password?</Link>
+            <Link to="/forgot-password" className="forgot-password-link" tabIndex={0}>Forgot Password?</Link>
           </div>
 
           <button className="auth-btn" type="submit">Sign In</button>

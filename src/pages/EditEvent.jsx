@@ -464,10 +464,18 @@ export default function EditEvent() {
                     }
                   }}
                 >
-                  <input type="checkbox" name="isPrivate" checked={formData.isPrivate} onChange={(e) => setFormData({ ...formData, isPrivate: e.target.checked })} />
+                  <input 
+                    type="checkbox" 
+                    name="isPrivate" 
+                    checked={formData.isPrivate} 
+                    onChange={(e) => setFormData({ ...formData, isPrivate: e.target.checked })}
+                    role="switch"
+                    aria-checked={formData.isPrivate}
+                    aria-label={`Event Visibility: ${formData.isPrivate ? "Private" : "Public"}`}
+                  />
                   <span className="slider round"></span>
                 </label>
-                <span className="toggle-label stencil-text">
+                <span className="toggle-label stencil-text" aria-live="polite">
                   {formData.isPrivate ? "Private (Link Only)" : "Public (Visible to All)"}
                 </span>
               </div>

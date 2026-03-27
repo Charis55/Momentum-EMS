@@ -470,10 +470,18 @@ export default function CreateEvent() {
                     }
                   }}
                 >
-                  <input type="checkbox" name="isPrivate" checked={form.isPrivate} onChange={handleChange} />
+                  <input 
+                    type="checkbox" 
+                    name="isPrivate" 
+                    checked={form.isPrivate} 
+                    onChange={handleChange}
+                    role="switch"
+                    aria-checked={form.isPrivate}
+                    aria-label={`Event Visibility: ${form.isPrivate ? "Private" : "Public"}`}
+                  />
                   <span className="slider round"></span>
                 </label>
-                <span className="toggle-label stencil-text">
+                <span className="toggle-label stencil-text" aria-live="polite">
                   {form.isPrivate ? "Private (Link Only)" : "Public (Visible to All)"}
                 </span>
               </div>
