@@ -70,7 +70,15 @@ export default function Profile() {
   }
 
   async function handleEmailUpdate() {
-    if (email === user.email) return;
+    if (email === user.email) {
+      setStatusMsg({ type: "success", text: "✅ This is already your current account email." });
+      return;
+    }
+    if (!email.trim()) {
+      setStatusMsg({ type: "error", text: "❌ Please enter a valid email address." });
+      return;
+    }
+    setSaving(true);
     try {
       await verifyBeforeUpdateEmail(user, email);
       const msg = "📧 Verification link sent to new email!";
@@ -83,6 +91,8 @@ export default function Profile() {
       }
     } catch (err) {
       setStatusMsg({ type: "error", text: "❌ Security verification needed: Please log out and log back in to change your email." });
+    } finally {
+      setSaving(false);
     }
   }
 
@@ -177,7 +187,9 @@ export default function Profile() {
             <div>
               <label htmlFor="email" style={{ display: "block", marginBottom: "8px", color: "var(--card-text-muted)", fontSize: "0.9rem" }} tabIndex={0}>Account Email</label>
               <input id="email" style={inputStyle} type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-              <button style={outlineBtn} onClick={handleEmailUpdate}>Update & Verify Email</button>
+               <button style={outlineBtn} onClick={handleEmailUpdate} disabled={saving}>
+                {saving ? "Processing..." : "Update & Verify Email"}
+               </button>
             </div>
 
             <button style={outlineBtn} onClick={handlePasswordReset}>Send Password Reset Email</button>
