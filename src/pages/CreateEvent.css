@@ -109,7 +109,8 @@ html {
 }
 
 .stencil-input:focus,
-.form-textarea:focus {
+.form-textarea:focus,
+.composite-datetime-wrapper:focus-within {
   outline: none;
   border-color: #ffcc33 !important;
   /* Yellow from stencil */

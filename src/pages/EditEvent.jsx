@@ -6,6 +6,7 @@ import Toolbar from "../components/Toolbar";
 import { motion } from "framer-motion";
 import ConfirmationModal from "../components/ConfirmationModal";
 import logo from "/assets/momentum-logo.svg";
+import CompositeDateTime from "../components/CompositeDateTime";
 import "./CreateEvent.css";
 
 const WEBINAR_CATEGORIES = [
@@ -414,15 +415,11 @@ export default function EditEvent() {
             <div className="form-grid-3col">
               <div className="form-group">
                 <label id="date-label-edit" htmlFor="date">Date & Time</label>
-                <input 
-                  id="date" 
-                  type="datetime-local" 
-                  name="date" 
-                  value={formData.date} 
-                  onChange={(e) => setFormData({ ...formData, date: e.target.value })} 
-                  className="form-input stencil-input" 
-                  required 
-                  aria-labelledby="date-label-edit"
+                <CompositeDateTime 
+                  id="date"
+                  name="date"
+                  value={formData.date}
+                  onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                 />
               </div>
               <div className="form-group">

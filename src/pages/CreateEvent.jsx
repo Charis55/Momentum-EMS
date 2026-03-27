@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Toolbar from "../components/Toolbar";
 import ConfirmationModal from "../components/ConfirmationModal";
 import logo from "/assets/momentum-logo.svg";
+import CompositeDateTime from "../components/CompositeDateTime";
 import "./CreateEvent.css";
 
 const WEBINAR_CATEGORIES = [
@@ -420,15 +421,11 @@ export default function CreateEvent() {
             <div className="form-grid-3col">
               <div className="form-group">
                 <label id="date-label" htmlFor="date">Date & Time</label>
-                <input 
-                  id="date" 
-                  type="datetime-local" 
-                  name="date" 
-                  value={form.date} 
-                  onChange={handleChange} 
-                  className="form-input stencil-input" 
-                  required 
-                  aria-labelledby="date-label"
+                <CompositeDateTime 
+                  id="date"
+                  name="date"
+                  value={form.date}
+                  onChange={handleChange}
                 />
               </div>
               <div className="form-group">
