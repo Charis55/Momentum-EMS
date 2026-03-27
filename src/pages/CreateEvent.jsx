@@ -466,7 +466,15 @@ export default function CreateEvent() {
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       e.preventDefault();
-                      handleChange({ target: { name: "isPrivate", type: "checkbox", checked: !form.isPrivate } });
+                      const newPrivate = !form.isPrivate;
+                      handleChange({ target: { name: "isPrivate", type: "checkbox", checked: newPrivate } });
+                      // Accessibility: Announce state change for custom screen reader
+                      if (localStorage.getItem("a11y_reader") === "true" && "speechSynthesis" in window) {
+                        window.speechSynthesis.cancel();
+                        const utterance = new SpeechSynthesisUtterance(`Event Visibility: ${newPrivate ? "Private" : "Public"}`);
+                        utterance.rate = 0.95;
+                        window.speechSynthesis.speak(utterance);
+                      }
                     }
                   }}
                 >

@@ -460,7 +460,15 @@ export default function EditEvent() {
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       e.preventDefault();
-                      setFormData({ ...formData, isPrivate: !formData.isPrivate });
+                      const newPrivate = !formData.isPrivate;
+                      setFormData({ ...formData, isPrivate: newPrivate });
+                      // Accessibility: Announce state change for custom screen reader
+                      if (localStorage.getItem("a11y_reader") === "true" && "speechSynthesis" in window) {
+                        window.speechSynthesis.cancel();
+                        const utterance = new SpeechSynthesisUtterance(`Event Visibility: ${newPrivate ? "Private" : "Public"}`);
+                        utterance.rate = 0.95;
+                        window.speechSynthesis.speak(utterance);
+                      }
                     }
                   }}
                 >
