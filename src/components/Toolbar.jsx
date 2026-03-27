@@ -122,6 +122,7 @@ export default function Toolbar() {
 
       {/* GLASSMORPHIC SLIDE-OUT MENU */}
       <div style={{
+        display: user ? 'flex' : 'none', // Safeguard: Hide for guests
         position: 'fixed',
         top: 0,
         right: 0,
@@ -138,8 +139,7 @@ export default function Toolbar() {
         gap: '20px',
         zIndex: 1050,
         borderLeft: '1px solid var(--card-border)',
-        willChange: 'transform',
-        display: user ? 'flex' : 'none' // Safeguard: Hide for guests
+        willChange: 'transform'
       }}
       aria-hidden={!menuOpen}
       >
