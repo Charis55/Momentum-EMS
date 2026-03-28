@@ -5,7 +5,8 @@ import {
   signOut,
   sendEmailVerification,
   sendPasswordResetEmail,
-  onAuthStateChanged
+  onAuthStateChanged,
+  verifyBeforeUpdateEmail
 } from "firebase/auth";
 import { auth } from "./config";
 
@@ -26,6 +27,24 @@ export async function logoutUser() {
 
 export async function resetPassword(email) {
   await sendPasswordResetEmail(auth, email);
+}
+
+/**
+ * Modern Firebase way to update email.
+ * Sends a verification link to the NEW email address.
+ * Use ActionCodeSettings to redirect the user back to the app after verification.
+ */
+export async function changeUserEmail(newEmail) {
+  const user = auth.currentUser;
+  if (!user) throw new Error("No authenticated user found.");
+
+  const actionCodeSettings = {
+    // Redirect back to the profile page after verification
+    url: window.location.origin + "/profile",
+    handleCodeInApp: true,
+  };
+
+  await verifyBeforeUpdateEmail(user, newEmail, actionCodeSettings);
 }
 
 export function subscribeAuth(cb) {

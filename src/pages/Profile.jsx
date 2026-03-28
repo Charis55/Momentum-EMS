@@ -4,10 +4,10 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import {
   updateProfile,
   deleteUser,
-  verifyBeforeUpdateEmail,
   sendPasswordResetEmail,
   signOut
 } from "firebase/auth";
+import { changeUserEmail } from "../firebase/auth";
 import { useNavigate } from "react-router-dom";
 import Toolbar from "../components/Toolbar";
 import ConfirmationModal from "../components/ConfirmationModal";
@@ -80,7 +80,7 @@ export default function Profile() {
     }
     setSaving(true);
     try {
-      await verifyBeforeUpdateEmail(user, email);
+      await changeUserEmail(email);
       const msg = "📧 Verification link sent to new email!";
       setStatusMsg({ type: "success", text: msg });
       if (localStorage.getItem("a11y_reader") === "true" && "speechSynthesis" in window) {
