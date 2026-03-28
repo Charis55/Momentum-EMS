@@ -45,6 +45,7 @@ export async function changeUserEmail(newEmail) {
   };
 
   await verifyBeforeUpdateEmail(user, newEmail, actionCodeSettings);
+  console.log("[Auth] verifyBeforeUpdateEmail sent successfully to:", newEmail);
 }
 
 export function subscribeAuth(cb) {

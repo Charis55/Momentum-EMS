@@ -90,7 +90,12 @@ export default function Profile() {
           window.speechSynthesis.speak(utterance);
       }
     } catch (err) {
-      setStatusMsg({ type: "error", text: "❌ Security verification needed: Please log out and log back in to change your email." });
+      console.error("Email Update Error:", err);
+      if (err.code === "auth/requires-recent-login") {
+        setStatusMsg({ type: "error", text: "❌ Security timeout: Please log out and back in to change your email." });
+      } else {
+        setStatusMsg({ type: "error", text: `❌ Error: ${err.message}` });
+      }
     } finally {
       setSaving(false);
     }
