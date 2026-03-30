@@ -226,17 +226,17 @@ export default function EventDetails() {
                     className="sidebar-field focusable-field-group" 
                     tabIndex={0} 
                     aria-label={`Schedule: ${
-                      event?.date ? new Date(event.date).toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long' }) : "Date TBA"
+                      event?.date ? new Date(event.date).toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) : "Date TBA"
                     } at ${
-                      event?.date ? new Date(event.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }) : "00:00"
+                      event?.date ? new Date(event.date).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }) : "00:00"
                     } ${event?.timezone || ""}`}
                   >
                     <label className="ui-heading-label" aria-hidden="true">SCHEDULE</label>
-                    <h2 className="schedule-date-ui" aria-hidden="true">
-                      {event?.date ? new Date(event.date).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric' }) : "Date TBA"}
+                    <h2 className="schedule-date-ui" aria-hidden="true" style={{ fontSize: "1.4rem", color: "var(--card-text)" }}>
+                      {event?.date ? new Date(event.date).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' }) : "Date TBA"}
                     </h2>
-                    <h2 className="schedule-date-ui" aria-hidden="true">
-                      {event?.date ? new Date(event.date).toLocaleDateString('en-US', { month: 'long' }) : ""} at {event?.date ? new Date(event.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }) : "00:00"}
+                    <h2 className="schedule-date-ui" aria-hidden="true" style={{ color: "#ffcc33", marginTop: "4px" }}>
+                      at {event?.date ? new Date(event.date).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }) : "00:00"}
                     </h2>
                     <p className="timezone-subtext" aria-hidden="true">{event?.timezone}</p>
                   </div>

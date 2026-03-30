@@ -233,12 +233,21 @@ export default function OrganizerDashboard() {
                 className="organizer-card-ui"
               >
                 <div className="card-top-row">
-                  <span className="date-tag" tabIndex={0}>
-                    {ev.date
-                      ? typeof ev.date === "string"
-                        ? new Date(ev.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }).toUpperCase()
-                        : new Date(ev.date?.seconds * 1000).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }).toUpperCase()
-                      : "DATE TBA"}
+                  <span className="date-tag" tabIndex={0} style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+                    <span aria-hidden="true">
+                      {ev.date
+                        ? typeof ev.date === "string"
+                          ? new Date(ev.date).toLocaleDateString('en-US', { day: 'numeric', month: 'short' }).toUpperCase()
+                          : new Date(ev.date?.seconds * 1000).toLocaleDateString('en-US', { day: 'numeric', month: 'short' }).toUpperCase()
+                        : "DATE TBA"}
+                    </span>
+                    <span aria-hidden="true" style={{ fontSize: "0.65rem", opacity: 0.8 }}>
+                      {ev.date
+                        ? typeof ev.date === "string"
+                          ? new Date(ev.date).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })
+                          : new Date(ev.date?.seconds * 1000).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })
+                        : ""}
+                    </span>
                   </span>
                   <AttendeeStats eventId={ev.id} onUpdate={handleCountUpdate} />
                 </div>
